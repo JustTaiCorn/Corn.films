@@ -4,7 +4,7 @@ import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import { Box, Breadcrumbs, Button, Chip, Divider, Stack, Typography } from "@mui/material";
 import { grey } from "@mui/material/colors";
 import { useEffect, useRef } from "react";
-import { useDispatch, useSelector, } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import CircularRate from "../components/common/CircularRate";
 import Container from "../components/common/Container";

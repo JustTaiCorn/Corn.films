@@ -1,8 +1,9 @@
-import HomePage from "../pages/HomePage";
-import MediaDetail from "../pages/MediaDetail";
-import MediaList from "../pages/MediaList";
-import MediaSearch from "../pages/MediaSearch";
-import MediaWatch from "../pages/MediaWatch";
+import { lazy } from "react";
+const HomePage = lazy(() => import("../pages/HomePage"));
+const MediaDetail = lazy(() => import("../pages/MediaDetail"));
+const MediaList = lazy(() => import("../pages/MediaList"));
+const MediaSearch = lazy(() => import("../pages/MediaSearch"));
+const MediaWatch = lazy(() => import("../pages/MediaWatch"));
 
 export const routesGen = {
   home: "/",
@@ -11,6 +12,8 @@ export const routesGen = {
   mediaSearch: "/search",
   mediaWatch: (slug) => `/xem-phim/${slug}`,
 };
+
+
 
 const routes = [
   {
@@ -35,7 +38,6 @@ const routes = [
     path: "/xem-phim/:slug",
     element: <MediaWatch />,
   }
-
 ];
 
 export default routes;
