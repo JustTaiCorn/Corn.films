@@ -1,10 +1,6 @@
 import { Box, Typography, CircularProgress } from "@mui/material";
 
 const CircularRate = ({ value }) => {
-
-  if (value === undefined || value === 0) {
-    return null
-  }
   const ratingValue = value;
   return (
     <Box sx={{
@@ -29,10 +25,14 @@ const CircularRate = ({ value }) => {
           fontWeight="700"
           sx={{ marginTop: "-5px" }}
         >
-          {Math.floor(value * 10) / 10}
+          {value === 0 || isNaN(value) ?
+            (<><Typography variant="caption" color="error" fontSize={25}>💩</Typography></>)
+            :
+            Math.floor(value * 10) / 10
+          }
         </Typography>
       </Box>
-    </Box>
+    </Box >
   );
 };
 
