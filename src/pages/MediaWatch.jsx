@@ -3,7 +3,7 @@ import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlin
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import { Box, Button, Chip, Divider, Stack, Typography } from "@mui/material";
 import { grey } from "@mui/material/colors";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import CircularRate from "../components/common/CircularRate";
@@ -19,6 +19,7 @@ import RecommendSlide from "../components/common/RecommendSlide";
 import MediaPlayer from "../components/common/MediaPlayer";
 import EpisodeList from "../components/common/EpisodeList";
 import { resetSelectedEpisode } from "../redux/features/episodeSlice";
+import getTMDBImages from "../api/configs/images.config";
 
 const MediaDetail = () => {
     const dispatch = useDispatch();
@@ -30,7 +31,8 @@ const MediaDetail = () => {
 
     }, [slug, dispatch]);
 
-
+    const [posters, setPosters] = useState([]);
+    const [backdrops, setBackdrops] = useState([]);
     const { isLoading, data } = useDetail({ slug });
 
     useEffect(() => {
@@ -38,7 +40,17 @@ const MediaDetail = () => {
     }, [isLoading, dispatch]);
 
     const media = data?.item;
+    useEffect(() => {
+        const fetchImages = async () => {
+            if (media) {
+                const { posters, backdrops } = await getTMDBImages(media);
+                setPosters(posters);
+                setBackdrops(backdrops);
+            }
+        };
 
+        fetchImages();
+    }, [media]);
 
 
     if (!media) return null;
@@ -49,7 +61,6 @@ const MediaDetail = () => {
         media.director.length === 1 && media.director[0] === ""
             ? "Chưa cập nhật"
             : media.director;
-    console.log(director);
     const title = media.title || media.name || "No Title";
     const year = media.year ? `(${media.year})` : "";
     const genres = media.category || [];
@@ -57,9 +68,7 @@ const MediaDetail = () => {
     const thumbUrl = media.thumb_url
         ? `https://img.ophim.live/uploads/movies/${media.thumb_url}`
         : "https://via.placeholder.com/500x750";
-    const posterUrl = media.poster_url
-        ? `https://img.ophim.live/uploads/movies/${media.poster_url}`
-        : "https://via.placeholder.com/500x750";
+    const posterUrl = posters[0]?.file_path || "";
     const episodes = media.episodes[0].server_data || [];
 
     console.log("MediaDetail", episodes);
@@ -72,7 +81,7 @@ const MediaDetail = () => {
                     <Box sx={{ display: "flex", flexDirection: { md: "row", xs: "column" } }}>
                         {/* poster */}
                         <Box sx={{ width: { xs: "70%", sm: "50%", md: "40%" }, margin: { xs: "0 auto 2rem", md: "0 2rem 0 0" } }}>
-                            <Box sx={{ paddingTop: "140%", ...uiConfigs.style.backgroundImage(posterUrl) }} />
+                            <Box sx={{ paddingTop: "140%", ...uiConfigs.style.backgroundImage(`https://image.tmdb.org/t/p/w500${posterUrl}`) }} />
                         </Box>
                         {/* poster */}
 
@@ -158,24 +167,6 @@ const MediaDetail = () => {
                                 </Typography>
 
                                 {/* overview */}
-
-                                {/* buttons */}
-                                <Stack direction="row" spacing={1}>
-                                    <Button
-                                        variant="contained"
-                                        sx={{ width: "max-content" }}
-                                        size="large"
-                                        startIcon={<PlayArrowIcon />}
-                                        onClick={() => {
-                                            if (videoRef.current) {
-                                                videoRef.current.scrollIntoView({ behavior: "smooth" });
-                                            }
-                                        }}
-                                    >
-                                        watch now
-                                    </Button>
-                                </Stack>
-                                {/* buttons */}
                             </Stack>
                         </Box>
                         {/* media info */}
@@ -192,13 +183,7 @@ const MediaDetail = () => {
                     <EpisodeList episodes={episodes} />
                 </Container>
                 {/* media episodes */}
-                {/* media videos */}
-                <div ref={videoRef} style={{ paddingTop: "2rem" }}>
-                    <Container header="Video in Youtube">
-                        <MediaVideosSlide slug={media.slug} />
-                    </Container>
-                </div>
-                {/* media videos */}
+
 
                 {/* media recommendation */}
                 <Container header="you may also like">

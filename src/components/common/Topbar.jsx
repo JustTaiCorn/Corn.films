@@ -71,7 +71,6 @@ const Topbar = () => {
               </Box>
             </Stack>
 
-            {/* main menu */}
             <Box flexGrow={1} alignItems="center" display={{ xs: "none", md: "flex" }}>
               <Box sx={{ marginRight: "30px" }}>
                 <Logo />
@@ -101,10 +100,8 @@ const Topbar = () => {
                 sx={{ color: "inherit" }}
                 onClick={onSwithMode}
               >
-
                 {flower && <LocalFloristIcon />}
                 {!flower && <MacroOffIcon />}
-
               </IconButton>
             </Box>
             {/* main menu */}

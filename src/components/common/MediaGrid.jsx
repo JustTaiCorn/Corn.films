@@ -3,8 +3,6 @@ import MediaItem from "./MediaItem";
 import uiConfigs from "../../configs/ui.configs";
 import { Col, Row } from 'antd';
 const MediaGrid = ({ medias }) => {
-
-  console.log("Medias:", medias);
   return (
     <Box sx={{ ...uiConfigs.style.mainContent }}>
       <Row gutter={[5, 5]}>

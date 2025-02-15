@@ -5,7 +5,7 @@ import { Box, Button, Chip, Divider, Stack, Typography } from "@mui/material";
 import { grey } from "@mui/material/colors";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import CircularRate from "../components/common/CircularRate";
 import Container from "../components/common/Container";
 import ImageHeader from "../components/common/ImageHeader";
@@ -16,8 +16,6 @@ import { useDetail } from "../api/modules/media.api";
 import { setGlobalLoading } from "../redux/features/globalLoadingSlice";
 import MediaVideosSlide from "../components/common/MediaVideosSlide";
 import RecommendSlide from "../components/common/RecommendSlide";
-import MediaPlayer from "../components/common/MediaPlayer";
-import EpisodeList from "../components/common/EpisodeList";
 import { resetSelectedEpisode } from "../redux/features/episodeSlice";
 import BackdropSlide from "../components/common/BackdropSlide";
 import PosterSlide from "../components/common/PosterSlide";
@@ -62,7 +60,6 @@ const MediaDetail = () => {
     media.director.length === 1 && media.director[0] === ""
       ? "Chưa cập nhật"
       : media.director;
-  console.log(director);
   const title = media.title || media.name || "No Title";
   const year = media.year ? `(${media.year})` : "";
   const genres = media.category || [];
@@ -70,11 +67,9 @@ const MediaDetail = () => {
   const thumbUrl = media.thumb_url
     ? `https://img.ophim.live/uploads/movies/${media.thumb_url}`
     : "https://via.placeholder.com/500x750";
-  const posterUrl = posters[0]?.file_path
-  console.log(posterUrl);
-  const episodes = media.episodes[0].server_data || [];
-
-  console.log(backdrops, posters);
+  const posterPath = posters[0]?.file_path
+    ? `https://image.tmdb.org/t/p/w500${posters[0].file_path}`
+    : `https://img.ophim.live/uploads/movies/${media.poster_url}`;
   return (
     <>
       <ImageHeader imgPath={thumbUrl} />
@@ -84,7 +79,7 @@ const MediaDetail = () => {
           <Box sx={{ display: "flex", flexDirection: { md: "row", xs: "column" } }}>
             {/* poster */}
             <Box sx={{ width: { xs: "70%", sm: "50%", md: "40%" }, margin: { xs: "0 auto 2rem", md: "0 2rem 0 0" } }}>
-              <Box sx={{ paddingTop: "140%", ...uiConfigs.style.backgroundImage(`https://image.tmdb.org/t/p/w500${posterUrl}`) }} />
+              <Box sx={{ paddingTop: "140%", ...uiConfigs.style.backgroundImage(posterPath) }} />
             </Box>
             {/* poster */}
 
@@ -178,11 +173,7 @@ const MediaDetail = () => {
                     sx={{ width: "max-content" }}
                     size="large"
                     startIcon={<PlayArrowIcon />}
-                    onClick={() => {
-                      if (videoRef.current) {
-                        videoRef.current.scrollIntoView({ behavior: "smooth" });
-                      }
-                    }}
+                    LinkComponent={Link} to={`/xem-phim/${media.slug}`}
                   >
                     watch now
                   </Button>
@@ -195,14 +186,6 @@ const MediaDetail = () => {
         </Box>
         {/* media content */}
         {/* media watch */}
-        <Container header="Watch now">
-          <MediaPlayer />
-        </Container>
-        {/* media watch */}
-        {/* media episodes */}
-        <Container>
-          <EpisodeList episodes={episodes} />
-        </Container>
         {/* media episodes */}
         {/* media backdrop */}
         {backdrops?.length > 0 && (

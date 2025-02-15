@@ -1,4 +1,6 @@
 import { lazy } from "react";
+import MediaCategory from "../pages/MediaCategory";
+import MediaCoutries from "../pages/MediaCoutries";
 const HomePage = lazy(() => import("../pages/HomePage"));
 const MediaDetail = lazy(() => import("../pages/MediaDetail"));
 const MediaList = lazy(() => import("../pages/MediaList"));
@@ -37,6 +39,14 @@ const routes = [
   {
     path: "/xem-phim/:slug",
     element: <MediaWatch />,
+  },
+  {
+    path: "/quoc-gia",
+    element: <MediaCoutries />,
+  },
+  {
+    path: "/the-loai",
+    element: <MediaCategory />,
   }
 ];
 

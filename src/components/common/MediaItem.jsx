@@ -22,25 +22,24 @@ const MediaItem = ({ media }) => {
 
     fetchImages();
   }, [media]);
-
-  console.log("MediaItem", media);
   const {
     name,
     year,
     slug,
-    tmdb,
+    tmdb, poster_url,
     time
     // id
   } = media;
 
   const title = name;
   const rate = tmdb?.vote_average;
-  // const mediaId = id;
-  const posterPath = posters[0]?.file_path;
+  const posterPath = posters[0]?.file_path
+    ? `https://image.tmdb.org/t/p/w500${posters[0].file_path}`
+    : `https://img.ophim.live/uploads/movies/${poster_url}`;
   return (
     <Link to={routesGen.mediaDetail(slug)}>
       <Box sx={{
-        ...uiConfigs.style.backgroundImage(`https://image.tmdb.org/t/p/w500${posterPath}`),
+        ...uiConfigs.style.backgroundImage(posterPath),
         paddingTop: "160%",
         "&:hover .media-info": { opacity: 1, bottom: 0 },
         "&:hover .media-back-drop, &:hover .media-play-btn": { opacity: 1 },

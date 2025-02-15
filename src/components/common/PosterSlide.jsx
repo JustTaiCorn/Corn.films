@@ -1,6 +1,7 @@
 import { Box } from "@mui/material";
 import { SwiperSlide } from "swiper/react";
 import AutoSwiper from "./AutoSwiper";
+import React from "react";
 
 const PosterSlide = ({ posters }) => {
   return (
@@ -19,4 +20,4 @@ const PosterSlide = ({ posters }) => {
   );
 };
 
-export default PosterSlide;
+export default React.memo(PosterSlide);

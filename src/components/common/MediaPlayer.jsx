@@ -37,9 +37,10 @@ export default function MediaPlayer() {
                     }}
                 ></iframe>
             ) : (
-                <Alert severity="info" >
+                <Alert severity="info">
                     <AlertTitle>Info</AlertTitle>
-                    <Typography fontSize={18}>Vui lòng chọn tập phim để phát😘</Typography></Alert>
+                    <Typography fontSize={18}>Vui lòng chọn tập phim để phát😘</Typography>
+                </Alert>
             )}
         </Stack>
     );

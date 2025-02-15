@@ -134,13 +134,13 @@ const HeroSlide = ({ mediaType }) => {
                           size="large"
                           startIcon={<PlayArrowIcon />}
                           component={Link}
-                          to={routesGen.mediaDetail(movie.slug)}
+                          to={routesGen.mediaWatch(movie.slug)}
                           sx={{ width: "max-content" }}
                         >
                           watch now
                         </Button>
 
-                        <Button variant="outlined" size="large" color="primary" component={Link} to={routesGen.mediaWatch(movie.slug)}
+                        <Button variant="outlined" size="large" color="primary" component={Link} to={routesGen.mediaDetail(movie.slug)}
                           sx={{ width: "max-content" }}
                           endIcon={<ArrowForwardIosIcon />}>
                           Xem chi tiết

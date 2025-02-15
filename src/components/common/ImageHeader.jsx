@@ -1,5 +1,6 @@
 import { Box, useTheme } from "@mui/material";
 import uiConfigs from "../../configs/ui.configs";
+import React from "react";
 
 const ImageHeader = ({ imgPath }) => {
   const theme = useTheme();
@@ -27,4 +28,4 @@ const ImageHeader = ({ imgPath }) => {
   );
 };
 
-export default ImageHeader;
+export default React.memo(ImageHeader);

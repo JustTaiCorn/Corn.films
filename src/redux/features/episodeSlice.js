@@ -4,8 +4,12 @@ export const episodeSlice = createSlice({
   name: "episode",
   initialState: {
     selectedEpisode: null,
+    episodes: [],
   },
   reducers: {
+    setEpisodes: (state, action) => {
+      state.episodes = action.payload;
+    },
     setEpisode: (state, action) => {
       state.selectedEpisode = action.payload;
     },
@@ -15,6 +19,7 @@ export const episodeSlice = createSlice({
   },
 });
 
-export const { setEpisode, resetSelectedEpisode } = episodeSlice.actions;
+export const { setEpisode, resetSelectedEpisode, setEpisodes } =
+  episodeSlice.actions;
 
 export default episodeSlice.reducer;
