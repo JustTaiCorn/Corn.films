@@ -12,7 +12,9 @@ import Logo from "./Logo";
 import UserMenu from "./UserMenu";
 import Sidebar from "./Sidebar";
 import menuConfigs from "../../configs/menu.configs";
-
+import MacroOffIcon from '@mui/icons-material/MacroOff';
+import LocalFloristIcon from '@mui/icons-material/LocalFlorist';
+import { toggleFlower } from "../../redux/features/flowerSlice";
 const ScrollAppBar = ({ children, window }) => {
   const { themeMode } = useSelector((state) => state.themeMode);
 
@@ -33,7 +35,7 @@ const Topbar = () => {
   const { user } = useSelector((state) => state.user);
   const { appState } = useSelector((state) => state.appState);
   const { themeMode } = useSelector((state) => state.themeMode);
-
+  const flower = useSelector((state) => state.flower.showFlower); console.log("Before dispatch:", flower);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const dispatch = useDispatch();
@@ -42,7 +44,11 @@ const Topbar = () => {
     const theme = themeMode === themeModes.dark ? themeModes.light : themeModes.dark;
     dispatch(setThemeMode(theme));
   };
+  const onSwithMode = () => {
 
+    dispatch(toggleFlower());
+
+  };
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
 
   return (
@@ -90,6 +96,15 @@ const Topbar = () => {
               >
                 {themeMode === themeModes.dark && <DarkModeOutlinedIcon />}
                 {themeMode === themeModes.light && <WbSunnyOutlinedIcon />}
+              </IconButton>
+              <IconButton
+                sx={{ color: "inherit" }}
+                onClick={onSwithMode}
+              >
+
+                {flower && <LocalFloristIcon />}
+                {!flower && <MacroOffIcon />}
+
               </IconButton>
             </Box>
             {/* main menu */}

@@ -9,6 +9,9 @@ import WbSunnyOutlinedIcon from "@mui/icons-material/WbSunnyOutlined";
 import { themeModes } from "../../configs/theme.configs";
 import { setThemeMode } from "../../redux/features/themeModeSlice";
 import menuConfigs from "../../configs/menu.configs";
+import { toggleFlower } from "../../redux/features/flowerSlice";
+import MacroOffIcon from '@mui/icons-material/MacroOff';
+import LocalFloristIcon from '@mui/icons-material/LocalFlorist';
 
 const Sidebar = ({ open, toggleSidebar }) => {
   const dispatch = useDispatch();
@@ -16,13 +19,20 @@ const Sidebar = ({ open, toggleSidebar }) => {
   const { user } = useSelector((state) => state.user);
   const { appState } = useSelector((state) => state.appState);
   const { themeMode } = useSelector((state) => state.themeMode);
-
+  const flower = useSelector((state) => state.flower.showFlower);
   const sidebarWidth = uiConfigs.size.sidebarWith;
 
   const onSwitchTheme = () => {
     const theme = themeMode === themeModes.dark ? themeModes.light : themeModes.dark;
     dispatch(setThemeMode(theme));
   };
+  const onSwithMode = () => {
+
+    dispatch(toggleFlower());
+
+  };
+
+
   const drawer = (
     <>
       <Toolbar sx={{ paddingY: "20px", color: "text.primary" }}>
@@ -84,6 +94,12 @@ const Sidebar = ({ open, toggleSidebar }) => {
               {themeMode === themeModes.dark ? "dark mode" : "light mode"}
             </Typography>
           } />
+        </ListItemButton>
+        <ListItemButton onClick={onSwithMode}>
+          <ListItemIcon>
+            {flower && <LocalFloristIcon />}
+            {!flower && <MacroOffIcon />}
+          </ListItemIcon>
         </ListItemButton>
       </List>
     </>

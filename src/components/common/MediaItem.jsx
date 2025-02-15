@@ -4,15 +4,30 @@ import { Link } from "react-router-dom";
 import uiConfigs from "../../configs/ui.configs";
 import { routesGen } from "../../routes/routes";
 import CircularRate from "./CircularRate";
+import { useEffect, useState } from "react";
+import getTMDBImages from "../../api/configs/images.config";
 
 
 const MediaItem = ({ media }) => {
+
+  const [posters, setPosters] = useState([]);
+
+  useEffect(() => {
+    const fetchImages = async () => {
+      if (media) {
+        const { posters } = await getTMDBImages(media);
+        setPosters(posters);
+      }
+    };
+
+    fetchImages();
+  }, [media]);
+
   console.log("MediaItem", media);
   const {
     name,
     year,
     slug,
-    poster_url,
     tmdb,
     time
     // id
@@ -21,17 +36,15 @@ const MediaItem = ({ media }) => {
   const title = name;
   const rate = tmdb?.vote_average;
   // const mediaId = id;
-  const posterPath = poster_url
-    ? `https://img.ophim.live/uploads/movies/${poster_url}`
-    : "https://via.placeholder.com/500x750";
+  const posterPath = posters[0]?.file_path;
   return (
     <Link to={routesGen.mediaDetail(slug)}>
       <Box sx={{
-        ...uiConfigs.style.backgroundImage(posterPath),
+        ...uiConfigs.style.backgroundImage(`https://image.tmdb.org/t/p/w500${posterPath}`),
         paddingTop: "160%",
         "&:hover .media-info": { opacity: 1, bottom: 0 },
         "&:hover .media-back-drop, &:hover .media-play-btn": { opacity: 1 },
-        color: "primary.contrastText"
+        color: "primary.contrastText", margin: 1, borderRadius: "15px",
       }}>
 
         {/* Background overlay */}

@@ -3,7 +3,7 @@ import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlin
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import { Box, Button, Chip, Divider, Stack, Typography } from "@mui/material";
 import { grey } from "@mui/material/colors";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import CircularRate from "../components/common/CircularRate";
@@ -19,6 +19,9 @@ import RecommendSlide from "../components/common/RecommendSlide";
 import MediaPlayer from "../components/common/MediaPlayer";
 import EpisodeList from "../components/common/EpisodeList";
 import { resetSelectedEpisode } from "../redux/features/episodeSlice";
+import BackdropSlide from "../components/common/BackdropSlide";
+import PosterSlide from "../components/common/PosterSlide";
+import getTMDBImages from "../api/configs/images.config";
 
 const MediaDetail = () => {
   const dispatch = useDispatch();
@@ -30,7 +33,8 @@ const MediaDetail = () => {
 
   }, [slug, dispatch]);
 
-
+  const [posters, setPosters] = useState([]);
+  const [backdrops, setBackdrops] = useState([]);
   const { isLoading, data } = useDetail({ slug });
 
   useEffect(() => {
@@ -39,8 +43,17 @@ const MediaDetail = () => {
 
   const media = data?.item;
 
+  useEffect(() => {
+    const fetchImages = async () => {
+      if (media) {
+        const { posters, backdrops } = await getTMDBImages(media);
+        setPosters(posters);
+        setBackdrops(backdrops);
+      }
+    };
 
-
+    fetchImages();
+  }, [media]);
   if (!media) return null;
   const quality = media.quality || "HD";
   const actor = media.actor.length === 1 && media.actor[0] === "" ? "Chưa cập nhật" : media.actor;
@@ -57,12 +70,11 @@ const MediaDetail = () => {
   const thumbUrl = media.thumb_url
     ? `https://img.ophim.live/uploads/movies/${media.thumb_url}`
     : "https://via.placeholder.com/500x750";
-  const posterUrl = media.poster_url
-    ? `https://img.ophim.live/uploads/movies/${media.poster_url}`
-    : "https://via.placeholder.com/500x750";
+  const posterUrl = posters[0]?.file_path
+  console.log(posterUrl);
   const episodes = media.episodes[0].server_data || [];
 
-  console.log("MediaDetail", episodes);
+  console.log(backdrops, posters);
   return (
     <>
       <ImageHeader imgPath={thumbUrl} />
@@ -72,7 +84,7 @@ const MediaDetail = () => {
           <Box sx={{ display: "flex", flexDirection: { md: "row", xs: "column" } }}>
             {/* poster */}
             <Box sx={{ width: { xs: "70%", sm: "50%", md: "40%" }, margin: { xs: "0 auto 2rem", md: "0 2rem 0 0" } }}>
-              <Box sx={{ paddingTop: "140%", ...uiConfigs.style.backgroundImage(posterUrl) }} />
+              <Box sx={{ paddingTop: "140%", ...uiConfigs.style.backgroundImage(`https://image.tmdb.org/t/p/w500${posterUrl}`) }} />
             </Box>
             {/* poster */}
 
@@ -192,6 +204,22 @@ const MediaDetail = () => {
           <EpisodeList episodes={episodes} />
         </Container>
         {/* media episodes */}
+        {/* media backdrop */}
+        {backdrops?.length > 0 && (
+          <Container header="backdrops">
+            <BackdropSlide backdrops={backdrops} />
+          </Container>
+        )}
+        {/* media backdrop */}
+        {/* media posters */}
+        {posters?.length > 0 && (
+          <Container header="posters">
+            <PosterSlide posters={posters} />
+          </Container>
+        )}
+        {/* media posters */}
+
+
         {/* media videos */}
         <div ref={videoRef} style={{ paddingTop: "2rem" }}>
           <Container header="Video in Youtube">
