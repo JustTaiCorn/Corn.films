@@ -1,4 +1,4 @@
-
+import { useEffect } from "react";
 import { SwiperSlide } from "swiper/react";
 import { useList } from "../../api/modules/media.api";
 import AutoSwiper from "./AutoSwiper";
@@ -11,13 +11,14 @@ const MediaSlide = ({ mediaType }) => {
   const { isLoading, data } = useList({
     mediaType,
     page: 1
-  })
+  });
 
-  if (isLoading) {
-    dispatch(setGlobalLoading(true));
-  }
+  useEffect(() => {
+    dispatch(setGlobalLoading(isLoading));
+  }, [isLoading, dispatch]);
 
   const medias = data?.items;
+
   return (
     <AutoSwiper>
       {medias?.map((media, index) => (

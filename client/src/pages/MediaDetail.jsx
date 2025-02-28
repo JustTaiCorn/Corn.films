@@ -1,5 +1,6 @@
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
+import LoadingButton from "@mui/lab/LoadingButton";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import { Box, Button, Chip, Divider, Stack, Typography } from "@mui/material";
 import { grey } from "@mui/material/colors";
@@ -177,6 +178,19 @@ const MediaDetail = () => {
                   >
                     watch now
                   </Button>
+
+                  <LoadingButton
+                    variant="text"
+                    sx={{
+                      width: "max-content",
+                      "& .MuiButon-starIcon": { marginRight: "0" }
+                    }}
+                    size="large"
+                    startIcon={<FavoriteIcon />}
+                    loadingPosition="start"
+                  // loading={onRequest}
+                  // onClick={onFavoriteClick}
+                  />
                 </Stack>
                 {/* buttons */}
               </Stack>

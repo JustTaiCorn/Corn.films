@@ -14,7 +14,6 @@ const API_OPTION = {
 
 const getTMDBImages = async (media) => {
   const { id, type, season } = media.tmdb;
-  console.log(media.tmdb);
   try {
     let endpoint = "";
 

@@ -3,22 +3,25 @@ import { ListItemButton, ListItemIcon, ListItemText, Menu, Typography } from "@m
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-
 import menuConfigs from "../../configs/menu.configs";
-import { setUser } from "../../redux/features/userSlice";
+import { logout } from "../../redux/features/userThunks"; // Thêm import này
 
 const UserMenu = () => {
   const { user } = useSelector((state) => state.user);
-
   const dispatch = useDispatch();
-
   const [anchorEl, setAnchorEl] = useState(null);
 
   const toggleMenu = (e) => setAnchorEl(e.currentTarget);
 
+  const handleLogout = async () => {
+    await dispatch(logout());
+    setAnchorEl(null);
+  };
+
   if (!user) {
     return null;
   }
+
   return (
     <>
       {user && (
@@ -28,7 +31,7 @@ const UserMenu = () => {
             sx={{ cursor: "pointer", userSelect: "none" }}
             onClick={toggleMenu}
           >
-            {user.displayName}
+            {user.username}
           </Typography>
           <Menu
             open={Boolean(anchorEl)}
@@ -36,7 +39,7 @@ const UserMenu = () => {
             onClose={() => setAnchorEl(null)}
             PaperProps={{ sx: { padding: 0 } }}
           >
-            {menuConfigs.user.map((item, index) => (
+            {menuConfigs.user?.map((item, index) => (
               <ListItemButton
                 component={Link}
                 to={item.path}
@@ -51,7 +54,7 @@ const UserMenu = () => {
             ))}
             <ListItemButton
               sx={{ borderRadius: "10px" }}
-              onClick={() => dispatch(setUser(null))}
+              onClick={handleLogout}  // Thay đổi ở đây
             >
               <ListItemIcon><LogoutOutlinedIcon /></ListItemIcon>
               <ListItemText disableTypography primary={

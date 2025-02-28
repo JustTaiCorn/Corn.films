@@ -63,7 +63,7 @@ const Sidebar = ({ open, toggleSidebar }) => {
 
         {user && (<>
           <Typography variant="h6" marginBottom="20px">PERSONAL</Typography>
-          {menuConfigs.user.map((item, index) => (
+          {menuConfigs.user?.map((item, index) => (
             <ListItemButton
               key={index}
               sx={{

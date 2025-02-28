@@ -6,7 +6,6 @@ import { AppBar, Box, Button, IconButton, Stack, Toolbar, useScrollTrigger } fro
 import { cloneElement, useState } from "react";
 import { Link } from "react-router-dom";
 import { themeModes } from "../../configs/theme.configs";
-import { setAuthModalOpen } from "../../redux/features/authModalSlice";
 import { setThemeMode } from "../../redux/features/themeModeSlice";
 import Logo from "./Logo";
 import UserMenu from "./UserMenu";
@@ -110,7 +109,8 @@ const Topbar = () => {
             <Stack spacing={3} direction="row" alignItems="center">
               {!user && <Button
                 variant="contained"
-                onClick={() => dispatch(setAuthModalOpen(true))}
+                component={Link}
+                to="/log-in"
               >
                 sign in
               </Button>}

@@ -13,9 +13,10 @@ import routes from "./routes/routes";
 import themeConfigs from "./configs/theme.configs";
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { Suspense, lazy } from "react";
+import { Suspense, lazy, useEffect } from "react";
 import GlobalLoading from "./components/common/GlobalLoading";
 import Falling from "falling";
+import { checkAuth } from "./redux/features/userThunks";
 const MainLayout = lazy(() => import("./components/layout/MainLayout"));
 const PageWrapper = lazy(() => import("./components/common/PageWrapper"));
 
@@ -23,6 +24,18 @@ const queryClient = new QueryClient();
 const App = () => {
   const { themeMode } = useSelector((state) => state.themeMode);
   const flower = useSelector((state) => state.flower.showFlower);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const initializeAuth = async () => {
+      try {
+        await dispatch(checkAuth());
+      } catch (error) {
+        console.error('Auth check failed:', error);
+      }
+    };
+    initializeAuth();
+  }, [dispatch]);
 
   return (
     <QueryClientProvider client={queryClient}>

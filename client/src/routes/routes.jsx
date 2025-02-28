@@ -1,6 +1,13 @@
 import { lazy } from "react";
 import MediaCategory from "../pages/MediaCategory";
 import MediaCoutries from "../pages/MediaCoutries";
+import SignUpPage from "../pages/SignUpPage";
+import LoginPage from "../pages/LoginPage";
+import EmailVerificationPage from "../pages/EmailVerificationPage";
+import ForgotPasswordPage from "../pages/ForgotPasswordPage";
+import { Navigate } from "react-router";
+import { useSelector } from "react-redux";
+import MediaListByRequest from "../pages/MediaListByRequest";
 const HomePage = lazy(() => import("../pages/HomePage"));
 const MediaDetail = lazy(() => import("../pages/MediaDetail"));
 const MediaList = lazy(() => import("../pages/MediaList"));
@@ -15,7 +22,15 @@ export const routesGen = {
   mediaWatch: (slug) => `/xem-phim/${slug}`,
 };
 
+const RedirectAuthenticatedUser = ({ children }) => {
+  const { isAuthenticated, user } = useSelector((state) => state.user);
 
+  if (isAuthenticated && user.isVerified) {
+    return <Navigate to='/' replace />;
+  }
+
+  return children;
+};
 
 const routes = [
   {
@@ -45,9 +60,40 @@ const routes = [
     element: <MediaCoutries />,
   },
   {
+    path: "/the-loai/:slug",
+    element: <MediaListByRequest />
+  },
+  {
+    path: "/quoc-gia/:slug",
+    element: <MediaListByRequest />
+  }
+  ,
+  {
     path: "/the-loai",
     element: <MediaCategory />,
+  },
+
+
+  {
+    path: "/sign-up",
+    element: <RedirectAuthenticatedUser><SignUpPage /></RedirectAuthenticatedUser>
+  },
+  {
+    path: "/log-in",
+    element: <RedirectAuthenticatedUser><LoginPage /></RedirectAuthenticatedUser>
+  },
+  {
+    path: "/verify-email",
+    element: <RedirectAuthenticatedUser><EmailVerificationPage /></RedirectAuthenticatedUser>
+  },
+  {
+    path: "/forgot-password",
+    element: <ForgotPasswordPage />
+  },
+  {
+    path: "reset-password/:token",
   }
+
 ];
 
 export default routes;

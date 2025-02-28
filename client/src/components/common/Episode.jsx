@@ -7,8 +7,6 @@ const Episode = ({ episode }) => {
         dispatch(setEpisode(episode));
     }
     const selectEpisode = useSelector((state) => state.episode.selectedEpisode);
-    console.log("Current selectedEpisode in Redux:", selectEpisode);
-    console.log("Current episode slug:", episode.slug);
     return (
         <Button
             variant="contained"

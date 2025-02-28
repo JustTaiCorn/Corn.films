@@ -4,8 +4,10 @@ const mediaEndpoints = {
   list: ({ mediaType, currPage }) => `danh-sach/${mediaType}?page=${currPage}`,
   detail: ({ slug }) => `phim/${slug}`,
   search: ({ query }) => `tim-kiem?keyword=${query}&page=1`,
-  listByCategory: ({ category }) => `the-loai/${category}?page=1`,
-  listByCountry: ({ country }) => `quoc-gia/${country}?page=1`,
+  listByCategory: ({ category, currPage }) =>
+    `the-loai/${category}?page=${currPage || 1}`,
+  listByCountry: ({ country, currPage }) =>
+    `quoc-gia/${country}?page=${currPage || 1}`,
 };
 // Hàm return url dựa vào params
 const buildUrl = (params) => {
@@ -62,11 +64,19 @@ const mediaApi = {
       return { err };
     }
   },
+  getCategory: async () => {
+    try {
+      const response = await publicClient.get("the-loai");
 
-  getListByCategory: async ({ category }) => {
+      return response.data;
+    } catch (err) {
+      return { err };
+    }
+  },
+  getListByCategory: async ({ category, currPage }) => {
     try {
       const response = await publicClient.get(
-        mediaEndpoints.listByCategory({ category })
+        mediaEndpoints.listByCategory({ category, currPage })
       );
 
       return response.data;
@@ -74,11 +84,19 @@ const mediaApi = {
       return { err };
     }
   },
+  getCoutry: async () => {
+    try {
+      const response = await publicClient.get("quoc-gia/");
+      return response.data;
+    } catch (err) {
+      return { err };
+    }
+  },
 
-  getListByCountry: async ({ country }) => {
+  getListByCountry: async ({ country, currPage }) => {
     try {
       const response = await publicClient.get(
-        mediaEndpoints.listByCountry({ country })
+        mediaEndpoints.listByCountry({ country, currPage })
       );
 
       return response.data;
@@ -121,20 +139,23 @@ export const useSearch = ({ query }) => {
   });
 };
 
-export const useListByCategory = ({ category }) => {
+export const useListByCategory = ({ category, currPage }) => {
   return useQuery({
-    queryKey: ["listByCategory", { category }],
+    queryKey: ["listByCategory", { category, currPage }],
     queryFn: () =>
       mediaApi.getListByCategory({
         category,
+        currPage,
       }),
+    enabled: !!category,
   });
 };
 
-export const useListByCountry = ({ country }) => {
+export const useListByCountry = ({ country, currPage }) => {
   return useQuery({
-    queryKey: ["listByCountry", { country }],
-    queryFn: () => mediaApi.getListByCountry({ country }),
+    queryKey: ["listByCountry", { country, currPage }],
+    queryFn: () => mediaApi.getListByCountry({ country, currPage }),
+    enabled: !!country,
   });
 };
 

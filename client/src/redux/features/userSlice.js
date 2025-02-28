@@ -3,38 +3,59 @@ export const userSlice = createSlice({
   name: "User",
   initialState: {
     user: null,
+    isAuthenticated: false,
+    error: null,
+    isLoading: false,
+    isCheckingAuth: true,
+    message: null,
     listFavorites: [],
-    isAuthenticated: false, // Thêm trạng thái xác thực
   },
   reducers: {
-    setUser: (state, action) => {
-      if (action.payload === null) {
-        localStorage.removeItem("actkn");
-        state.isAuthenticated = false;
-      } else {
-        if (action.payload.token) {
-          localStorage.setItem("actkn", action.payload.token);
-          state.isAuthenticated = true;
-        }
-      }
-      state.user = action.payload;
+    setLoading: (state, action) => {
+      state.isLoading = action.payload;
+      state.error = null;
     },
-    //   setListFavorites: (state, action) => {
-    //     if (!state.isAuthenticated) return; // Kiểm tra xác thực
-    //     state.listFavorites = action.payload;
-    //   },
-    //   removeFavorite: (state, action) => {
-    //     if (!state.isAuthenticated) return; // Kiểm tra xác thực
-    //     const { mediaId } = action.payload;
-    //     state.listFavorites = [...state.listFavorites].filter(e => e.mediaId.toString() !== mediaId.toString());
-    //   },
-    //   addFavorite: (state, action) => {
-    //     if (!state.isAuthenticated) return; // Kiểm tra xác thực
-    //     state.listFavorites = [action.payload, ...state.listFavorites];
-    //   }
+    setUser: (state, action) => {
+      state.user = action.payload;
+      state.isAuthenticated = !!action.payload;
+      state.isLoading = false;
+      state.isCheckingAuth = false;
+      state.error = null;
+    },
+    setCheckingAuth: (state, action) => {
+      state.isCheckingAuth = action.payload;
+      state.error = null;
+    },
+    setAuthState: (state, action) => {
+      state.user = action.payload.user;
+      state.isAuthenticated = action.payload.isAuthenticated;
+      state.isLoading = false;
+      state.isCheckingAuth = false;
+      state.error = null;
+    },
+    setError: (state, action) => {
+      state.error = action.payload;
+      state.isLoading = false;
+      state.isCheckingAuth = false;
+    },
+    setMessage: (state, action) => {
+      state.message = action.payload;
+      state.isLoading = false;
+    },
+    setListFavorites: (state, action) => {
+      state.listFavorites = action.payload;
+    },
+    addFavorite: (state, action) => {
+      state.listFavorites = [action.payload, ...state.listFavorites];
+    },
+    removeFavorite: (state, action) => {
+      const { mediaId } = action.payload;
+      state.listFavorites = state.listFavorites.filter(
+        (e) => e.mediaId.toString() !== mediaId.toString()
+      );
+    },
   },
 });
 
-export const { setUser } = userSlice.actions;
+export const { setUser,setLoading,setAuthState,setCheckingAuth,setError,setListFavorites,setMessage,addFavorite,removeFavorite } = userSlice.actions;
 export default userSlice.reducer;
-// ... existing code ...
