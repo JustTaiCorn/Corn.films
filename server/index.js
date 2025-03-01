@@ -8,14 +8,27 @@ import routes from "./routes/routes.js";
 config();
 const app = express();
 
-// CORS phải được cấu hình TRƯỚC khi định nghĩa route
+const allowedOrigins = [
+  "http://localhost:5173", // Frontend local khi phát triển
+  "https://popcornflims.netlify.app", // Frontend trên Netlify (production)
+];
+
+// Cấu hình CORS cho nhiều origins
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://popcornflims.netlify.app"],
-    credentials: true,
+    origin: function (origin, callback) {
+      // Kiểm tra xem origin có trong danh sách allowedOrigins không
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Các phương thức HTTP được phép
+    allowedHeaders: ["Content-Type", "Authorization"], // Các header được phép
+    credentials: true, // Cho phép gửi cookie, token, v.v. nếu cần
   })
 );
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());

@@ -80,7 +80,7 @@ const routes = [
   },
   {
     path: "/log-in",
-    element: <RedirectAuthenticatedUser><LoginPage /></RedirectAuthenticatedUser>
+    element: <LoginPage />
   },
   {
     path: "/verify-email",
