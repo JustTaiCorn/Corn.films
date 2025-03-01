@@ -9,7 +9,12 @@ config();
 const app = express();
 
 // CORS phải được cấu hình TRƯỚC khi định nghĩa route
-app.use(cors({ origin: "http://localhost:5173", credentials: true }));
+app.use(
+  cors({
+    origin: ["http://localhost:5173", "https://popcornflims.netlify.app"],
+    credentials: true,
+  })
+);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

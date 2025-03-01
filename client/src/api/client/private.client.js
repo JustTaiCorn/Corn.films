@@ -1,9 +1,9 @@
 import axios from "axios";
 
 const API_URL =
-  import.meta.env.MODE === "development"
-    ? "http://localhost:5000/api/v1" // Sửa để khớp với cấu trúc route server
-    : "/api/v1";
+  import.meta.env.MODE === "production"
+    ? "https://corn-films.onrender.com/api/v1"
+    : "http://localhost:5000/api/v1";
 
 console.log(API_URL);
 const privateClient = axios.create({
