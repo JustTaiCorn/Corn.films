@@ -8,6 +8,7 @@ import ForgotPasswordPage from "../pages/ForgotPasswordPage";
 import { Navigate } from "react-router";
 import { useSelector } from "react-redux";
 import MediaListByRequest from "../pages/MediaListByRequest";
+import ResetPasswordPage from "../pages/ResetPasswordPage";
 const HomePage = lazy(() => import("../pages/HomePage"));
 const MediaDetail = lazy(() => import("../pages/MediaDetail"));
 const MediaList = lazy(() => import("../pages/MediaList"));
@@ -92,6 +93,7 @@ const routes = [
   },
   {
     path: "reset-password/:token",
+    element: <ResetPasswordPage />
   }
 
 ];

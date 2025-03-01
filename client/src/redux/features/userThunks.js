@@ -78,7 +78,9 @@ export const verifyEmail = async (code) => {
 export const forgotPassword = (email) => async (dispatch) => {
   dispatch(setLoading(true));
   try {
-    const response = await axios.post(`/user/forgot-password`, { email });
+    const response = await privateClient.post(`/user/forgot-password`, {
+      email,
+    });
     dispatch(setMessage(response.data.message));
   } catch (error) {
     dispatch(
@@ -91,7 +93,7 @@ export const forgotPassword = (email) => async (dispatch) => {
 export const resetPassword = (token, password) => async (dispatch) => {
   dispatch(setLoading(true));
   try {
-    const response = await axios.post(`/user/reset-password/${token}`, {
+    const response = await privateClient.post(`/user/reset-password/${token}`, {
       password,
     });
     dispatch(setMessage(response.data.message));
@@ -109,9 +111,13 @@ export const uploadAvatar = (file) => async (dispatch) => {
   formData.append("avatar", file);
 
   try {
-    const response = await axios.post("/api/user/upload-avatar", formData, {
-      headers: { "Content-Type": "multipart/form-data" },
-    });
+    const response = await privateClient.post(
+      "/api/user/upload-avatar",
+      formData,
+      {
+        headers: { "Content-Type": "multipart/form-data" },
+      }
+    );
     dispatch(
       setAuthState({
         user: { ...response.data.user, avatarUrl: response.data.avatarUrl },

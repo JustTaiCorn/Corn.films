@@ -89,11 +89,11 @@ const ForgotPasswordPage = () => {
                       backgroundColor: "#424242",
                       color: "white",
                       "& fieldset": { borderColor: "#616161" },
-                      "&:hover fieldset": { borderColor: "#4caf50" },
-                      "&.Mui-focused fieldset": { borderColor: "#4caf50" },
+                      "&:hover fieldset": { borderColor: "#" },
+                      "&.Mui-focused fieldset": { borderColor: "#fb5a5a" },
                     },
                     "& .MuiInputLabel-root": { color: "gray" },
-                    "& .MuiInputLabel-root.Mui-focused": { color: "#4caf50" },
+                    "& .MuiInputLabel-root.Mui-focused": { color: "#fb5a5a" },
                   }}
                 />
                 <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
@@ -104,16 +104,13 @@ const ForgotPasswordPage = () => {
                     disabled={isLoading}
                     sx={{
                       py: 1.5,
-                      background: "linear-gradient(to right, #4caf50, #00c853)",
+                      background: "linear-gradient(to right, #fb5a5a, #fb5a5a)",
                       color: "white",
                       fontWeight: "bold",
                       borderRadius: "8px",
                       textTransform: "none",
                       "&:hover": {
-                        background: "linear-gradient(to right, #388e3c, #00a544)",
-                      },
-                      "&:focus": {
-                        ring: "2px solid rgba(76, 175, 80, 0.5)",
+                        background: "linear-gradient(to right, #a83333, #fb5a5a)",
                       },
                       "&:disabled": { opacity: 0.5 },
                     }}
