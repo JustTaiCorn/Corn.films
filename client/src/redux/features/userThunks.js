@@ -1,4 +1,3 @@
-import axios from "axios";
 import {
   setAuthState,
   setCheckingAuth,
@@ -62,7 +61,7 @@ export const logout = () => async (dispatch) => {
 export const checkAuth = () => async (dispatch) => {
   dispatch(setCheckingAuth(true));
   try {
-    const response = await axios.get(`/user/check-auth`);
+    const response = await privateClient.get(`/user/check-auth`);
     dispatch(setAuthState({ user: response.data.user, isAuthenticated: true }));
   } catch (error) {
     dispatch(setAuthState({ user: null, isAuthenticated: false }));

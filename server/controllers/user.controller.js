@@ -209,7 +209,9 @@ export const resetPassword = async (req, res) => {
 
 export const checkAuth = async (req, res) => {
   try {
-    const user = await User.findById(req.userId).select("-password");
+    // Thay đổi từ req.userId thành req.user.id
+    const user = await User.findById(req.user.id).select("-password");
+
     if (!user) {
       return res
         .status(400)

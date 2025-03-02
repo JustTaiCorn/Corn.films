@@ -1,5 +1,4 @@
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import LoadingButton from "@mui/lab/LoadingButton";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import { Box, Button, Chip, Divider, Stack, Typography } from "@mui/material";
@@ -21,6 +20,7 @@ import { resetSelectedEpisode } from "../redux/features/episodeSlice";
 import BackdropSlide from "../components/common/BackdropSlide";
 import PosterSlide from "../components/common/PosterSlide";
 import getTMDBImages from "../api/configs/images.config";
+import MediaReview from "../components/common/MediaReview";
 
 const MediaDetail = () => {
   const dispatch = useDispatch();
@@ -224,7 +224,7 @@ const MediaDetail = () => {
           </Container>
         </div>
         {/* media videos */}
-
+        <MediaReview media={media} />
         {/* media recommendation */}
         <Container header="you may also like">
           <RecommendSlide category={media.category[0].slug} country={media.country[0].slug} />

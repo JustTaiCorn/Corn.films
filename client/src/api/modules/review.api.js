@@ -1,0 +1,48 @@
+import privateClient from "../client/private.client";
+const reviewApi = {
+  add: async ({ mediaId, mediaTitle, mediaPoster, content }) => {
+    try {
+      const response = await privateClient.post("reviews", {
+        mediaId,
+        mediaTitle,
+        mediaPoster,
+        content,
+      });
+
+      return { response: response.data };
+    } catch (err) {
+      return { err };
+    }
+  },
+
+  remove: async ({ reviewId }) => {
+    try {
+      const response = await privateClient.delete(`reviews/${reviewId}`);
+
+      return { response: response.data };
+    } catch (err) {
+      return { err };
+    }
+  },
+
+  getList: async () => {
+    try {
+      const response = await privateClient.get("reviews");
+
+      return { response: response.data };
+    } catch (err) {
+      return { err };
+    }
+  },
+
+  getReviewsByMediaId: async (mediaId) => {
+    try {
+      const response = await privateClient.get(`reviews/media/${mediaId}`);
+      return { response: response.data };
+    } catch (err) {
+      return { err };
+    }
+  },
+};
+
+export default reviewApi;
