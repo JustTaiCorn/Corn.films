@@ -31,13 +31,12 @@ const getTMDBImages = async (media) => {
     const response = await axios.get(endpoint, {
       params: { api_key: API_KEY, API_OPTION },
     });
-    console.log(response);
     const posters = response.data.posters || [];
     const backdrops = response.data.backdrops || [];
 
     return { posters, backdrops };
   } catch (error) {
-    console.error("Lỗi khi gọi TMDB API:", error.message);
+    console.error("Failed to get images from TMDB", error);
     return { posters: [], backdrops: [] };
   }
 };

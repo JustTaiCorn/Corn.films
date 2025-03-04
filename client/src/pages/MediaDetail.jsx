@@ -4,7 +4,7 @@ import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import { Box, Button, Chip, Divider, Stack, Typography } from "@mui/material";
 import { grey } from "@mui/material/colors";
 import { useEffect, useRef, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useParams, Link } from "react-router-dom";
 import CircularRate from "../components/common/CircularRate";
 import Container from "../components/common/Container";
@@ -21,26 +21,55 @@ import BackdropSlide from "../components/common/BackdropSlide";
 import PosterSlide from "../components/common/PosterSlide";
 import getTMDBImages from "../api/configs/images.config";
 import MediaReview from "../components/common/MediaReview";
+import favoriteApi from "../api/modules/favorite.api";
+import { addFavorite, removeFavorite, setListFavorites } from "../redux/features/userSlice";
+import { toast } from "react-toastify";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 
 const MediaDetail = () => {
   const dispatch = useDispatch();
   const videoRef = useRef(null);
   const { slug } = useParams();
-  useEffect(() => {
-    window.scrollTo(0, 0);
-    dispatch(resetSelectedEpisode());
-
-  }, [slug, dispatch]);
-
   const [posters, setPosters] = useState([]);
   const [backdrops, setBackdrops] = useState([]);
   const { isLoading, data } = useDetail({ slug });
+  const media = data?.item;
+  const { user, listFavorites } = useSelector((state) => state.user);
+  const [onRequest, setOnRequest] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(false);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    dispatch(resetSelectedEpisode());
+  }, [slug, dispatch]);
 
   useEffect(() => {
     dispatch(setGlobalLoading(isLoading));
   }, [isLoading, dispatch]);
 
-  const media = data?.item;
+  useEffect(() => {
+    if (Array.isArray(listFavorites) && listFavorites.length > 0 && media) {
+      const foundFavorite = listFavorites.find(
+        (favorite) => favorite.mediaId === media._id
+      );
+      setIsFavorite(!!foundFavorite);
+    }
+  }, [listFavorites, media]);
+
+  useEffect(() => {
+    const loadFavorites = async () => {
+      if (user && (!Array.isArray(listFavorites) || listFavorites.length === 0)) {
+        const { response } = await favoriteApi.getList();
+        if (response && Array.isArray(response.data.favorites)) {
+          dispatch(setListFavorites(response.data.favorites));
+        } else {
+          dispatch(setListFavorites([]));
+        }
+      }
+    };
+
+    loadFavorites();
+  }, [dispatch, user, listFavorites]);
 
   useEffect(() => {
     const fetchImages = async () => {
@@ -58,7 +87,7 @@ const MediaDetail = () => {
   const actor = media.actor.length === 1 && media.actor[0] === "" ? "Chưa cập nhật" : media.actor;
   const actorsString = actor === "Chưa cập nhật" ? "Chưa cập nhật" : actor.join(", ");
   const director =
-    media.director.length === 1 && media.director[0] === ""
+    media.director?.length === 1 && media.director[0] === ""
       ? "Chưa cập nhật"
       : media.director;
   const title = media.title || media.name || "No Title";
@@ -71,6 +100,88 @@ const MediaDetail = () => {
   const posterPath = posters[0]?.file_path
     ? `https://image.tmdb.org/t/p/w500${posters[0].file_path}`
     : `https://img.ophim.live/uploads/movies/${media.poster_url}`;
+
+  const onFavoriteClick = async () => {
+    if (!user) {
+      toast.warning("Vui lòng đăng nhập để thêm vào yêu thích");
+      return;
+    }
+
+    if (onRequest || !media) return;
+    setOnRequest(true);
+
+    try {
+      if (isFavorite && Array.isArray(listFavorites)) {
+        // Tìm favorite cần xóa
+        const favorite = listFavorites.find(
+          (item) => item.mediaId === media._id
+        );
+        if (favorite) {
+          const { response, err } = await favoriteApi.remove({ favoriteId: favorite.mediaId });
+
+          if (response) {
+            // Sửa chỗ này để truyền đúng định dạng mà reducer mong đợi
+            dispatch(removeFavorite({ mediaId: media._id }));
+            setIsFavorite(false);
+            toast.success("Đã xóa khỏi danh sách yêu thích");
+          } else if (err) {
+            toast.error("Lỗi khi xóa khỏi yêu thích");
+          }
+        }
+      } else {
+        // Kiểm tra trong danh sách hiện tại trước khi gọi API
+        const alreadyFavorited = Array.isArray(listFavorites) &&
+          listFavorites.some(item => item.mediaId === media._id);
+
+        if (alreadyFavorited) {
+          setIsFavorite(true);
+          setOnRequest(false);
+          return; // Không gọi API nếu đã có trong danh sách
+        }
+
+        // Thêm vào favorites
+        const body = {
+          mediaId: media._id,
+          mediaTitle: media.title || media.name || "Không tiêu đề",
+          mediaPoster: media.poster_url || media.thumb_url || "",
+          mediaRate: media.vote_average || 0
+        };
+
+        const { response, err } = await favoriteApi.add(body);
+
+        if (response && response.data) {
+          dispatch(addFavorite(response.data));
+          setIsFavorite(true);
+          toast.success("Đã thêm vào danh sách yêu thích");
+        } else if (err) {
+          toast.error("Lỗi khi thêm vào yêu thích");
+        }
+      }
+    } catch (error) {
+      console.error("Favorite action error:", error);
+      toast.error("Có lỗi xảy ra");
+    } finally {
+      setOnRequest(false);
+    }
+  };
+
+  const renderFavoriteButton = () => (
+    <LoadingButton
+      variant="contained"
+      size="large"
+      startIcon={isFavorite ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+      loadingPosition="start"
+      loading={onRequest}
+      onClick={onFavoriteClick}
+      sx={{
+        bgcolor: isFavorite ? "primary.main" : "secondary.main",
+        "& .MuiButton-startIcon": { marginRight: 1 }
+      }}
+    >
+      {isFavorite ? "Đã yêu thích" : "Yêu thích"}
+    </LoadingButton>
+  );
+
   return (
     <>
       <ImageHeader imgPath={thumbUrl} />
@@ -179,18 +290,7 @@ const MediaDetail = () => {
                     watch now
                   </Button>
 
-                  <LoadingButton
-                    variant="text"
-                    sx={{
-                      width: "max-content",
-                      "& .MuiButon-starIcon": { marginRight: "0" }
-                    }}
-                    size="large"
-                    startIcon={<FavoriteIcon />}
-                    loadingPosition="start"
-                  // loading={onRequest}
-                  // onClick={onFavoriteClick}
-                  />
+                  {renderFavoriteButton()}
                 </Stack>
                 {/* buttons */}
               </Stack>

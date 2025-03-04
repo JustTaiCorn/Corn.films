@@ -8,7 +8,10 @@ import {
   signup,
   verifyEmail,
 } from "../controllers/user.controller.js";
+import { body } from "express-validator";
 import { verifyToken } from "../middlewares/verifyToken.js";
+import requestHandler from "../handlers/request.handler.js";
+import favoriteController from "../controllers/favorite.controller.js";
 
 const router = express.Router();
 
@@ -21,5 +24,28 @@ router.post("/verify-email", verifyEmail);
 router.post("/forgot-password", forgotPassword);
 
 router.post("/reset-password/:token", resetPassword);
+
+router.get("/favorites", verifyToken, favoriteController.getFavoritesOfUser);
+
+router.post(
+  "/favorites",
+  verifyToken,
+  body("mediaId")
+    .exists()
+    .withMessage("mediaId is required")
+    .isLength({ min: 1 })
+    .withMessage("mediaId can not be empty"),
+  body("mediaTitle").exists().withMessage("mediaTitle is required"),
+  body("mediaPoster").exists().withMessage("mediaPoster is required"),
+  body("mediaRate").exists().withMessage("mediaRate is required"),
+  requestHandler.validate,
+  favoriteController.addFavorite
+);
+
+router.delete(
+  "/favorites/:favoriteId",
+  verifyToken,
+  favoriteController.removeFavorite
+);
 
 export default router;

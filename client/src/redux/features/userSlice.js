@@ -46,7 +46,16 @@ export const userSlice = createSlice({
       state.listFavorites = action.payload;
     },
     addFavorite: (state, action) => {
-      state.listFavorites = [action.payload, ...state.listFavorites];
+      // Kiểm tra xem mediaId đã tồn tại trong danh sách chưa
+      const existingIndex = state.listFavorites.findIndex(
+        (item) => item.mediaId === action.payload.mediaId
+      );
+
+      // Nếu chưa tồn tại, thêm vào đầu danh sách
+      if (existingIndex === -1) {
+        state.listFavorites = [action.payload, ...state.listFavorites];
+      }
+      // Nếu đã tồn tại, không làm gì cả
     },
     removeFavorite: (state, action) => {
       const { mediaId } = action.payload;
@@ -57,5 +66,15 @@ export const userSlice = createSlice({
   },
 });
 
-export const { setUser,setLoading,setAuthState,setCheckingAuth,setError,setListFavorites,setMessage,addFavorite,removeFavorite } = userSlice.actions;
+export const {
+  setUser,
+  setLoading,
+  setAuthState,
+  setCheckingAuth,
+  setError,
+  setListFavorites,
+  setMessage,
+  addFavorite,
+  removeFavorite,
+} = userSlice.actions;
 export default userSlice.reducer;

@@ -3,7 +3,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import WbSunnyOutlinedIcon from "@mui/icons-material/WbSunnyOutlined";
 import { AppBar, Box, Button, IconButton, Stack, Toolbar, useScrollTrigger } from "@mui/material";
-import { cloneElement, useState } from "react";
+import { cloneElement, useState, memo } from "react";
 import { Link } from "react-router-dom";
 import { themeModes } from "../../configs/theme.configs";
 import { setThemeMode } from "../../redux/features/themeModeSlice";
@@ -14,6 +14,7 @@ import menuConfigs from "../../configs/menu.configs";
 import MacroOffIcon from '@mui/icons-material/MacroOff';
 import LocalFloristIcon from '@mui/icons-material/LocalFlorist';
 import { toggleFlower } from "../../redux/features/flowerSlice";
+
 const ScrollAppBar = ({ children, window }) => {
   const { themeMode } = useSelector((state) => state.themeMode);
 
@@ -30,11 +31,13 @@ const ScrollAppBar = ({ children, window }) => {
     }
   });
 };
-const Topbar = () => {
+
+// Sử dụng React.memo để tránh render lại khi props không đổi
+const Topbar = memo(function Topbar() {
   const { user } = useSelector((state) => state.user);
   const { appState } = useSelector((state) => state.appState);
   const { themeMode } = useSelector((state) => state.themeMode);
-  const flower = useSelector((state) => state.flower.showFlower); console.log("Before dispatch:", flower);
+  const flower = useSelector((state) => state.flower.showFlower);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const dispatch = useDispatch();
@@ -122,6 +125,6 @@ const Topbar = () => {
       </ScrollAppBar>
     </>
   );
-};
+});
 
 export default Topbar;

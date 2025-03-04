@@ -75,7 +75,7 @@ const getReviewsByMediaId = async (req, res) => {
     const reviews = await reviewModel
       .find({ mediaId })
       .populate({
-        path: "user", // Changed from "User" to "user" to match schema
+        path: "user",
         select: "username",
       })
       .sort("-createdAt");

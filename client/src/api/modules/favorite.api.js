@@ -1,0 +1,39 @@
+import privateClient from "../client/private.client";
+
+const favoriteApi = {
+  getList: async () => {
+    try {
+      const response = await privateClient.get("user/favorites");
+      return { response };
+    } catch (err) {
+      return { err };
+    }
+  },
+
+  add: async ({ mediaId, mediaTitle, mediaPoster, mediaRate }) => {
+    try {
+      const response = await privateClient.post("user/favorites", {
+        mediaId,
+        mediaTitle,
+        mediaPoster,
+        mediaRate,
+      });
+      return { response };
+    } catch (err) {
+      return { err };
+    }
+  },
+
+  remove: async ({ favoriteId }) => {
+    try {
+      const response = await privateClient.delete(
+        `user/favorites/${favoriteId}`
+      );
+      return { response };
+    } catch (err) {
+      return { err };
+    }
+  },
+};
+
+export default favoriteApi;
