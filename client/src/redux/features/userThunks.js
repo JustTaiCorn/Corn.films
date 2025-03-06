@@ -66,6 +66,7 @@ export const checkAuth = () => async (dispatch) => {
     dispatch(setAuthState({ user: response.data.user, isAuthenticated: true }));
   } catch (error) {
     dispatch(setAuthState({ user: null, isAuthenticated: false }));
+    console.log("Check auth error:", error);
     throw error;
   }
 };
