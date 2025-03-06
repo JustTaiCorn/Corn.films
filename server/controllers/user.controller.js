@@ -117,7 +117,7 @@ export const login = async (req, res) => {
         .json({ success: false, message: "Mật khẩu không đúng" });
     }
 
-    generateTokenAndSetCookie(res, user._id);
+    const token = generateTokenAndSetCookie(res, user._id);
 
     user.lastLogin = new Date();
     await user.save();
@@ -129,10 +129,11 @@ export const login = async (req, res) => {
         ...user._doc,
         password: undefined,
       },
+      token,
     });
   } catch (error) {
     console.log("Error in login ", error);
-    res.status(400).json({ success: false, message: "Đăng nhập thất bại" });
+    res.status(400).json({ success: false, message: error.message });
   }
 };
 

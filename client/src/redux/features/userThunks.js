@@ -33,6 +33,8 @@ export const login = (email, password) => async (dispatch) => {
       email,
       password,
     });
+    console.log("response:", response);
+    localStorage.setItem("token", response.data.token);
     dispatch(
       setAuthState({
         user: response.data.user,
@@ -53,6 +55,7 @@ export const logout = () => async (dispatch) => {
     dispatch(setAuthState({ user: null, isAuthenticated: false }));
     dispatch(setListFavorites([]));
     dispatch(setGlobalLoading(false));
+    localStorage.removeItem("token");
   } catch (error) {
     dispatch(setError("Error logging out"));
     throw error;
@@ -62,12 +65,34 @@ export const logout = () => async (dispatch) => {
 export const checkAuth = () => async (dispatch) => {
   dispatch(setCheckingAuth(true));
   try {
+    // Kiểm tra token trong localStorage
+    const token = localStorage.getItem("token");
+    if (!token) {
+      dispatch(setAuthState({ user: null, isAuthenticated: false }));
+      return;
+    }
+
+    // Gọi API kiểm tra auth với token
     const response = await privateClient.get(`/user/check-auth`);
-    dispatch(setAuthState({ user: response.data.user, isAuthenticated: true }));
+    if (response.data?.user) {
+      dispatch(
+        setAuthState({
+          user: response.data.user,
+          isAuthenticated: true,
+        })
+      );
+    } else {
+      // Nếu không có user data, xóa token và set trạng thái chưa auth
+      localStorage.removeItem("token");
+      dispatch(setAuthState({ user: null, isAuthenticated: false }));
+    }
   } catch (error) {
+    // Nếu có lỗi, xóa token và set trạng thái chưa auth
+    localStorage.removeItem("token");
     dispatch(setAuthState({ user: null, isAuthenticated: false }));
-    console.log("Check auth error:", error);
-    throw error;
+    console.error("Check auth error:", error);
+  } finally {
+    dispatch(setCheckingAuth(false));
   }
 };
 
