@@ -6,7 +6,7 @@ export const userSlice = createSlice({
     isAuthenticated: false,
     error: null,
     isLoading: false,
-    isCheckingAuth: true,
+    isCheckingAuth: false,
     message: null,
     listFavorites: [],
   },
