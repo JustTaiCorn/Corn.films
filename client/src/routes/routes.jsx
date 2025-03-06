@@ -9,6 +9,8 @@ import { Navigate } from "react-router";
 import { useSelector } from "react-redux";
 import MediaListByRequest from "../pages/MediaListByRequest";
 import ResetPasswordPage from "../pages/ResetPasswordPage";
+import FavoriteList from "../pages/FavoriteList";
+import ReviewList from "../pages/ReviewList";
 const HomePage = lazy(() => import("../pages/HomePage"));
 const MediaDetail = lazy(() => import("../pages/MediaDetail"));
 const MediaList = lazy(() => import("../pages/MediaList"));
@@ -28,6 +30,20 @@ const RedirectAuthenticatedUser = ({ children }) => {
 
   if (isAuthenticated && user.isVerified) {
     return <Navigate to='/' replace />;
+  }
+
+  return children;
+};
+
+const ProtectedRoute = ({ children }) => {
+  const { isAuthenticated, user } = useSelector((state) => state.user);
+
+  if (!isAuthenticated) {
+    return <Navigate to='/log-in' replace />;
+  }
+
+  if (!user.isVerified) {
+    return <Navigate to='/verify-email' replace />;
   }
 
   return children;
@@ -94,7 +110,25 @@ const routes = [
   {
     path: "reset-password/:token",
     element: <ResetPasswordPage />
-  }
+  },
+  {
+    path: "/favorites",
+    element: (
+      <ProtectedRoute>
+        <FavoriteList />
+      </ProtectedRoute>
+    ),
+    state: "favorites"
+  },
+  {
+    path: "/reviews",
+    element: (
+      <ProtectedRoute>
+        <ReviewList />
+      </ProtectedRoute>
+    ),
+    state: "reviews"
+  },
 
 ];
 

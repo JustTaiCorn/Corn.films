@@ -5,7 +5,7 @@ import { Box, Button, Chip, Divider, Stack, Typography } from "@mui/material";
 import { grey } from "@mui/material/colors";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useLocation } from "react-router-dom";
 import CircularRate from "../components/common/CircularRate";
 import Container from "../components/common/Container";
 import ImageHeader from "../components/common/ImageHeader";
@@ -25,7 +25,8 @@ import favoriteApi from "../api/modules/favorite.api";
 import { addFavorite, removeFavorite, setListFavorites } from "../redux/features/userSlice";
 import { toast } from "react-toastify";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-
+import { Movie } from "@mui/icons-material";
+import MovieShareModal from "../components/common/MovieShareModal";
 const MediaDetail = () => {
   const dispatch = useDispatch();
   const videoRef = useRef(null);
@@ -33,11 +34,20 @@ const MediaDetail = () => {
   const [posters, setPosters] = useState([]);
   const [backdrops, setBackdrops] = useState([]);
   const { isLoading, data } = useDetail({ slug });
-  const media = data?.item;
   const { user, listFavorites } = useSelector((state) => state.user);
   const [onRequest, setOnRequest] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
+  const [movieUrl, setMovieUrl] = useState("");
+  const [movieTitle, setMovieTitle] = useState("Check out this movie!");
+  const location = useLocation();
+  const media = data?.item;
+  const Slug = data?.params.slug;
 
+  useEffect(() => {
+    const baseUrl = window.location.origin;
+    const path = location.pathname;
+    setMovieUrl(`${baseUrl}${path}`);
+  }, [location.pathname]);
   useEffect(() => {
     window.scrollTo(0, 0);
     dispatch(resetSelectedEpisode());
@@ -144,7 +154,10 @@ const MediaDetail = () => {
           mediaId: media._id,
           mediaTitle: media.title || media.name || "Không tiêu đề",
           mediaPoster: media.poster_url || media.thumb_url || "",
-          mediaRate: media.vote_average || 0
+          mediaRate: media.vote_average || 0,
+          mediaSlug: Slug || "",
+          mediaYear: media.year || "",
+          mediaTime: media.time || "",
         };
 
         const { response, err } = await favoriteApi.add(body);
@@ -175,7 +188,13 @@ const MediaDetail = () => {
       onClick={onFavoriteClick}
       sx={{
         bgcolor: isFavorite ? "primary.main" : "secondary.main",
-        "& .MuiButton-startIcon": { marginRight: 1 }
+        "& .MuiButton-startIcon": { marginRight: 1 },
+        fontSize: { xs: "0.875rem", sm: "1rem" },
+        padding: { xs: "6px 12px", sm: "8px 16px", md: "10px 20px" },
+        minWidth: { xs: "120px", sm: "150px", md: "180px" },
+        "& .MuiSvgIcon-root": {
+          fontSize: { xs: "1rem", sm: "1.25rem", md: "1.5rem" },
+        },
       }}
     >
       {isFavorite ? "Đã yêu thích" : "Yêu thích"}
@@ -291,6 +310,8 @@ const MediaDetail = () => {
                   </Button>
 
                   {renderFavoriteButton()}
+                  <MovieShareModal movieUrl={movieUrl} movieTitle={movieTitle} />
+
                 </Stack>
                 {/* buttons */}
               </Stack>
@@ -324,7 +345,7 @@ const MediaDetail = () => {
           </Container>
         </div>
         {/* media videos */}
-        <MediaReview media={media} />
+        <MediaReview media={media} slug={Slug} />
         {/* media recommendation */}
         <Container header="you may also like">
           <RecommendSlide category={media.category[0].slug} country={media.country[0].slug} />

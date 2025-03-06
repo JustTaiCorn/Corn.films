@@ -1,12 +1,13 @@
 import privateClient from "../client/private.client";
 const reviewApi = {
-  add: async ({ mediaId, mediaTitle, mediaPoster, content }) => {
+  add: async ({ mediaId, mediaTitle, mediaPoster, content, mediaSlug }) => {
     try {
       const response = await privateClient.post("reviews", {
         mediaId,
         mediaTitle,
         mediaPoster,
         content,
+        mediaSlug,
       });
 
       return { response: response.data };
@@ -24,7 +25,7 @@ const reviewApi = {
       return { err };
     }
   },
-
+  // Get reviews của user hiện tại
   getList: async () => {
     try {
       const response = await privateClient.get("reviews");

@@ -104,13 +104,13 @@ const getReviewsOfUser = async (req, res) => {
       })
       .populate({
         path: "user",
-        select: "username", // Chỉ lấy username
+        select: "username",
       })
       .sort("-createdAt");
 
     res.status(200).json({
       success: true,
-      results: reviews,
+      reviews: reviews,
     });
   } catch (error) {
     console.error(error);

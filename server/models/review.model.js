@@ -26,6 +26,10 @@ export default mongoose.model(
         type: String,
         required: true,
       },
+      mediaSlug: {
+        type: String,
+        required: true,
+      },
     },
     modelOptions
   )

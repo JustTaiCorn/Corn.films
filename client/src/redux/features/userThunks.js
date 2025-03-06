@@ -52,6 +52,7 @@ export const logout = () => async (dispatch) => {
     await privateClient.post(`/user/logout`);
     dispatch(setAuthState({ user: null, isAuthenticated: false }));
     dispatch(setListFavorites([]));
+    dispatch(setGlobalLoading(false));
   } catch (error) {
     dispatch(setError("Error logging out"));
     throw error;

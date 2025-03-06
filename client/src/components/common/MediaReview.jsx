@@ -74,7 +74,7 @@ const ReviewItem = ({ review, onRemoved }) => {
   );
 };
 
-const MediaReview = ({ media }) => {
+const MediaReview = ({ media, slug }) => {
   const mediaId = media._id || media.id;
   const { user } = useSelector((state) => state.user);
   const [listReviews, setListReviews] = useState([]);
@@ -119,9 +119,9 @@ const MediaReview = ({ media }) => {
       content,
       mediaId: media._id || media.id,
       mediaTitle: media.title || media.name,
-      mediaPoster: media.poster_path || media.poster_url || media.thumb_url
+      mediaPoster: media.poster_path || media.poster_url || media.thumb_url,
+      mediaSlug: slug
     };
-    console.log(body);
     const { response, err } = await reviewApi.add(body);
 
     setOnRequest(false);

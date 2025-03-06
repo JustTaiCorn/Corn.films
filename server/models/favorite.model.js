@@ -26,6 +26,18 @@ export default mongoose.model(
         type: Number,
         required: true,
       },
+      mediaSlug: {
+        type: String,
+        required: true,
+      },
+      mediaTime: {
+        type: String,
+        required: true,
+      },
+      mediaYear: {
+        type: String,
+        required: true,
+      },
     },
     modelOptions
   )

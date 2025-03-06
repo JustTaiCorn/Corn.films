@@ -10,13 +10,24 @@ const favoriteApi = {
     }
   },
 
-  add: async ({ mediaId, mediaTitle, mediaPoster, mediaRate }) => {
+  add: async ({
+    mediaId,
+    mediaTitle,
+    mediaPoster,
+    mediaRate,
+    mediaSlug,
+    mediaTime,
+    mediaYear,
+  }) => {
     try {
       const response = await privateClient.post("user/favorites", {
         mediaId,
         mediaTitle,
         mediaPoster,
         mediaRate,
+        mediaSlug,
+        mediaTime,
+        mediaYear,
       });
       return { response };
     } catch (err) {
