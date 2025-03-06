@@ -58,6 +58,8 @@ const MovieShareModal = ({ movieUrl, movieTitle = "Check out this movie!" }) => 
             </IconButton>
 
             <Modal
+                contentLabel="Share Movie Modal"
+                ariaHideApp={true}
                 isOpen={modalIsOpen}
                 onRequestClose={closeModal}
                 style={{
