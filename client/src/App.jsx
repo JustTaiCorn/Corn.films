@@ -17,6 +17,7 @@ import { Suspense, lazy, useEffect } from "react";
 import GlobalLoading from "./components/common/GlobalLoading";
 import Falling from "falling";
 import { checkAuth } from "./redux/features/userThunks";
+import SplashCursor from "./utils/SplashCursor";
 const MainLayout = lazy(() => import("./components/layout/MainLayout"));
 const PageWrapper = lazy(() => import("./components/common/PageWrapper"));
 
@@ -48,6 +49,7 @@ const App = () => {
         colors={["#FFF3C7", "#FEC7B4", "#FC819E", "#F7418F", "#FF8787", "#D80032", "#FF8787", "#F7418F", "#FC819E", "#FEC7B4", "#FFF3C7"]}
       />}
       <ReactQueryDevtools initialIsOpen={false} />
+      <SplashCursor />
       <ThemeProvider theme={themeConfigs.custom({ mode: themeMode })}>
         {/* config toastify */}
         <ToastContainer
