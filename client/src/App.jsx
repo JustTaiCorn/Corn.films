@@ -40,12 +40,12 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       {flower && <Falling
-        flowerCount={70}
-        flowerImage="https://emojicdn.elk.sh/🌸"
+        flowerCount={100}
+        flowerImage="https://raw.githubusercontent.com/microsoft/fluentui-emoji/main/assets/Cherry%20blossom/3D/cherry_blossom_3d.png"
         fallSpeed={-1}
         spreadWidth={4000}
         spreadHeight={2000}
-        colors={["#FFF3C7", "#FEC7B4", "#FC819E", "#F7418F", "#FF8787", "#D80032"]}
+        colors={["#FFF3C7", "#FEC7B4", "#FC819E", "#F7418F", "#FF8787", "#D80032", "#FF8787", "#F7418F", "#FC819E", "#FEC7B4", "#FFF3C7"]}
       />}
       <ReactQueryDevtools initialIsOpen={false} />
       <ThemeProvider theme={themeConfigs.custom({ mode: themeMode })}>
