@@ -13,7 +13,6 @@ import {
 } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import { verifyEmail } from "../redux/features/userThunks";
-import { setUser } from "../redux/features/userSlice";
 
 const EmailVerificationPage = () => {
     const [code, setCode] = useState(["", "", "", "", "", ""]);
@@ -56,13 +55,12 @@ const EmailVerificationPage = () => {
         e.preventDefault();
         const verificationCode = code.join("");
         try {
-            const response = await verifyEmail(verificationCode);
-            dispatch(setUser(response.user));
+            await dispatch(verifyEmail(verificationCode));
             navigate("/");
             toast.success("Email verified successfully");
         } catch (error) {
             console.log(error);
-            toast.error(error.response?.data?.message || "Verification failed");
+            toast.error(error.message || "Verification failed");
         }
     };
 

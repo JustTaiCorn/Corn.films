@@ -28,7 +28,7 @@ export const routesGen = {
 const RedirectAuthenticatedUser = ({ children }) => {
   const { isAuthenticated, user } = useSelector((state) => state.user);
 
-  if (isAuthenticated && user.isVerified) {
+  if (isAuthenticated && user && user.isVerified) {
     return <Navigate to='/' replace />;
   }
 

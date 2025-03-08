@@ -14,13 +14,15 @@ import { Lock, Mail } from "@mui/icons-material";
 import Input from "../components/common/Input"; // Using the same Input component
 import { useSelector, useDispatch } from "react-redux"; // Added useDispatch
 import { login } from "../redux/features/userThunks";
+import { toast } from "react-toastify";
+import { setError } from "../redux/features/userSlice";
 
 const LoginPage = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
     const dispatch = useDispatch(); // Added useDispatch
-    const { error, isLoading } = useSelector((state) => state.user);
+    const { isLoading } = useSelector((state) => state.user);
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -34,7 +36,7 @@ const LoginPage = () => {
             await dispatch(login(email, password));
             navigate("/");
         } catch (error) {
-            console.log(error);
+            toast.error(error.response?.data?.message || "Đăng nhập thất bại");
         }
     };
 
@@ -121,23 +123,6 @@ const LoginPage = () => {
                                 </Typography>
                             </Link>
                         </Box>
-
-                        {error && (
-                            <Alert
-                                severity="error"
-                                sx={{
-                                    mb: 2,
-                                    backgroundColor: 'rgba(211, 47, 47, 0.1)',
-                                    color: '#d32f2f',
-                                    '& .MuiAlert-icon': {
-                                        color: '#d32f2f'
-                                    }
-                                }}
-                            >
-                                {error}
-                            </Alert>
-                        )}
-
                         <Button
                             component={motion.button}
                             whileHover={{ scale: 1.02 }}

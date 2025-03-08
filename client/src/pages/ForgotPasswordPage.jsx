@@ -10,18 +10,18 @@ import {
   CircularProgress,
   Link,
 } from "@mui/material";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { forgotPassword } from "../redux/features/userThunks";
 
 const ForgotPasswordPage = () => {
   const [email, setEmail] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
-
+  const dispatch = useDispatch();
   const { isLoading } = useSelector((state) => state.user);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await forgotPassword(email);
+    await dispatch(forgotPassword(email));
     setIsSubmitted(true);
   };
 

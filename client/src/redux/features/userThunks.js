@@ -16,13 +16,18 @@ export const signup = (email, password, username) => async (dispatch) => {
       password,
       username,
     });
-    dispatch(setAuthState({ user: response.data.user, isAuthenticated: true }));
+    // Không lưu trạng thái người dùng ngay sau khi đăng ký
+    dispatch(
+      setMessage("Đăng ký thành công. Vui lòng kiểm tra email để xác thực.")
+    );
     return response.data;
   } catch (error) {
     const errorMessage =
       error.response?.data?.message || "An error occurred during sign up";
     dispatch(setError(errorMessage));
     throw error;
+  } finally {
+    dispatch(setLoading(false));
   }
 };
 
@@ -33,7 +38,13 @@ export const login = (email, password) => async (dispatch) => {
       email,
       password,
     });
-    console.log("response:", response);
+
+    // Kiểm tra xem người dùng đã xác thực email hay chưa
+    if (!response.data.user.isVerified) {
+      dispatch(setError("Vui lòng xác thực email trước khi đăng nhập"));
+      return;
+    }
+
     localStorage.setItem("token", response.data.token);
     dispatch(
       setAuthState({
@@ -44,7 +55,10 @@ export const login = (email, password) => async (dispatch) => {
     return response.data;
   } catch (error) {
     dispatch(setError(error.response?.data?.message || "Đăng nhập thất bại"));
+    console.error("Login error:", error);
     throw error;
+  } finally {
+    dispatch(setLoading(false));
   }
 };
 
@@ -96,9 +110,24 @@ export const checkAuth = () => async (dispatch) => {
   }
 };
 
-export const verifyEmail = async (code) => {
-  const response = await privateClient.post(`/user/verify-email`, { code });
-  return response.data;
+export const verifyEmail = (code) => async (dispatch) => {
+  dispatch(setLoading(true));
+  try {
+    const response = await privateClient.post(`/user/verify-email`, { code });
+    dispatch(
+      setAuthState({
+        user: response.data.user,
+        isAuthenticated: true,
+      })
+    );
+    return response.data;
+  } catch (error) {
+    const errorMessage = error.response?.data?.message || "Verification failed";
+    dispatch(setError(errorMessage));
+    throw error;
+  } finally {
+    dispatch(setLoading(false));
+  }
 };
 
 export const forgotPassword = (email) => async (dispatch) => {
@@ -112,6 +141,7 @@ export const forgotPassword = (email) => async (dispatch) => {
     dispatch(
       setError(error.response?.data?.message || "Error sending reset email")
     );
+    console.error("Forgot password error:", error);
     throw error;
   }
 };

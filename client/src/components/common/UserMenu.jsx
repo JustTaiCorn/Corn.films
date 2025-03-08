@@ -2,7 +2,7 @@ import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import { ListItemButton, ListItemIcon, ListItemText, Menu, Typography } from "@mui/material";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import menuConfigs from "../../configs/menu.configs";
 import { logout } from "../../redux/features/userThunks"; // Thêm import này
 
@@ -10,11 +10,12 @@ const UserMenu = () => {
   const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = useState(null);
-
+  const navigate = useNavigate();
   const toggleMenu = (e) => setAnchorEl(e.currentTarget);
 
   const handleLogout = async () => {
     await dispatch(logout());
+    navigate("/");
     setAnchorEl(null);
   };
 

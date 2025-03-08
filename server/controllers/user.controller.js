@@ -117,6 +117,16 @@ export const login = async (req, res) => {
         .json({ success: false, message: "Mật khẩu không đúng" });
     }
 
+    // Kiểm tra xem người dùng đã xác thực email hay chưa
+    if (!user.isVerified) {
+      return res
+        .status(400)
+        .json({
+          success: false,
+          message: "Vui lòng xác thực email trước khi đăng nhập",
+        });
+    }
+
     const token = generateTokenAndSetCookie(res, user._id);
 
     user.lastLogin = new Date();
