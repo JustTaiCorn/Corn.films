@@ -6,6 +6,8 @@ import {
   logout,
   resetPassword,
   signup,
+  updatepassword,
+  updateProfile,
   verifyEmail,
 } from "../controllers/user.controller.js";
 import { body } from "express-validator";
@@ -48,4 +50,16 @@ router.delete(
   favoriteController.removeFavorite
 );
 
+router.put(
+  "/update-password",
+  verifyToken,
+  requestHandler.validate,
+  updatepassword
+);
+router.put(
+  "/update-profile",
+  verifyToken,
+  requestHandler.validate,
+  updateProfile
+);
 export default router;

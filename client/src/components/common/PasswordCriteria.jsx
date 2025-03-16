@@ -14,20 +14,20 @@ const PasswordCriteria = ({ password }) => {
     ];
 
     return (
-        <Box sx={{ mt: 1, display: "flex", flexDirection: "column", gap: 0.5 }}>
+        <Box sx={{ mt: 1, display: "flex", flexDirection: "column", gap: 0.5, color: "grey.400" }}>
             {criteria.map((item) => (
                 <Box
                     key={item.label}
                     sx={{ display: "flex", alignItems: "center", gap: 1 }}
                 >
                     {item.met ? (
-                        <CheckCircle sx={{ fontSize: 16, color: "green.main" }} />
+                        <CheckCircle sx={{ fontSize: 16, color: "green" }} />
                     ) : (
                         <Cancel sx={{ fontSize: 16, color: "grey.500" }} />
                     )}
                     <Typography
                         variant="caption"
-                        sx={{ color: item.met ? "green.main" : "grey.400" }}
+                        sx={{ color: item.met ? "green" : "grey.400" }}
                     >
                         {item.label}
                     </Typography>

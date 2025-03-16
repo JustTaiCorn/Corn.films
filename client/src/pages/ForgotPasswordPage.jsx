@@ -57,7 +57,7 @@ const ForgotPasswordPage = () => {
               align="center"
               sx={{
                 fontWeight: "bold",
-                background: "#fb5a5a",
+                background: "red",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 mb: 2,
@@ -90,10 +90,10 @@ const ForgotPasswordPage = () => {
                       color: "white",
                       "& fieldset": { borderColor: "#616161" },
                       "&:hover fieldset": { borderColor: "#" },
-                      "&.Mui-focused fieldset": { borderColor: "#fb5a5a" },
+                      "&.Mui-focused fieldset": { borderColor: "red" },
                     },
                     "& .MuiInputLabel-root": { color: "gray" },
-                    "& .MuiInputLabel-root.Mui-focused": { color: "#fb5a5a" },
+                    "& .MuiInputLabel-root.Mui-focused": { color: "red" },
                   }}
                 />
                 <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
@@ -104,13 +104,13 @@ const ForgotPasswordPage = () => {
                     disabled={isLoading}
                     sx={{
                       py: 1.5,
-                      background: "linear-gradient(to right, #fb5a5a, #fb5a5a)",
+                      background: "linear-gradient(to right, red, red)",
                       color: "white",
                       fontWeight: "bold",
                       borderRadius: "8px",
                       textTransform: "none",
                       "&:hover": {
-                        background: "linear-gradient(to right, #a83333, #fb5a5a)",
+                        background: "linear-gradient(to right, #a83333, red)",
                       },
                       "&:disabled": { opacity: 0.5 },
                     }}
@@ -134,7 +134,7 @@ const ForgotPasswordPage = () => {
                     sx={{
                       width: 64,
                       height: 64,
-                      backgroundColor: "#fb5a5a",
+                      backgroundColor: "red",
                       borderRadius: "50%",
                       display: "flex",
                       alignItems: "center",
@@ -165,7 +165,7 @@ const ForgotPasswordPage = () => {
               component={RouterLink}
               to="/log-in"
               sx={{
-                color: "##fb5a5a",
+                color: "red",
                 textDecoration: "none",
                 display: "flex",
                 alignItems: "center",

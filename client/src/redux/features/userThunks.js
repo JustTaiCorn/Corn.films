@@ -187,3 +187,48 @@ export const uploadAvatar = (file) => async (dispatch) => {
     throw error;
   }
 };
+
+// Thêm vào cuối file
+export const updateProfile = (username) => async (dispatch) => {
+  dispatch(setLoading(true));
+  try {
+    const response = await privateClient.put("/user/update-profile", {
+      username,
+    });
+
+    dispatch(
+      setAuthState({
+        user: response.data.user,
+        isAuthenticated: true,
+      })
+    );
+
+    return response.data;
+  } catch (error) {
+    dispatch(
+      setError(error.response?.data?.message || "Failed to update profile")
+    );
+    throw error;
+  } finally {
+    dispatch(setLoading(false));
+  }
+};
+
+export const updatePassword = (password, newPassword) => async (dispatch) => {
+  dispatch(setLoading(true));
+  try {
+    const response = await privateClient.put("/user/update-password", {
+      password,
+      newPassword,
+    });
+
+    return response.data;
+  } catch (error) {
+    dispatch(
+      setError(error.response?.data?.message || "Failed to update password")
+    );
+    throw error;
+  } finally {
+    dispatch(setLoading(false));
+  }
+};

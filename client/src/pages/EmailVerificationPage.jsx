@@ -101,7 +101,7 @@ const EmailVerificationPage = () => {
                         align="center"
                         sx={{
                             fontWeight: "bold",
-                            background: "#fb5a5a",
+                            background: "red",
                             WebkitBackgroundClip: "text",
                             WebkitTextFillColor: "transparent",
                             mb: 2,
@@ -141,10 +141,10 @@ const EmailVerificationPage = () => {
                                                 borderColor: "#616161",
                                             },
                                             "&:hover fieldset": {
-                                                borderColor: "#fb5a5a",
+                                                borderColor: "red",
                                             },
                                             "&.Mui-focused fieldset": {
-                                                borderColor: "#fb5a5a",
+                                                borderColor: "red",
                                             },
                                         },
                                         "& .MuiInputBase-input": {
@@ -173,16 +173,16 @@ const EmailVerificationPage = () => {
                             sx={{
                                 mt: 3,
                                 py: 1.5,
-                                background: "linear-gradient(to right, #4caf50, #00c853)", //
+                                background: "red", //
                                 color: "white",
                                 fontWeight: "bold",
                                 borderRadius: "8px",
                                 textTransform: "none",
                                 "&:hover": {
-                                    background: "linear-gradient(to right, #388e3c, #00a544)",
+                                    background: "linear-gradient(to right, #ff416c, #ff4b2b)",
                                 },
                                 "&:focus": {
-                                    ring: "2px solid rgba(76, 175, 80, 0.5)",
+                                    ring: "2px solid red",
                                 },
                                 "&:disabled": {
                                     opacity: 0.5,

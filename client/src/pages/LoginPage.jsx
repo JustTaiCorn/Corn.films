@@ -74,7 +74,7 @@ const LoginPage = () => {
                         sx={{
                             mb: { xs: 2, sm: 4 },
                             fontWeight: "bold",
-                            background: "#fb5a5a",
+                            background: "red",
                             WebkitBackgroundClip: "text",
                             WebkitTextFillColor: "transparent",
                             fontSize: { xs: "1.5rem", sm: "2rem" },
@@ -114,7 +114,7 @@ const LoginPage = () => {
                                 <Typography
                                     variant="body2"
                                     sx={{
-                                        color: "#fb5a5a",
+                                        color: "red",
                                         "&:hover": { textDecoration: "underline" },
                                         fontSize: { xs: "0.75rem", sm: "0.875rem" },
                                     }}
@@ -135,7 +135,7 @@ const LoginPage = () => {
                                 mt: { xs: 2, sm: 3 },
                                 mb: 2,
                                 py: { xs: 1, sm: 1.5 },
-                                background: "#fb5a5a",
+                                background: "red",
                                 "&:hover": {
                                     background: "red",
                                 },
@@ -165,12 +165,12 @@ const LoginPage = () => {
                                 Don't have an account?{" "}
                                 <Link
                                     to="/sign-up"
-                                    style={{ color: "#fb5a5a", textDecoration: "none" }}
+                                    style={{ color: "red", textDecoration: "none" }}
                                 >
                                     <Typography
                                         component="span"
                                         sx={{
-                                            color: "#fb5a5a",
+                                            color: "red",
                                             "&:hover": { textDecoration: "underline" },
                                             fontSize: "inherit",
                                         }}

@@ -11,6 +11,7 @@ import MediaListByRequest from "../pages/MediaListByRequest";
 import ResetPasswordPage from "../pages/ResetPasswordPage";
 import FavoriteList from "../pages/FavoriteList";
 import ReviewList from "../pages/ReviewList";
+import ProfilePage from "../pages/ProfilePage";
 const HomePage = lazy(() => import("../pages/HomePage"));
 const MediaDetail = lazy(() => import("../pages/MediaDetail"));
 const MediaList = lazy(() => import("../pages/MediaList"));
@@ -129,7 +130,12 @@ const routes = [
     ),
     state: "reviews"
   },
-
+  {
+    path: "/profile",
+    element: <ProtectedRoute>
+      <ProfilePage />
+    </ProtectedRoute>
+  }
 ];
 
 export default routes;

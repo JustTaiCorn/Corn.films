@@ -78,7 +78,7 @@ const SignUpPage = () => {
                     elevation={3}
                     sx={{
                         p: { xs: 2, sm: 3, md: 4 },
-                        backgroundColor: "rgba(66, 66, 66, 0.9)",
+                        backgroundColor: "white",
                         backdropFilter: "blur(10px)",
                         borderRadius: 2,
                         maxWidth: 480,
@@ -90,7 +90,7 @@ const SignUpPage = () => {
                         sx={{
                             mb: { xs: 2, sm: 4 }, // Responsive margin bottom
                             fontWeight: "bold",
-                            color: "#fb5a5a",
+                            color: "red",
                             fontSize: { xs: "1.5rem", sm: "2rem" }, // Responsive font size
                         }}
                     >
@@ -143,7 +143,7 @@ const SignUpPage = () => {
                                 mt: { xs: 2, sm: 3 }, // Responsive margin top
                                 mb: 2,
                                 py: { xs: 1, sm: 1.5 }, // Responsive padding
-                                background: "#fb5a5a",
+                                background: "red",
                                 "&:hover": {
                                     background: "red",
                                 },
@@ -160,18 +160,18 @@ const SignUpPage = () => {
                         <Box sx={{ textAlign: "center", mt: { xs: 1, sm: 2 } }}>
                             <Typography
                                 variant="body2"
-                                color="text.secondary"
+                                color="black"
                                 sx={{ fontSize: { xs: "0.75rem", sm: "0.875rem" } }} // Responsive font size
                             >
                                 Already have an account?{" "}
                                 <Link
                                     to="/log-in"
-                                    style={{ color: "#fb5a5a", textDecoration: "none" }}
+                                    style={{ color: "red", textDecoration: "none" }}
                                 >
                                     <Typography
                                         component="span"
                                         sx={{
-                                            color: "#fb5a5a",
+                                            color: "red",
                                             "&:hover": { textDecoration: "underline" },
                                             fontSize: "inherit",
                                         }}

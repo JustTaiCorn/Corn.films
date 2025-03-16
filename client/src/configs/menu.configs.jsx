@@ -6,6 +6,7 @@ import PublicOutlinedIcon from "@mui/icons-material/PublicOutlined";
 import CategoryOutlinedIcon from "@mui/icons-material/CategoryOutlined";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import RateReviewOutlinedIcon from "@mui/icons-material/RateReviewOutlined";
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 const main = [
   {
     display: "trang chủ",
@@ -70,6 +71,11 @@ const user = [
     icon: <RateReviewOutlinedIcon />,
     state: "reviews"
   },
+  {
+    display: "profile",
+    path: "/profile",
+    icon: <AccountCircleIcon />,
+  }
   // {
   //   display: "password update",
   //   path: "/password-update",

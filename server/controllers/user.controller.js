@@ -119,12 +119,10 @@ export const login = async (req, res) => {
 
     // Kiểm tra xem người dùng đã xác thực email hay chưa
     if (!user.isVerified) {
-      return res
-        .status(400)
-        .json({
-          success: false,
-          message: "Vui lòng xác thực email trước khi đăng nhập",
-        });
+      return res.status(400).json({
+        success: false,
+        message: "Vui lòng xác thực email trước khi đăng nhập",
+      });
     }
 
     const token = generateTokenAndSetCookie(res, user._id);
@@ -233,5 +231,74 @@ export const checkAuth = async (req, res) => {
   } catch (error) {
     console.log("Error in checkAuth ", error);
     res.status(400).json({ success: false, message: error.message });
+  }
+};
+
+export const updatepassword = async (req, res) => {
+  try {
+    const { password, newPassword } = req.body;
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res
+        .status(400)
+        .json({ success: false, message: "User not found" });
+    }
+    const isPasswordValid = await bcryptjs.compare(password, user.password);
+    if (!isPasswordValid) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Mật khẩu cũ không đúng" });
+    }
+    const hashedPassword = await bcryptjs.hash(newPassword, 10);
+    user.password = hashedPassword;
+    await user.save();
+    res
+      .status(200)
+      .json({ success: true, message: "Password updated successfully" });
+  } catch (error) {
+    console.log("Error in updatepassword ", error);
+    res
+      .status(500)
+      .json({ success: false, message: "False to update password" });
+  }
+};
+
+export const updateProfile = async (req, res) => {
+  try {
+    const { username } = req.body;
+
+    if (!username || username.trim() === "") {
+      return res.status(400).json({
+        success: false,
+        message: "Username is required",
+      });
+    }
+
+    const user = await User.findById(req.user.id);
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    user.username = username;
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Profile updated successfully",
+      user: {
+        ...user._doc,
+        password: undefined,
+      },
+    });
+  } catch (error) {
+    console.log("Error in updateProfile:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to update profile",
+    });
   }
 };
