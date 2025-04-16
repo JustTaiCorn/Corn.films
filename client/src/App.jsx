@@ -48,7 +48,7 @@ const App = () => {
         spreadHeight={2000}
         colors={["#FFF3C7", "#FEC7B4", "#FC819E", "#F7418F", "#FF8787", "#D80032", "#FF8787", "#F7418F", "#FC819E", "#FEC7B4", "#FFF3C7"]}
       />}
-      <ReactQueryDevtools initialIsOpen={false} />
+      {/* <ReactQueryDevtools initialIsOpen={false} /> */}
       {/* <SplashCursor /> */}
       <ThemeProvider theme={themeConfigs.custom({ mode: themeMode })}>
         {/* config toastify */}

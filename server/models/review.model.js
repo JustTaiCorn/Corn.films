@@ -30,6 +30,24 @@ export default mongoose.model(
         type: String,
         required: true,
       },
+      likes: [
+        {
+          type: Schema.Types.ObjectId,
+          ref: "User",
+        },
+      ],
+      dislikes: [
+        {
+          type: Schema.Types.ObjectId,
+          ref: "User",
+        },
+      ],
+      replies: [
+        {
+          type: Schema.Types.ObjectId,
+          ref: "Review",
+        },
+      ],
     },
     modelOptions
   )

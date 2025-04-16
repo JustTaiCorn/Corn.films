@@ -44,6 +44,36 @@ const reviewApi = {
       return { err };
     }
   },
+
+  reply: async ({ reviewId, content }) => {
+    try {
+      const response = await privateClient.post(`reviews/reply/${reviewId}`, {
+        content,
+      });
+
+      return { response: response.data };
+    } catch (err) {
+      return { err };
+    }
+  },
+  like: async ({ reviewId }) => {
+    try {
+      const response = await privateClient.post(`reviews/like/${reviewId}`);
+
+      return { response: response.data };
+    } catch (err) {
+      return { err };
+    }
+  },
+  dislike: async ({ reviewId }) => {
+    try {
+      const response = await privateClient.post(`reviews/dislike/${reviewId}`);
+
+      return { response: response.data };
+    } catch (err) {
+      return { err };
+    }
+  },
 };
 
 export default reviewApi;
