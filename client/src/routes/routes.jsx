@@ -12,6 +12,7 @@ import ResetPasswordPage from "../pages/ResetPasswordPage";
 import FavoriteList from "../pages/FavoriteList";
 import ReviewList from "../pages/ReviewList";
 import ProfilePage from "../pages/ProfilePage";
+import ScheduleMedia from "../pages/ScheduleMedia";
 const HomePage = lazy(() => import("../pages/HomePage"));
 const MediaDetail = lazy(() => import("../pages/MediaDetail"));
 const MediaList = lazy(() => import("../pages/MediaList"));
@@ -135,6 +136,10 @@ const routes = [
     element: <ProtectedRoute>
       <ProfilePage />
     </ProtectedRoute>
+  },
+  {
+    path: "lich-chieu",
+    element: <ScheduleMedia />,
   }
 ];
 

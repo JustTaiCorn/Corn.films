@@ -7,6 +7,7 @@ import CategoryOutlinedIcon from "@mui/icons-material/CategoryOutlined";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import RateReviewOutlinedIcon from "@mui/icons-material/RateReviewOutlined";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import { Calendar } from "antd";
 const main = [
   {
     display: "trang chủ",
@@ -56,6 +57,11 @@ const main = [
     icon: <CategoryOutlinedIcon />,
     state: "the loai",
   },
+  {
+    display: "Lịch chiếu",
+    path: "/lich-chieu",
+    icon: <Calendar />,
+  }
 ];
 
 const user = [
@@ -63,19 +69,18 @@ const user = [
     display: "favorites",
     path: "/favorites",
     icon: <FavoriteBorderOutlinedIcon />,
-    state: "favorite"
   },
   {
     display: "reviews",
     path: "/reviews",
     icon: <RateReviewOutlinedIcon />,
-    state: "reviews"
   },
   {
     display: "profile",
     path: "/profile",
     icon: <AccountCircleIcon />,
-  }
+  },
+
   // {
   //   display: "password update",
   //   path: "/password-update",
