@@ -5,10 +5,12 @@ import { Box } from '@mui/material';
 import uiConfigs from "../configs/ui.configs";
 import Container from "../components/common/Container";
 import MediaSlide from "../components/common/MediaSlide";
+import ModalWelcome from '../components/common/ModalWelcome';
 
 const HomePage = () => {
   return (
     <>
+      <ModalWelcome />
       <HeroSlide mediaType={tmdbConfigs.phimmoicapnhat} />
 
       <Box marginTop="-4rem" sx={{ ...uiConfigs.style.mainContent }}>

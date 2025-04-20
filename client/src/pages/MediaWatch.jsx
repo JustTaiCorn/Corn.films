@@ -20,6 +20,8 @@ import MediaPlayer from "../components/common/MediaPlayer";
 import EpisodeList from "../components/common/EpisodeList";
 import { resetSelectedEpisode } from "../redux/features/episodeSlice";
 import getTMDBImages from "../api/configs/images.config";
+import { Modal } from "antd";
+import ModalWelcome from "../components/common/ModalWelcome";
 
 const MediaDetail = () => {
     const dispatch = useDispatch();
@@ -32,7 +34,6 @@ const MediaDetail = () => {
     }, [slug, dispatch]);
 
     const [posters, setPosters] = useState([]);
-    const [backdrops, setBackdrops] = useState([]);
     const { isLoading, data } = useDetail({ slug });
 
     useEffect(() => {
@@ -43,9 +44,8 @@ const MediaDetail = () => {
     useEffect(() => {
         const fetchImages = async () => {
             if (media) {
-                const { posters, backdrops } = await getTMDBImages(media);
+                const { posters } = await getTMDBImages(media);
                 setPosters(posters);
-                setBackdrops(backdrops);
             }
         };
 
@@ -74,6 +74,7 @@ const MediaDetail = () => {
     console.log("MediaDetail", episodes);
     return (
         <>
+            <ModalWelcome />
             <ImageHeader imgPath={thumbUrl} />
             <Box sx={{ color: "primary.contrastText", ...uiConfigs.style.mainContent }}>
                 {/* media content */}

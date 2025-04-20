@@ -205,40 +205,56 @@ const ReviewItem = ({ review, onRemoved }) => {
           </Typography>
 
           {/* Like/Dislike/Reply buttons */}
-          <Stack direction="row" spacing={2} alignItems="center">
-            <Button
-              startIcon={userLiked ? <ThumbUpIcon /> : <ThumbUpOutlinedIcon />}
-              onClick={handleLike}
-              color={userLiked ? "primary" : "inherit"}
-              disabled={onRequest}
-            >
-              {likesCount}
-            </Button>
-
-            <Button
-              startIcon={userDisliked ? <ThumbDownIcon /> : <ThumbDownOutlinedIcon />}
-              onClick={handleDislike}
-              color={userDisliked ? "error" : "inherit"}
-              disabled={onRequest}
-            >
-              {dislikesCount}
-            </Button>
-
-            <Button
-              startIcon={<ReplyIcon />}
-              onClick={() => user ? setShowReplyForm(!showReplyForm) : toast.error("Please login to reply")}
-            >
-              Reply
-            </Button>
-
-            {replies && replies.length > 0 && (
+          <Stack
+            direction={{ xs: 'column', sm: 'row' }}
+            spacing={2}
+            alignItems={{ xs: 'flex-start', sm: 'center' }}
+            sx={{ mt: 2 }}
+          >
+            <Stack direction="row" spacing={2} alignItems="center">
               <Button
-                startIcon={showReplies ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-                onClick={() => setShowReplies(!showReplies)}
+                startIcon={userLiked ? <ThumbUpIcon /> : <ThumbUpOutlinedIcon />}
+                onClick={handleLike}
+                color={userLiked ? "primary" : "inherit"}
+                disabled={onRequest}
               >
-                {replies.length} {replies.length === 1 ? "reply" : "replies"}
+                {likesCount}
               </Button>
-            )}
+
+              <Button
+                startIcon={userDisliked ? <ThumbDownIcon /> : <ThumbDownOutlinedIcon />}
+                onClick={handleDislike}
+                color={userDisliked ? "error" : "inherit"}
+                disabled={onRequest}
+              >
+                {dislikesCount}
+              </Button>
+            </Stack>
+
+            <Stack direction="row" spacing={2} alignItems="center">
+              <Button
+                startIcon={<ReplyIcon />}
+                onClick={() => user ? setShowReplyForm(!showReplyForm) : toast.error("Please login to reply")}
+                sx={{ minWidth: '90px' }}
+              >
+                Reply
+              </Button>
+
+              {replies && replies.length > 0 && (
+                <Button
+                  startIcon={showReplies ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                  onClick={() => setShowReplies(!showReplies)}
+                  sx={{
+                    minWidth: '120px',
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis'
+                  }}
+                >
+                  {replies.length} {replies.length === 1 ? "reply" : "replies"}
+                </Button>
+              )}
+            </Stack>
           </Stack>
 
           {/* Reply form */}

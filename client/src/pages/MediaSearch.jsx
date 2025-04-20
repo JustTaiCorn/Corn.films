@@ -45,7 +45,7 @@ const MediaSearch = () => {
       <Box sx={{ ...uiConfigs.style.mainContent }}>
         <Stack spacing={2}>
           <TextField
-            color="success"
+            color="primary"
             placeholder="Tìm kiếm phim"
             sx={{ width: "100%" }}
             autoFocus

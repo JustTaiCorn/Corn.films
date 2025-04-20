@@ -8,6 +8,7 @@ import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlin
 import RateReviewOutlinedIcon from "@mui/icons-material/RateReviewOutlined";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { Calendar } from "antd";
+import { CalendarMonth } from "@mui/icons-material";
 const main = [
   {
     display: "trang chủ",
@@ -60,7 +61,7 @@ const main = [
   {
     display: "Lịch chiếu",
     path: "/lich-chieu",
-    icon: <Calendar />,
+    icon: <CalendarMonth />,
   }
 ];
 

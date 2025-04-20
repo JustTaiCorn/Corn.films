@@ -2,7 +2,6 @@ import {
     Box,
     Typography,
     Grid,
-    Card,
     CardContent,
     styled
 } from '@mui/material';
@@ -14,7 +13,6 @@ import { Navigation } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
-import { use } from 'react';
 
 // Dữ liệu phim theo ngày
 const moviesByDate = {

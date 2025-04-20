@@ -83,6 +83,13 @@ const Sidebar = ({ open, toggleSidebar }) => {
           ))}
         </>)}
 
+
+        <ListItemButton onClick={onSwithMode}>
+          <ListItemIcon>
+            {flower && <LocalFloristIcon />}
+            {!flower && <MacroOffIcon />}
+          </ListItemIcon>
+        </ListItemButton>
         <Typography variant="h6" marginBottom="20px">THEME</Typography>
         <ListItemButton onClick={onSwitchTheme}>
           <ListItemIcon>
@@ -95,12 +102,7 @@ const Sidebar = ({ open, toggleSidebar }) => {
             </Typography>
           } />
         </ListItemButton>
-        <ListItemButton onClick={onSwithMode}>
-          <ListItemIcon>
-            {flower && <LocalFloristIcon />}
-            {!flower && <MacroOffIcon />}
-          </ListItemIcon>
-        </ListItemButton>
+
       </List>
     </>
   );
@@ -112,7 +114,7 @@ const Sidebar = ({ open, toggleSidebar }) => {
       sx={{
         "& .MuiDrawer-Paper": {
           boxSizing: "border-box",
-          widh: sidebarWidth,
+          width: sidebarWidth,
           borderRight: "0px"
         }
       }}
