@@ -22,6 +22,7 @@ import { resetSelectedEpisode } from "../redux/features/episodeSlice";
 import getTMDBImages from "../api/configs/images.config";
 import { Modal } from "antd";
 import ModalWelcome from "../components/common/ModalWelcome";
+import BackgroundImage from "../components/common/BackgroundImage";
 
 const MediaDetail = () => {
     const dispatch = useDispatch();
@@ -74,9 +75,10 @@ const MediaDetail = () => {
     console.log("MediaDetail", episodes);
     return (
         <>
+            <BackgroundImage />
             <ModalWelcome />
-            <ImageHeader imgPath={thumbUrl} />
-            <Box sx={{ color: "primary.contrastText", ...uiConfigs.style.mainContent }}>
+            {/* <ImageHeader imgPath={thumbUrl} /> */}
+            <Box sx={{ color: "primary.contrastText", ...uiConfigs.style.mainContent, mt: '30rem' }}>
                 {/* media content */}
                 <Box sx={{ marginTop: { xs: "-10rem", md: "-15rem", lg: "-20rem" } }}>
                     <Box sx={{ display: "flex", flexDirection: { md: "row", xs: "column" } }}>

@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { TextField, Button, Box, Typography, CircularProgress, Container, Paper } from "@mui/material";
-import LockIcon from "@mui/icons-material/Lock";
 import { useDispatch, useSelector } from "react-redux";
 import { resetPassword } from "../redux/features/userThunks";
 import { toast } from "react-toastify";
@@ -62,7 +61,7 @@ const ResetPasswordPage = () => {
 					align="center"
 					sx={{
 						fontWeight: "bold",
-						background: "#fb5a5a",
+						background: "primary.main",
 						WebkitBackgroundClip: "text",
 						WebkitTextFillColor: "transparent",
 						mb: 2,

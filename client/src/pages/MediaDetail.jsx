@@ -27,6 +27,7 @@ import { toast } from "react-toastify";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { Movie } from "@mui/icons-material";
 import MovieShareModal from "../components/common/MovieShareModal";
+import BackgroundImage from "../components/common/BackgroundImage";
 const MediaDetail = () => {
   const dispatch = useDispatch();
   const videoRef = useRef(null);
@@ -204,6 +205,7 @@ const MediaDetail = () => {
   return (
     <>
       {/* <ImageHeader imgPath={thumbUrl} /> */}
+      <BackgroundImage />
       <Box sx={{ color: "primary.contrastText", ...uiConfigs.style.mainContent, mt: '30rem' }}>
         {/* media content */}
         <Box sx={{ marginTop: { xs: "-10rem", md: "-15rem", lg: "-20rem" } }}>

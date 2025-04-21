@@ -40,7 +40,7 @@ const HeroSlide = ({ mediaType }) => {
         left: 0,
         zIndex: 2,
         pointerEvents: "none",
-        ...uiConfigs.style.gradientBgImage[theme.palette.mode]
+        ...uiConfigs.style.gradientBgImage[theme.palette.mode],
       }
     }}>
       <Swiper
@@ -67,8 +67,8 @@ const HeroSlide = ({ mediaType }) => {
                     md: "60%",
                     lg: "45%"
                   },
-                  backgroundPosition: "top",
-                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                  backgroundSize: "auto",
                   backgroundImage: `url(${thumbUrl})`
                 }} />
                 <Box sx={{
@@ -114,7 +114,8 @@ const HeroSlide = ({ mediaType }) => {
                         <CircularRate value={movie?.tmdb?.vote_average} />
                         {/* rating */}
 
-                        <Divider orientation="vertical" />
+                        <Divider orientation="vertical"
+                        />
                         {/* genres */}
                         {movie?.category?.map((theLoai, index) => (
                           <Chip

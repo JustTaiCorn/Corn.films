@@ -13,6 +13,7 @@ import { Navigation } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
+import BackgroundImage from '../components/common/BackgroundImage';
 
 // Dữ liệu phim theo ngày
 const moviesByDate = {
@@ -104,99 +105,102 @@ export default function ScheduleMedia() {
     })
 
     return (
-        <Box sx={{ color: '#fff', mt: 10, minHeight: '100vh', backgroundColor: '#1a1d24' }}>
-            {/* Header */}
-            <Box sx={{ display: 'flex', alignItems: 'center', p: 3, pb: 1 }}>
-                <Typography variant="h5" component="div" sx={{ fontWeight: 'bold', alignItems: 'center' }}>
-                    <Box component="span" sx={{ mr: 1, fontSize: '1.5rem' }}>📅</Box>
-                    Lịch chiếu
-                </Typography>
-            </Box>
-
-            {/* Swiper dates section with clickable slides */}
-            <Box sx={{ position: 'relative', mb: 4, }}>
-                <Swiper
-                    ref={swiperRef} // Gắn ref vào Swiper
-                    modules={[Navigation]}
-                    breakpoints={{
-                        640: { slidesPerView: 5 },
-                        768: { slidesPerView: 6 },
-                        1024: { slidesPerView: 7 },
-                    }}
-                    style={{ padding: '0 20px' }}
-                    navigation={true}
-                    initialSlide={currentDateIndex}
-                >
-                    {dates.map((item, index) => (
-                        <SwiperSlide key={item.id}>
-                            <DateSlide
-                                isActive={index === currentDateIndex}
-                                onClick={() => handleDateClick(index)}
-                                sx={{ cursor: 'pointer' }} // Thêm con trỏ chuột để thể hiện có thể click
-                            >
-                                <Typography variant="body2" sx={{ color: '#aaa', mb: 0.5 }}>
-                                    {item.date}
-                                </Typography>
-                                <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
-                                    {item.day}
-                                </Typography>
-                            </DateSlide>
-                        </SwiperSlide>
-                    ))}
-                </Swiper>
-            </Box>
-
-            {/* Movie grid - now using Grid for responsive layout */}
-            <Box sx={{ p: 3, pt: 0, }}>
-                {currentMovies.length > 0 ? (
-                    <Grid container spacing={2}>
-                        {currentMovies.map((movie) => (
-                            <Grid item xs={12} md={6} lg={3} key={movie.id}>
-                                <Box
-                                    sx={{
-                                        bgcolor: 'rgba(37, 40, 48, 0.8)',
-                                        borderRadius: 2,
-                                        transition: 'all 0.3s',
-                                        cursor: 'pointer',
-                                        height: '100%',
-                                        '&:hover': {
-                                            transform: 'translateY(-5px)',
-                                            boxShadow: '0 10px 20px rgba(0, 0, 0, 0.2)'
-                                        },
-                                    }}
-                                >
-                                    <CardContent sx={{ display: 'flex', p: 2 }}>
-                                        <Box
-                                            component="img"
-                                            src={movie.image || "/api/placeholder/80/110"}
-                                            alt={movie.title}
-                                            sx={{
-                                                width: 80,
-                                                height: 110,
-                                                borderRadius: 1,
-                                                objectFit: 'cover',
-                                                mr: 2
-                                            }}
-                                        />
-                                        <Box>
-                                            <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mb: 0.5 }}>
-                                                {movie.title}
-                                            </Typography>
-                                            <Typography variant="body2" sx={{ color: '#aaa' }}>
-                                                {movie.episode}
-                                            </Typography>
-                                        </Box>
-                                    </CardContent>
-                                </Box>
-                            </Grid>
-                        ))}
-                    </Grid>
-                ) : (
-                    <Typography sx={{ textAlign: 'center', py: 4 }}>
-                        Không có lịch chiếu nào cho ngày này
+        <>
+            <BackgroundImage />
+            <Box sx={{ color: '#fff', mt: 10, minHeight: '100vh', }}>
+                {/* Header */}
+                <Box sx={{ display: 'flex', alignItems: 'center', p: 3, pb: 1 }}>
+                    <Typography variant="h5" component="div" sx={{ fontWeight: 'bold', alignItems: 'center' }}>
+                        <Box component="span" sx={{ mr: 1, fontSize: '1.5rem' }}>📅</Box>
+                        Lịch chiếu
                     </Typography>
-                )}
+                </Box>
+
+                {/* Swiper dates section with clickable slides */}
+                <Box sx={{ position: 'relative', mb: 4, }}>
+                    <Swiper
+                        ref={swiperRef} // Gắn ref vào Swiper
+                        modules={[Navigation]}
+                        breakpoints={{
+                            640: { slidesPerView: 5 },
+                            768: { slidesPerView: 6 },
+                            1024: { slidesPerView: 7 },
+                        }}
+                        style={{ padding: '0 20px' }}
+                        navigation={true}
+                        initialSlide={currentDateIndex}
+                    >
+                        {dates.map((item, index) => (
+                            <SwiperSlide key={item.id}>
+                                <DateSlide
+                                    isActive={index === currentDateIndex}
+                                    onClick={() => handleDateClick(index)}
+                                    sx={{ cursor: 'pointer' }} // Thêm con trỏ chuột để thể hiện có thể click
+                                >
+                                    <Typography variant="body2" sx={{ color: '#aaa', mb: 0.5 }}>
+                                        {item.date}
+                                    </Typography>
+                                    <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+                                        {item.day}
+                                    </Typography>
+                                </DateSlide>
+                            </SwiperSlide>
+                        ))}
+                    </Swiper>
+                </Box>
+
+                {/* Movie grid - now using Grid for responsive layout */}
+                <Box sx={{ p: 3, pt: 0, }}>
+                    {currentMovies.length > 0 ? (
+                        <Grid container spacing={2}>
+                            {currentMovies.map((movie) => (
+                                <Grid item xs={12} md={6} lg={3} key={movie.id}>
+                                    <Box
+                                        sx={{
+                                            bgcolor: 'rgba(37, 40, 48, 0.8)',
+                                            borderRadius: 2,
+                                            transition: 'all 0.3s',
+                                            cursor: 'pointer',
+                                            height: '100%',
+                                            '&:hover': {
+                                                transform: 'translateY(-5px)',
+                                                boxShadow: '0 10px 20px rgba(0, 0, 0, 0.2)'
+                                            },
+                                        }}
+                                    >
+                                        <CardContent sx={{ display: 'flex', p: 2 }}>
+                                            <Box
+                                                component="img"
+                                                src={movie.image || "/api/placeholder/80/110"}
+                                                alt={movie.title}
+                                                sx={{
+                                                    width: 80,
+                                                    height: 110,
+                                                    borderRadius: 1,
+                                                    objectFit: 'cover',
+                                                    mr: 2
+                                                }}
+                                            />
+                                            <Box>
+                                                <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mb: 0.5 }}>
+                                                    {movie.title}
+                                                </Typography>
+                                                <Typography variant="body2" sx={{ color: '#aaa' }}>
+                                                    {movie.episode}
+                                                </Typography>
+                                            </Box>
+                                        </CardContent>
+                                    </Box>
+                                </Grid>
+                            ))}
+                        </Grid>
+                    ) : (
+                        <Typography sx={{ textAlign: 'center', py: 4 }}>
+                            Không có lịch chiếu nào cho ngày này
+                        </Typography>
+                    )}
+                </Box>
             </Box>
-        </Box>
+        </>
     );
 }

@@ -370,8 +370,7 @@ const MediaReview = ({ media, slug }) => {
     }
 
     if (response) {
-      // Filter out any review that might be a reply itself
-      // (this is a safeguard in case the backend didn't correctly filter)
+
       const mainReviews = response.results || [];
 
       setListReviews(mainReviews);

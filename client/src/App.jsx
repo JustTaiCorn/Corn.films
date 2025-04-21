@@ -17,7 +17,6 @@ import { Suspense, lazy, useEffect } from "react";
 import GlobalLoading from "./components/common/GlobalLoading";
 import Falling from "falling";
 import { checkAuth } from "./redux/features/userThunks";
-import BackgroundImage from "./components/common/BackgroundImage";
 // import SplashCursor from "./utils/SplashCursor";
 const MainLayout = lazy(() => import("./components/layout/MainLayout"));
 const PageWrapper = lazy(() => import("./components/common/PageWrapper"));
@@ -41,7 +40,6 @@ const App = () => {
 
   return (
     <>
-      <BackgroundImage />
       <QueryClientProvider client={queryClient}>
         {flower && <Falling
           flowerCount={100}
