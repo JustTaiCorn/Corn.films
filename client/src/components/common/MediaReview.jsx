@@ -356,9 +356,7 @@ const MediaReview = ({ media, slug }) => {
   const [content, setContent] = useState("");
   const [reviewCount, setReviewCount] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
-
   const skip = 4;
-
   const fetchReviews = async () => {
     setIsLoading(true);
     const { response, err } = await reviewApi.getReviewsByMediaId(mediaId);

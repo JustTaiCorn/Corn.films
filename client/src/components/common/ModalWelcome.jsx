@@ -50,7 +50,7 @@ export default function ModalWelcome() {
                         objectFit: 'contain',
                         mb: 3, borderRadius: 10
                     }}
-                    src="/src/assets/ảnh.png"
+                    src="https://i.pinimg.com/736x/6b/08/d2/6b08d20d57cecab2320ad3be55a31bfb.jpg"
                     alt="Promotional image"
                 />
 
