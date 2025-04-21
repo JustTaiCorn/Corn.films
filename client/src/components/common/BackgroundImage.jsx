@@ -27,7 +27,7 @@ export default function BackgroundImage() {
                     left: 0,
                     right: 0,
                     bottom: 0,
-                    backgroundImage: 'url("/src/assets/anhvietnam3.jpg")',
+                    backgroundImage: 'url(https://i.pinimg.com/736x/3f/c2/f5/3fc2f5d6662c2763a7411a18a0624e8e.jpg)',
                     backgroundPosition: 'center',
                     backgroundSize: 'cover',
                     backgroundRepeat: 'no-repeat',
