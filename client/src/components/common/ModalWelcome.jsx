@@ -9,7 +9,7 @@ export default function ModalWelcome() {
         // Set timer to show modal after 3 seconds (adjust as needed)
         const timer = setTimeout(() => {
             setOpen(true);
-        }, 1500);
+        }, 3000);
 
         // Clear the timer if component unmounts
         return () => clearTimeout(timer);

@@ -75,10 +75,9 @@ const MediaDetail = () => {
     console.log("MediaDetail", episodes);
     return (
         <>
-            <BackgroundImage />
             <ModalWelcome />
-            {/* <ImageHeader imgPath={thumbUrl} /> */}
-            <Box sx={{ color: "primary.contrastText", ...uiConfigs.style.mainContent, mt: '30rem' }}>
+            <ImageHeader imgPath={thumbUrl} />
+            <Box sx={{ color: "primary.contrastText", ...uiConfigs.style.mainContent, }}>
                 {/* media content */}
                 <Box sx={{ marginTop: { xs: "-10rem", md: "-15rem", lg: "-20rem" } }}>
                     <Box sx={{ display: "flex", flexDirection: { md: "row", xs: "column" } }}>
