@@ -2,9 +2,9 @@ import { Box } from "@mui/material";
 import { Outlet } from "react-router-dom";
 import Footer from "../common/Footer";
 import GlobalLoading from "../common/GlobalLoading";
-import SidebarForPC from "../common/SidebarForPC";
-import Topbar from "../common/Topbar";
 
+import Topbar from "../common/Topbar";
+import SideBarForPC from "../common/SideBarForPC";
 const MainLayout = () => {
     return (
         <>
@@ -12,7 +12,7 @@ const MainLayout = () => {
             <Box display="flex" minHeight="100vh" flexDirection="column">
                 <Box display="flex" flexGrow={1} flexDirection="row">
                     {/* sidebar */}
-                    <SidebarForPC />
+                    <SideBarForPC />
                     {/* sidebar */}
 
                     {/* main */}

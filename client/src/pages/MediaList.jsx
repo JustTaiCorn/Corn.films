@@ -36,7 +36,6 @@ const MediaList = () => {
 
   return (
     <>
-      {/* <HeroSlide mediaType={type} /> */}
       <Box sx={{ ...uiConfigs.style.mainContent, mt: 20 }}>
         <MediaGrid medias={medias} isLoading={isLoading} />
         <Paginations totalPages={totalPage} onPageChange={onPageChange}

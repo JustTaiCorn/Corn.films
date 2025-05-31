@@ -35,8 +35,8 @@ const MediaItem = ({ media }) => {
   return (
     <Box sx={{
       padding: { xs: 0.5, sm: 0.75, md: 1 },
-      margin: { xs: 0.25, sm: 0.5, md: 0.75 },
-      maxWidth: { xs: "80%", sm: "100%", md: "100%" },
+      margin: { xs: 0.15, sm: 0.25, md: 0.5 },
+      maxWidth: { xs: "70%", sm: "70%", md: "80%" },
       "&:hover": {
         "& img": {
           filter: "brightness(0.7)",
@@ -71,7 +71,7 @@ const MediaItem = ({ media }) => {
         </Box>
 
         {/* Text content below poster */}
-        <Stack spacing={0.5} sx={{ mt: 1, textAlign: 'center', height: { xs: "60px", sm: "70px" } }}>
+        <Stack spacing={0.5} sx={{ mt: 0.5, textAlign: 'center', height: { xs: "60px", sm: "70px" } }}>
           <Typography
             variant="body1"
             fontWeight="700"
