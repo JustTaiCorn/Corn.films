@@ -1,15 +1,10 @@
-import PlayArrowIcon from "@mui/icons-material/PlayArrow";
-import { Box, Button, Stack, Typography } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
-import uiConfigs from "../../configs/ui.configs";
 import { routesGen } from "../../routes/routes";
-import CircularRate from "./CircularRate";
 import { useEffect, useState } from "react";
 import getTMDBImages from "../../api/configs/images.config";
 
-
 const MediaItem = ({ media }) => {
-
   const [posters, setPosters] = useState([]);
 
   useEffect(() => {
@@ -22,92 +17,95 @@ const MediaItem = ({ media }) => {
 
     fetchImages();
   }, [media]);
+
   const {
     name,
     year,
     slug,
-    tmdb, poster_url,
-    time
-    // id
+    poster_url,
+    time,
+    origin_name
   } = media;
 
   const title = name;
-  const rate = tmdb?.vote_average;
   const posterPath = posters[0]?.file_path
     ? `https://image.tmdb.org/t/p/w500${posters[0].file_path}`
     : `https://img.ophim.live/uploads/movies/${poster_url}`;
+
   return (
-    <Link to={routesGen.mediaDetail(slug)}>
-      <Box sx={{
-        ...uiConfigs.style.backgroundImage(posterPath),
-        paddingTop: "160%",
-        "&:hover .media-info": { opacity: 1, bottom: 0 },
-        "&:hover .media-back-drop, &:hover .media-play-btn": { opacity: 1 },
-        color: "primary.contrastText", margin: 1, borderRadius: "15px",
-      }}>
-
-        {/* Background overlay */}
-        <Box className="media-back-drop" sx={{
-          opacity: { xs: 1, md: 0 },
-          transition: "all 0.3s ease",
-          width: "100%",
-          height: "100%",
-          position: "absolute",
-          top: 0,
-          left: 0,
-          backgroundImage: "linear-gradient(to top, rgba(0,0,0,1), rgba(0,0,0,0))"
-        }} />
-
-        {/* Play button */}
-        <Button
-          className="media-play-btn"
-          variant="contained"
-          startIcon={<PlayArrowIcon />}
-          sx={{
-            display: { xs: "none", md: "flex" },
-            opacity: 0,
-            transition: "all 0.3s ease",
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            "& .MuiButton-startIcon": { marginRight: "-4px" }
-          }}
-        />
-
-        {/* Media info */}
-        <Box
-          className="media-info"
-          sx={{
-            transition: "all 0.3s ease",
-            opacity: { xs: 1, md: 0 },
-            position: "absolute",
-            bottom: { xs: 0, md: "-20px" },
-            width: "100%",
-            height: "max-content",
-            boxSizing: "border-box",
-            padding: { xs: "10px", md: "2rem 1rem" }
-          }}
-        >
-          <Stack spacing={{ xs: 1, md: 2 }}>
-            {rate && <CircularRate value={rate} />}
-
-            <Typography>{time} - {year}</Typography>
-
-            <Typography
-              variant="body1"
-              fontWeight="700"
-              sx={{
-                fontSize: "1rem",
-                ...uiConfigs.style.typoLines(1, "left")
-              }}
-            >
-              {title}
-            </Typography>
-          </Stack>
+    <Box sx={{
+      padding: { xs: 0.5, sm: 0.75, md: 1 },
+      margin: { xs: 0.25, sm: 0.5, md: 0.75 },
+      maxWidth: { xs: "80%", sm: "100%", md: "100%" },
+      "&:hover": {
+        "& img": {
+          filter: "brightness(0.7)",
+        },
+      },
+    }}>
+      <Link to={routesGen.mediaDetail(slug)} style={{ textDecoration: 'none' }}>
+        {/* Poster Image */}
+        <Box sx={{
+          position: 'relative',
+          width: '100%',
+          height: { xs: "160px", sm: "220px", md: "280px", lg: "300px" },
+          marginBottom: 1,
+          overflow: "hidden",
+          borderRadius: { xs: 2, sm: 3 },
+          boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+        }}>
+          <img
+            src={posterPath}
+            alt={title}
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              borderRadius: 'inherit',
+              transition: "all 0.3s ease",
+            }}
+          />
         </Box>
-      </Box>
-    </Link>
+
+        {/* Text content below poster */}
+        <Stack spacing={0.5} sx={{ mt: 1, textAlign: 'center', height: { xs: "60px", sm: "70px" } }}>
+          <Typography
+            variant="body1"
+            fontWeight="700"
+            color="primary"
+            sx={{
+              fontSize: { xs: '0.75rem', sm: '0.85rem', md: '0.95rem' },
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              display: '-webkit-box',
+              WebkitLineClamp: 1,
+              WebkitBoxOrient: 'vertical',
+            }}
+          >
+            {title}
+          </Typography>
+
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            sx={{
+              color: '#aaa',
+              fontSize: { xs: '0.7rem', sm: '0.75rem', md: '0.8rem' },
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              display: '-webkit-box',
+              WebkitLineClamp: 1,
+              WebkitBoxOrient: 'vertical',
+            }}
+          >
+            {origin_name || time && `${time} - ` || year}
+          </Typography>
+        </Stack>
+      </Link>
+    </Box>
   );
 };
 

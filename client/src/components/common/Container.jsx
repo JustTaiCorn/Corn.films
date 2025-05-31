@@ -25,7 +25,10 @@ const Container = ({ header, children }) => {
               backgroundColor: "primary.main"
             }
           }}>
-            <Typography variant="h5" fontWeight="700" textTransform="uppercase">
+            <Typography variant="h5" fontWeight="700" textTransform="uppercase"
+              sx={{
+                fontSize: { xs: "1.2rem", md: "1.5rem" }
+              }}>
               {header}
             </Typography>
           </Box>

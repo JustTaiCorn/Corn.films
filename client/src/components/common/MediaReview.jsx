@@ -356,24 +356,36 @@ const MediaReview = ({ media, slug }) => {
   const [content, setContent] = useState("");
   const [reviewCount, setReviewCount] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
   const skip = 4;
+
   const fetchReviews = async () => {
     setIsLoading(true);
-    const { response, err } = await reviewApi.getReviewsByMediaId(mediaId);
-    setIsLoading(false);
+    setError(null);
 
-    if (err) {
-      console.log(err);
-      return;
-    }
+    try {
+      const { response, err } = await reviewApi.getReviewsByMediaId(mediaId);
 
-    if (response) {
-
-      const mainReviews = response.results || [];
-
-      setListReviews(mainReviews);
-      setFilteredReviews(mainReviews.slice(0, skip));
-      setReviewCount(mainReviews.length);
+      if (err) {
+        console.error("Review API error:", err);
+        setError(err.message || "Không thể tải bình luận");
+        setListReviews([]);
+        setFilteredReviews([]);
+        setReviewCount(0);
+      } else if (response) {
+        const mainReviews = response.results || [];
+        setListReviews(mainReviews);
+        setFilteredReviews(mainReviews.slice(0, skip));
+        setReviewCount(mainReviews.length);
+      }
+    } catch (error) {
+      console.error("Unexpected error in fetchReviews:", error);
+      setError("Có lỗi xảy ra khi tải bình luận");
+      setListReviews([]);
+      setFilteredReviews([]);
+      setReviewCount(0);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -429,7 +441,11 @@ const MediaReview = ({ media, slug }) => {
     <>
       <Container header={`Reviews (${reviewCount})`}>
         {isLoading ? (
-          <Typography>Loading reviews...</Typography>
+          <Typography>Đang tải bình luận...</Typography>
+        ) : error ? (
+          <Typography color="error" sx={{ p: 2 }}>
+            {error}. Thử lại sau.
+          </Typography>
         ) : (
           <Stack spacing={4} marginBottom={2}>
             {filteredReviews.length > 0 ? (
@@ -442,14 +458,15 @@ const MediaReview = ({ media, slug }) => {
                 ) : null
               ))
             ) : (
-              <Typography>No reviews yet. Be the first to review!</Typography>
+              <Typography>Chưa có bình luận nào. Hãy là người đầu tiên bình luận!</Typography>
             )}
 
             {filteredReviews.length < listReviews.length && (
-              <Button onClick={onLoadMore}>load more</Button>
+              <Button onClick={onLoadMore}>Xem thêm</Button>
             )}
           </Stack>
         )}
+
         {user && (
           <>
             <Divider />
@@ -464,7 +481,7 @@ const MediaReview = ({ media, slug }) => {
                   onChange={(e) => setContent(e.target.value)}
                   multiline
                   rows={4}
-                  placeholder="Write your review"
+                  placeholder="Viết bình luận của bạn"
                   variant="outlined"
                 />
                 <LoadingButton
@@ -476,7 +493,7 @@ const MediaReview = ({ media, slug }) => {
                   loading={onRequest}
                   onClick={onAddReview}
                 >
-                  post
+                  Đăng
                 </LoadingButton>
               </Stack>
             </Stack>

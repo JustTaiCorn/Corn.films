@@ -1,55 +1,51 @@
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import { Box, Button, Chip, Divider, Stack, Typography, useTheme } from "@mui/material";
-import { Autoplay } from 'swiper/modules';
-import { useDispatch } from "react-redux";
+import { Autoplay, Thumbs, Navigation } from 'swiper/modules';
 import { Link } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { setGlobalLoading } from "../../redux/features/globalLoadingSlice";
 import { routesGen } from "../../routes/routes";
 import uiConfigs from "../../configs/ui.configs";
-import CircularRate from "./CircularRate";
 import { useList } from "../../api/modules/media.api";
-import { useEffect } from "react";
+import { useState } from "react";
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import GlobalLoading from "../common/GlobalLoading";
+
 const HeroSlide = ({ mediaType }) => {
   const theme = useTheme();
-  const dispatch = useDispatch();
+  const [thumbsSwiper, setThumbsSwiper] = useState(null);
+  const [activeIndex, setActiveIndex] = useState(null);
+
+  const handleThumbnailClick = (index) => {
+    setActiveIndex(index);
+  };
+
   const { isLoading, data } = useList({
     mediaType,
     page: 1
   });
 
-  // Cập nhật globalLoading khi isLoading thay đổi
-  useEffect(() => {
-    dispatch(setGlobalLoading(isLoading));
-  }, [isLoading, dispatch]);
 
   // Đảm bảo movies luôn là một mảng
   const movies = data?.items || [];
+  if (isLoading) {
+    return (
+      <GlobalLoading isLoading={isLoading} />
+    );
+  }
 
   return (
-    <Box sx={{
+    <><Box sx={{
       position: "relative",
-      color: "primary.contrastText",
-      "&::before": {
-        content: '""',
-        width: "100%",
-        height: "30%",
-        position: "absolute",
-        bottom: 0,
-        left: 0,
-        zIndex: 2,
-        pointerEvents: "none",
-        ...uiConfigs.style.gradientBgImage[theme.palette.mode],
-      }
     }}>
       <Swiper
         grabCursor={true}
         loop={true}
-        modules={[Autoplay]}
+        modules={[Autoplay, Thumbs, Navigation]}
+        navigation={false}
         style={{ width: "100%", height: "max-content" }}
+        thumbs={{ swiper: thumbsSwiper }}
         autoplay={{
-          delay: 3000,
+          delay: 10000,
           disableOnInteraction: false
         }}
       >
@@ -62,17 +58,19 @@ const HeroSlide = ({ mediaType }) => {
               <SwiperSlide key={index}>
                 <Box sx={{
                   paddingTop: {
-                    xs: "130%",
-                    sm: "80%",
+                    xs: "90%",
+                    sm: "90%",
                     md: "60%",
                     lg: "45%"
                   },
                   backgroundPosition: "center",
-                  backgroundSize: "auto",
-                  backgroundImage: `url(${thumbUrl})`
+                  backgroundSize: "cover",
+                  backgroundAttachment: "fixed",
+                  backgroundImage: `url(${thumbUrl})`,
+                  borderRadius: 5,
                 }} />
                 <Box sx={{
-                  width: "100%",
+                  width: "40%",
                   height: "100%",
                   position: "absolute",
                   top: 0,
@@ -83,39 +81,98 @@ const HeroSlide = ({ mediaType }) => {
                   width: "100%",
                   height: "100%",
                   position: "absolute",
-                  top: 0,
+                  top: 100,
                   left: 0,
-                  paddingX: { sm: "10px", md: "5rem", lg: "10rem" }
+                  paddingX: { sm: "10px", md: "5rem", lg: "5rem" }
                 }}>
                   <Box sx={{
                     height: "100%",
                     display: "flex",
                     alignItems: "center",
-                    paddingX: "30px",
                     color: "text.primary",
-                    width: { sm: "unset", md: "30%", lg: "40%" }
+                    width: { xs: "90%", sm: "unset", md: "30%", lg: "40%" }
                   }}>
-                    <Stack spacing={4} direction="column">
+                    <Stack spacing={2} direction="column">
                       {/* title */}
                       <Typography
                         variant="h4"
-                        fontSize={{ xs: "2rem", md: "2rem", lg: "4rem" }}
+                        fontSize={{ xs: "1rem", md: "1rem", lg: "2rem" }}
                         fontWeight="700"
-                        sx={{
-                          ...uiConfigs.style.typoLines(2, "left")
-                        }}
                       >
                         {movie.name}
                       </Typography>
-                      {/* title */}
+                      <Typography
+                        variant="body1"
+                        fontSize={{ xs: "0.75rem", md: "0.8rem", lg: "1rem" }}
+                        fontWeight="400"
+                      >
+                        {movie.origin_name}
+                      </Typography>
+                      <Box sx={{
+                        display: "flex",
+                        flexDirection: "row",
+                        gap: 1,
+                        flexWrap: "wrap",
+                      }}>
 
+                        <Chip
+                          label={movie.quality}
+                          color="primary"
+                          variant="outlined"
+                          size="small"
+                          sx={{
+                            fontSize: { xs: '0.6rem', sm: '0.7rem', md: '0.8rem' },
+                            height: { xs: '24px', sm: '28px', md: '32px' },
+                            '& .MuiChip-label': {
+                              padding: { xs: '0 6px', sm: '0 8px', md: '0 12px' }
+                            }
+                          }}
+                        />
+                        <Chip
+                          label={movie.year}
+                          color="primary"
+                          variant="outlined"
+                          size="small"
+                          sx={{
+                            fontSize: { xs: '0.6rem', sm: '0.7rem', md: '0.8rem' },
+                            height: { xs: '24px', sm: '28px', md: '32px' },
+                            '& .MuiChip-label': {
+                              padding: { xs: '0 6px', sm: '0 8px', md: '0 12px' }
+                            }
+                          }}
+                        />
+                        <Chip
+                          label={movie.lang}
+                          color="primary"
+                          variant="outlined"
+                          size="small"
+                          sx={{
+                            fontSize: { xs: '0.6rem', sm: '0.7rem', md: '0.8rem' },
+                            height: { xs: '24px', sm: '28px', md: '32px' },
+                            '& .MuiChip-label': {
+                              padding: { xs: '0 6px', sm: '0 8px', md: '0 12px' }
+                            }
+                          }}
+                        />
+                        <Chip
+                          label={movie.episode_current}
+                          color="primary"
+                          variant="outlined"
+                          size="small"
+                          sx={{
+                            fontSize: { xs: '0.6rem', sm: '0.7rem', md: '0.8rem' },
+                            height: { xs: '24px', sm: '28px', md: '32px' },
+                            '& .MuiChip-label': {
+                              padding: { xs: '0 6px', sm: '0 8px', md: '0 12px' }
+                            }
+                          }}
+                        />
+
+
+                      </Box>
                       <Stack direction="row" spacing={1} alignItems="center">
                         {/* rating */}
-                        <CircularRate value={movie?.tmdb?.vote_average} />
-                        {/* rating */}
-
-                        <Divider orientation="vertical"
-                        />
+                        <Divider orientation="vertical" />
                         {/* genres */}
                         {movie?.category?.map((theLoai, index) => (
                           <Chip
@@ -123,11 +180,16 @@ const HeroSlide = ({ mediaType }) => {
                             color="primary"
                             key={index}
                             label={theLoai?.name}
+                            sx={{
+                              fontSize: { xs: '0.6rem', sm: '0.7rem', md: '0.8rem' },
+                              height: { xs: '24px', sm: '28px', md: '32px' },
+                              '& .MuiChip-label': {
+                                padding: { xs: '0 6px', sm: '0 8px', md: '0 12px' }
+                              }
+                            }}
                           />
                         ))}
-                        {/* genres */}
                       </Stack>
-
                       {/* buttons */}
                       <Stack direction="row" spacing={1} alignItems="center">
                         <Button
@@ -135,19 +197,32 @@ const HeroSlide = ({ mediaType }) => {
                           size="large"
                           startIcon={<PlayArrowIcon />}
                           component={Link}
-                          to={routesGen.mediaWatch(movie.slug)}
-                          sx={{ width: "max-content" }}
+                          to={`${routesGen.mediaWatch(movie.slug)}#player`}
+                          sx={{
+                            width: "max-content",
+                            fontSize: { xs: '0.7rem', sm: '0.8rem', md: '0.9rem' },
+                            padding: { xs: '6px 8px', sm: '8px 12px', md: '8px 16px' }
+                          }}
                         >
                           watch now
                         </Button>
+                        <Button
+                          variant="outlined"
+                          size="large"
+                          color="primary"
+                          component={Link}
+                          to={routesGen.mediaDetail(movie.slug)}
+                          sx={{
+                            width: "max-content",
+                            fontSize: { xs: '0.7rem', sm: '0.8rem', md: '0.9rem' },
+                            padding: { xs: '6px 8px', sm: '8px 12px', md: '8px 16px' },
 
-                        <Button variant="outlined" size="large" color="primary" component={Link} to={routesGen.mediaDetail(movie.slug)}
-                          sx={{ width: "max-content" }}
-                          endIcon={<ArrowForwardIosIcon />}>
+                          }}
+                          endIcon={<ArrowForwardIosIcon />}
+                        >
                           Xem chi tiết
                         </Button>
                       </Stack>
-                      {/* buttons */}
                     </Stack>
                   </Box>
                 </Box>
@@ -160,7 +235,65 @@ const HeroSlide = ({ mediaType }) => {
           </Typography>
         )}
       </Swiper>
-    </Box>
+
+      <Box sx={{
+        display: { xs: "none", md: "block" },
+        position: "absolute",
+        right: 0,
+        bottom: 50,
+        mr: 2,
+        width: "40%",
+        height: "50px",
+        backgroundColor: "transparent",
+        zIndex: 100,
+        borderRadius: "5px 0 0 5px",
+
+      }}>
+        <Swiper
+          onSwiper={setThumbsSwiper}
+          spaceBetween={10}
+          slidesPerView={5}
+          freeMode={true}
+          watchSlidesProgress={true}
+          modules={[Thumbs]}
+          loop={true}
+
+        >
+
+          {movies.map((movie, index) => {
+            const thumbUrl = movie.thumb_url
+              ? `https://img.ophim.live/uploads/movies/${movie.thumb_url}`
+              : "https://via.placeholder.com/500x750";
+            return (
+              <SwiperSlide key={index}
+                active={index === activeIndex}
+                onClick={() => handleThumbnailClick(index)}
+              ><Box
+                sx={{
+                  border: "2px solid transparent",
+                  "&:hover": {
+                    border: "2px solid #fff",
+                    borderRadius: "4px",
+
+                  }
+                }}
+              >
+                  <img src={thumbUrl} alt={movie.name}
+                    style={{
+                      width: "100%",
+                      height: "50px",
+                      objectFit: "cover",
+                      cursor: "pointer",
+                      borderRadius: "4px",
+                    }}
+                  />
+                </Box>
+              </SwiperSlide>
+            );
+          })}
+        </Swiper>
+      </Box>
+    </Box></>
   );
 };
 

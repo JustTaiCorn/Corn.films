@@ -3,17 +3,18 @@ import {
     Typography,
     Grid,
     CardContent,
-    styled
+    styled,
+    Paper
 } from '@mui/material';
 import { useState, useEffect, useRef } from 'react'; // Thêm useRef
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
+import { useTheme } from '@mui/material/styles'; // Thêm import này
 
 // Import Swiper styles
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
-import BackgroundImage from '../components/common/BackgroundImage';
 
 // Dữ liệu phim theo ngày
 const moviesByDate = {
@@ -66,23 +67,36 @@ const dates = (() => {
 })();
 
 // Styled date slide
-const DateSlide = styled(Box)(({ isActive }) => ({
+const DateSlide = styled(Box)(({ isActive, theme }) => ({
     padding: '15px 5px',
     textAlign: 'center',
-    color: 'white',
+    color: theme.palette.mode === 'dark' ? 'white' : theme.palette.text.primary,
     opacity: 1,
     height: '100%',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
-    backgroundColor: isActive ? 'rgba(38, 40, 49, 0.7)' : 'transparent',
-    borderBottom: isActive ? '3px solid #e6b800' : 'none',
+    backgroundColor: isActive
+        ? theme.palette.mode === 'dark'
+            ? 'rgba(38, 40, 49, 0.7)'
+            : 'rgba(230, 230, 230, 0.7)'
+        : 'transparent',
+    borderBottom: isActive
+        ? `3px solid ${theme.palette.mode === 'dark' ? '#e6b800' : theme.palette.primary.main}`
+        : 'none',
     '& .MuiTypography-body1': {
-        color: isActive ? '#e6b800' : 'white'
+        color: isActive
+            ? theme.palette.mode === 'dark'
+                ? '#e6b800'
+                : theme.palette.primary.main
+            : theme.palette.mode === 'dark'
+                ? 'white'
+                : theme.palette.text.primary
     }
 }));
 
 export default function ScheduleMedia() {
+    const theme = useTheme(); // Lấy theme hiện tại
     const [currentDateIndex, setCurrentDateIndex] = useState(2);
     const [currentMovies, setCurrentMovies] = useState([]);
     const swiperRef = useRef(null);
@@ -106,8 +120,14 @@ export default function ScheduleMedia() {
 
     return (
         <>
-            <BackgroundImage />
-            <Box sx={{ color: '#fff', mt: 10, minHeight: '100vh', }}>
+            <Paper sx={{
+                color: theme.palette.mode === 'dark' ? '#fff' : theme.palette.text.primary,
+                mr: 2,
+                ml: 1,
+                minHeight: '100vh',
+                backgroundColor: 'unset',
+                borderRadius: 5
+            }}>
                 {/* Header */}
                 <Box sx={{ display: 'flex', alignItems: 'center', p: 3, pb: 1 }}>
                     <Typography variant="h5" component="div" sx={{ fontWeight: 'bold', alignItems: 'center' }}>
@@ -119,7 +139,7 @@ export default function ScheduleMedia() {
                 {/* Swiper dates section with clickable slides */}
                 <Box sx={{ position: 'relative', mb: 4, }}>
                     <Swiper
-                        ref={swiperRef} // Gắn ref vào Swiper
+                        ref={swiperRef}
                         modules={[Navigation]}
                         breakpoints={{
                             640: { slidesPerView: 5 },
@@ -127,7 +147,7 @@ export default function ScheduleMedia() {
                             1024: { slidesPerView: 7 },
                         }}
                         style={{ padding: '0 20px' }}
-                        navigation={true}
+                        navigation={false}
                         initialSlide={currentDateIndex}
                     >
                         {dates.map((item, index) => (
@@ -135,9 +155,12 @@ export default function ScheduleMedia() {
                                 <DateSlide
                                     isActive={index === currentDateIndex}
                                     onClick={() => handleDateClick(index)}
-                                    sx={{ cursor: 'pointer' }} // Thêm con trỏ chuột để thể hiện có thể click
+                                    sx={{ cursor: 'pointer' }}
                                 >
-                                    <Typography variant="body2" sx={{ color: '#aaa', mb: 0.5 }}>
+                                    <Typography variant="body2" sx={{
+                                        color: theme.palette.mode === 'dark' ? '#aaa' : theme.palette.text.secondary,
+                                        mb: 0.5
+                                    }}>
                                         {item.date}
                                     </Typography>
                                     <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
@@ -149,7 +172,7 @@ export default function ScheduleMedia() {
                     </Swiper>
                 </Box>
 
-                {/* Movie grid - now using Grid for responsive layout */}
+                {/* Movie grid */}
                 <Box sx={{ p: 3, pt: 0, }}>
                     {currentMovies.length > 0 ? (
                         <Grid container spacing={2}>
@@ -157,7 +180,9 @@ export default function ScheduleMedia() {
                                 <Grid item xs={12} md={6} lg={3} key={movie.id}>
                                     <Box
                                         sx={{
-                                            bgcolor: 'rgba(37, 40, 48, 0.8)',
+                                            bgcolor: theme.palette.mode === 'dark'
+                                                ? 'rgba(37, 40, 48, 0.8)'
+                                                : 'rgba(245, 245, 245, 0.9)',
                                             borderRadius: 2,
                                             transition: 'all 0.3s',
                                             cursor: 'pointer',
@@ -182,10 +207,16 @@ export default function ScheduleMedia() {
                                                 }}
                                             />
                                             <Box>
-                                                <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mb: 0.5 }}>
+                                                <Typography variant="subtitle1" sx={{
+                                                    fontWeight: 'bold',
+                                                    mb: 0.5,
+                                                    color: theme.palette.text.primary
+                                                }}>
                                                     {movie.title}
                                                 </Typography>
-                                                <Typography variant="body2" sx={{ color: '#aaa' }}>
+                                                <Typography variant="body2" sx={{
+                                                    color: theme.palette.mode === 'dark' ? '#aaa' : theme.palette.text.secondary
+                                                }}>
                                                     {movie.episode}
                                                 </Typography>
                                             </Box>
@@ -195,12 +226,16 @@ export default function ScheduleMedia() {
                             ))}
                         </Grid>
                     ) : (
-                        <Typography sx={{ textAlign: 'center', py: 4 }}>
+                        <Typography sx={{
+                            textAlign: 'center',
+                            py: 4,
+                            color: theme.palette.text.secondary
+                        }}>
                             Không có lịch chiếu nào cho ngày này
                         </Typography>
                     )}
                 </Box>
-            </Box>
+            </Paper>
         </>
     );
 }

@@ -4,7 +4,6 @@ import themeModeReducer from "./features/themeModeSlice";
 import globalLoadingReducer from "./features/globalLoadingSlice";
 import appStateReducer from "./features/appStateSlice";
 import episodeReducer from "./features/episodeSlice";
-import flowerReducer from "./features/flowerSlice";
 const store = configureStore({
   reducer: {
     episode: episodeReducer,
@@ -12,7 +11,6 @@ const store = configureStore({
     themeMode: themeModeReducer,
     globalLoading: globalLoadingReducer,
     appState: appStateReducer,
-    flower: flowerReducer,
   },
 });
 

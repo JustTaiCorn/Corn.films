@@ -1,9 +1,6 @@
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
-import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import { Box, Button, Chip, Divider, Stack, Typography } from "@mui/material";
 import { grey } from "@mui/material/colors";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import CircularRate from "../components/common/CircularRate";
@@ -12,36 +9,39 @@ import ImageHeader from "../components/common/ImageHeader";
 
 import uiConfigs from "../configs/ui.configs";
 import { useDetail } from "../api/modules/media.api";
-
-import { setGlobalLoading } from "../redux/features/globalLoadingSlice";
-import MediaVideosSlide from "../components/common/MediaVideosSlide";
 import RecommendSlide from "../components/common/RecommendSlide";
 import MediaPlayer from "../components/common/MediaPlayer";
 import EpisodeList from "../components/common/EpisodeList";
-import { resetSelectedEpisode } from "../redux/features/episodeSlice";
+import { resetSelectedEpisode, setEpisode } from "../redux/features/episodeSlice";
 import getTMDBImages from "../api/configs/images.config";
-import { Modal } from "antd";
-import ModalWelcome from "../components/common/ModalWelcome";
-import BackgroundImage from "../components/common/BackgroundImage";
+import GlobalLoading from "../components/common/GlobalLoading";
 
 const MediaDetail = () => {
     const dispatch = useDispatch();
-    const videoRef = useRef(null);
     const { slug } = useParams();
-    useEffect(() => {
-        window.scrollTo(0, 0);
-        dispatch(resetSelectedEpisode());
-
-    }, [slug, dispatch]);
+    const iframeRef = useRef(null);
+    const playerRef = useRef(null);
 
     const [posters, setPosters] = useState([]);
     const { isLoading, data } = useDetail({ slug });
 
-    useEffect(() => {
-        dispatch(setGlobalLoading(isLoading));
-    }, [isLoading, dispatch]);
-
     const media = data?.item;
+    const episodes = useMemo(() => media?.episodes?.[0]?.server_data || [], [media]);
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+        dispatch(resetSelectedEpisode());
+        if (media && episodes.length > 0) {
+            dispatch(setEpisode(episodes[0]));
+        }
+
+        // Xử lý cuộn xuống player khi có hash #player trong URL
+        if (window.location.hash === '#player' && playerRef.current) {
+            setTimeout(() => {
+                playerRef.current.scrollIntoView({ behavior: 'smooth' });
+            }, 100); // Đợi 500ms để đảm bảo player đã render
+        }
+    }, [slug, dispatch, media, episodes]);
     useEffect(() => {
         const fetchImages = async () => {
             if (media) {
@@ -52,8 +52,6 @@ const MediaDetail = () => {
 
         fetchImages();
     }, [media]);
-
-
     if (!media) return null;
     const quality = media.quality || "HD";
     const actor = media.actor.length === 1 && media.actor[0] === "" ? "Chưa cập nhật" : media.actor;
@@ -70,12 +68,14 @@ const MediaDetail = () => {
         ? `https://img.ophim.live/uploads/movies/${media.thumb_url}`
         : "https://via.placeholder.com/500x750";
     const posterUrl = posters[0]?.file_path || "";
-    const episodes = media.episodes[0].server_data || [];
 
-    console.log("MediaDetail", episodes);
+
+
+    if (isLoading) {
+        return <GlobalLoading isLoading={isLoading} />
+    }
     return (
         <>
-            <ModalWelcome />
             <ImageHeader imgPath={thumbUrl} />
             <Box sx={{ color: "primary.contrastText", ...uiConfigs.style.mainContent, }}>
                 {/* media content */}
@@ -177,7 +177,9 @@ const MediaDetail = () => {
                 {/* media content */}
                 {/* media watch */}
                 <Container header="Watch now">
-                    <MediaPlayer />
+                    <div ref={playerRef}>
+                        <MediaPlayer useRef={iframeRef} />
+                    </div>
                 </Container>
                 {/* media watch */}
                 {/* media episodes */}
@@ -192,7 +194,7 @@ const MediaDetail = () => {
                     <RecommendSlide category={media.category[0].slug} country={media.country[0].slug} />
                 </Container>
                 {/* media recommendation */}
-            </Box>
+            </Box >
         </>
     );
 };

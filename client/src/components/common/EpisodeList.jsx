@@ -2,12 +2,20 @@ import { Paper, useMediaQuery, useTheme } from "@mui/material";
 import Episode from "./Episode";
 import { grey } from "@mui/material/colors";
 import { Col, Row } from "antd";
-
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { setEpisode } from "../../redux/features/episodeSlice";
 
 const EpisodeList = ({ episodes }) => {
-
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        if (episodes && episodes.length > 0) {
+            dispatch(setEpisode(episodes[0]));
+        }
+    }, [episodes, dispatch]);
 
     return (
         <Paper

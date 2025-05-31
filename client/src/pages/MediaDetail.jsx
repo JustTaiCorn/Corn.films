@@ -6,7 +6,6 @@ import { grey } from "@mui/material/colors";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, Link, useLocation } from "react-router-dom";
-import CircularRate from "../components/common/CircularRate";
 import Container from "../components/common/Container";
 import ImageHeader from "../components/common/ImageHeader";
 
@@ -25,9 +24,7 @@ import favoriteApi from "../api/modules/favorite.api";
 import { addFavorite, removeFavorite, setListFavorites } from "../redux/features/userSlice";
 import { toast } from "react-toastify";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import { Movie } from "@mui/icons-material";
 import MovieShareModal from "../components/common/MovieShareModal";
-import BackgroundImage from "../components/common/BackgroundImage";
 const MediaDetail = () => {
   const dispatch = useDispatch();
   const videoRef = useRef(null);
@@ -39,7 +36,6 @@ const MediaDetail = () => {
   const [onRequest, setOnRequest] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
   const [movieUrl, setMovieUrl] = useState("");
-  const [movieTitle, setMovieTitle] = useState("Check out this movie!");
   const location = useLocation();
   const media = data?.item;
   const Slug = data?.params.slug;
@@ -211,7 +207,7 @@ const MediaDetail = () => {
           <Box sx={{ display: "flex", flexDirection: { md: "row", xs: "column" } }}>
             {/* poster */}
             <Box sx={{ width: { xs: "70%", sm: "50%", md: "40%" }, margin: { xs: "0 auto 2rem", md: "0 2rem 0 0" } }}>
-              <Box sx={{ paddingTop: "140%", ...uiConfigs.style.backgroundImage(posterPath) }} />
+              <Box sx={{ height: "300px", width: "250px", ...uiConfigs.style.backgroundImage(posterPath), borderRadius: 10, boxShadow: 3, margin: "0 auto" }} />
             </Box>
             {/* poster */}
 
@@ -247,7 +243,6 @@ const MediaDetail = () => {
                 {/* rate and genres */}
                 <Stack direction="row" spacing={1} alignItems="center">
                   {/* rate */}
-                  <CircularRate value={media.vote_average} />
                   {/* rate */}
                   <Divider orientation="vertical" />
                   {/* genres */}
@@ -256,47 +251,37 @@ const MediaDetail = () => {
                   ))}
                   {/* genres */}
                 </Stack>
-                {/* rate and genres */}
-                <Stack direction="column" spacing={1} alignItems="left">
-                  <Stack direction="row" spacing={5} alignItems="left">
-                    <Typography variant="body1" sx={{ color: grey[500] }}>Đang phát:</Typography>
-                    <Typography variant="body1" sx={{ pl: "0.5rem" }}>{media.episode_current}</Typography>
-                  </Stack>
-                  <Stack direction="row" spacing={5} alignItems="left">
-                    <Typography variant="body1" sx={{ color: grey[500] }}>Tổng số tập:</Typography>
-                    <Typography variant="body1">{media.episode_total}</Typography>
-                  </Stack>
-
-                  <Stack direction="row" spacing={5} alignItems="left">
-                    <Typography variant="body1" sx={{ color: grey[500] }}>Thời lượng:</Typography>
-                    <Typography variant="body1" sx={{ pl: "0.5rem" }}>{media.time}</Typography>
-                  </Stack>
-                  <Stack direction="row" spacing={5} alignItems="left">
-                    <Typography variant="body1" sx={{ color: grey[500] }}>Quốc gia:</Typography>
-                    <Typography variant="body1" sx={{ pl: "1.25rem" }}>{media.country[0].name}</Typography>
-                  </Stack>
-
-                  <Stack direction="row" spacing={5} alignItems="left">
-                    <Typography variant="body1" sx={{ color: grey[500], whiteSpace: 'nowrap' }}>Diễn viên:</Typography>
-                    <Typography variant="body1" sx={{ pl: "1.25rem" }}>{actorsString}</Typography>
-                  </Stack>
-
-                  <Stack direction="row" spacing={5} alignItems="left">
-                    <Typography variant="body1" sx={{ color: grey[500] }}>Đạo diễn:</Typography>
-                    <Typography variant="body1" sx={{ pl: "1.25rem" }}>{director}</Typography>
-                  </Stack>
-
-                  <Stack direction="row" spacing={5} alignItems="left">
-                    <Typography variant="body1" sx={{ color: grey[500] }}>Lượt xem:</Typography>
-                    <Typography variant="body1" sx={{ pl: "1.25rem" }}>{media.view}</Typography>
-                  </Stack>
+                {/* media details */}
+                <Stack spacing={1}>
+                  <Box sx={{ mt: 2, mb: 2 }}></Box>
+                  {[
+                    { label: "Đang phát", value: media.episode_current },
+                    { label: "Tổng số tập", value: media.episode_total },
+                    { label: "Thời lượng", value: media.time },
+                    { label: "Quốc gia", value: media.country[0].name },
+                    { label: "Diễn viên", value: actorsString },
+                    { label: "Đạo diễn", value: director },
+                    { label: "Lượt xem", value: media.view }
+                  ].map((item, index) => (
+                    <Stack direction="row" spacing={2} alignItems="flex-start" key={index} sx={{ mb: 1 }}>
+                      <Typography variant="body1" sx={{
+                        color: grey[500],
+                        minWidth: '100px',
+                        whiteSpace: 'nowrap'
+                      }}>
+                        {item.label}:
+                      </Typography>
+                      <Typography variant="body1">
+                        {item.value}
+                      </Typography>
+                    </Stack>
+                  ))}
+                  {/* overview */}
                 </Stack>
                 {/* overview */}
                 <Typography variant="body1" sx={{ ...uiConfigs.style.typoLines(5) }}>
                   {content}
                 </Typography>
-
-                {/* overview */}
 
                 {/* buttons */}
                 <Stack direction="row" spacing={1}>
@@ -305,13 +290,14 @@ const MediaDetail = () => {
                     sx={{ width: "max-content" }}
                     size="large"
                     startIcon={<PlayArrowIcon />}
-                    LinkComponent={Link} to={`/xem-phim/${media.slug}`}
+                    LinkComponent={Link}
+                    to={`/xem-phim/${media.slug}#player`}
                   >
                     watch now
                   </Button>
 
                   {renderFavoriteButton()}
-                  <MovieShareModal movieUrl={movieUrl} movieTitle={movieTitle} />
+                  <MovieShareModal movieUrl={movieUrl} />
 
                 </Stack>
                 {/* buttons */}
@@ -324,27 +310,23 @@ const MediaDetail = () => {
         {/* media watch */}
         {/* media episodes */}
         {/* media backdrop */}
-        {backdrops?.length > 0 && (
-          <Container header="backdrops">
-            <BackdropSlide backdrops={backdrops} />
-          </Container>
-        )}
+        {
+          backdrops?.length > 0 && (
+            <Container header="backdrops">
+              <BackdropSlide backdrops={backdrops} />
+            </Container>
+          )
+        }
         {/* media backdrop */}
         {/* media posters */}
-        {posters?.length > 0 && (
-          <Container header="posters">
-            <PosterSlide posters={posters} />
-          </Container>
-        )}
+        {
+          posters?.length > 0 && (
+            <Container header="posters">
+              <PosterSlide posters={posters} />
+            </Container>
+          )
+        }
         {/* media posters */}
-
-
-        {/* media videos */}
-        <div ref={videoRef} style={{ paddingTop: "2rem" }}>
-          <Container header="Video in Youtube">
-            <MediaVideosSlide slug={media.slug} />
-          </Container>
-        </div>
         {/* media videos */}
         <MediaReview media={media} slug={Slug} />
         {/* media recommendation */}
@@ -352,7 +334,7 @@ const MediaDetail = () => {
           <RecommendSlide category={media.category[0].slug} country={media.country[0].slug} />
         </Container>
         {/* media recommendation */}
-      </Box>
+      </Box >
     </>
   );
 };

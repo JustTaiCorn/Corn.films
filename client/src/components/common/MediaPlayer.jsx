@@ -50,55 +50,50 @@ export default function MediaPlayer() {
                 position: 'relative',
                 zIndex: 2,
             }}>
-                {selectedEpisode ? (
-                    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                        <Box sx={{
-                            width: '100%',
-                            maxWidth: '1000px',
-                            transition: 'all 0.3s ease',
-                            ...(isTheaterMode && {
-                                transform: 'scale(1.2)',
-                            })
-                        }}>
-                            <iframe
-                                src={selectedEpisode.link_embed}
-                                title={selectedEpisode.filename}
-                                allowFullScreen
-                                ref={iframeRef}
-                                style={{
-                                    width: "100%",
-                                    borderRadius: "12px",
-                                    border: `2px solid ${isTheaterMode ? '#000' : '#e40000'}`,
-                                    boxShadow: isTheaterMode
-                                        ? '0 0 30px rgba(255, 0, 0, 0.3)'
-                                        : '0 4px 8px rgba(0, 0, 0, 0.1)',
-                                }}
-                            />
-                        </Box>
 
-                        <Button
-                            variant={isTheaterMode ? "contained" : "outlined"}
-                            color="error"
-                            startIcon={isTheaterMode ? <LightModeIcon /> : <DarkModeIcon />}
-                            onClick={toggleTheaterMode}
-                            sx={{
-                                mt: isTheaterMode ? 10 : 1,
-                                borderRadius: '20px',
-                                px: 3,
-                                py: 1,
-                                fontSize: '0.9rem',
-                                textTransform: 'none'
+                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                    <Box sx={{
+                        width: '100%',
+                        maxWidth: '1000px',
+                        transition: 'all 0.3s ease',
+                        ...(isTheaterMode && {
+                            transform: 'scale(1.2)',
+                        })
+                    }}>
+                        <iframe
+                            src={selectedEpisode?.link_embed}
+                            title={selectedEpisode?.filename}
+                            allowFullScreen
+                            ref={iframeRef}
+                            style={{
+                                width: "100%",
+                                borderRadius: "12px",
+                                border: `2px solid ${isTheaterMode ? '#000' : '#e40000'}`,
+                                boxShadow: isTheaterMode
+                                    ? '0 0 30px rgba(255, 0, 0, 0.3)'
+                                    : '0 4px 8px rgba(0, 0, 0, 0.1)',
                             }}
-                        >
-                            {isTheaterMode ? "Bật đèn" : "Tắt đèn"}
-                        </Button>
+                        />
                     </Box>
-                ) : (
-                    <Alert severity="info">
-                        <AlertTitle>Info</AlertTitle>
-                        <Typography fontSize={18}>Vui lòng chọn tập phim để phát😘</Typography>
-                    </Alert>
-                )}
+
+                    <Button
+                        variant={isTheaterMode ? "contained" : "outlined"}
+                        color="error"
+                        startIcon={isTheaterMode ? <LightModeIcon /> : <DarkModeIcon />}
+                        onClick={toggleTheaterMode}
+                        sx={{
+                            mt: isTheaterMode ? 10 : 1,
+                            borderRadius: '20px',
+                            px: 3,
+                            py: 1,
+                            fontSize: '0.9rem',
+                            textTransform: 'none'
+                        }}
+                    >
+                        {isTheaterMode ? "Bật đèn" : "Tắt đèn"}
+                    </Button>
+                </Box>
+
             </Stack>
         </Box>
     );

@@ -1,47 +1,51 @@
-import { useSelector } from "react-redux";
-import { Paper, Box, LinearProgress, Toolbar } from "@mui/material";
+import { Paper, Box, LinearProgress, Toolbar, CircularProgress } from "@mui/material";
 import { useEffect, useState } from "react";
 import Logo from "./Logo";
+import { LoadingButton } from "@mui/lab";
 
-const GlobalLoading = () => {
-  const { globalLoading } = useSelector((state) => state.globalLoading);
-
-  const [isLoading, setIsLoading] = useState(false);
+const GlobalLoading = ({ isLoading }) => {
+  const [shouldShow, setShouldShow] = useState(false);
 
   useEffect(() => {
-    if (globalLoading) {
-      setIsLoading(true);
-    } else {
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 1000);
-    }
-  }, [globalLoading]);
+    let timeoutId;
 
-  if (!isLoading) {
+    if (isLoading) {
+      setShouldShow(true);
+    } else {
+      timeoutId = setTimeout(() => {
+        setShouldShow(false);
+      }, 500);
+    }
+
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+    };
+  }, [isLoading]);
+
+  if (!shouldShow) {
     return null;
   }
+
   return (
-    <>
-      <Paper sx={{
-        transition: "all .3s ease",
-        position: "fixed",
-        width: "100vw",
-        height: "100vh",
-        zIndex: 999
+    <Paper sx={{
+      transition: "all .3s ease",
+      position: "fixed",
+      width: "100vw",
+      height: "100vh",
+      zIndex: 999
+    }}>
+      <Toolbar />
+      <LinearProgress />
+      <Box sx={{
+        position: "absolute",
+        margin: "auto",
+        top: "50%",
+        left: "40%",
+
       }}>
-        <Toolbar />
-        <LinearProgress />
-        <Box sx={{
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)"
-        }}>
-          <Logo />
-        </Box>
-      </Paper>
-    </>
+        <CircularProgress size={100} />
+      </Box>
+    </Paper>
   );
 };
 

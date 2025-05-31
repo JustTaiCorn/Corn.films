@@ -30,7 +30,7 @@ const MediaSearch = () => {
     if (newQuery.trim().length >= 3) {
       debounceSearch(newQuery.trim());
     } else {
-      fdsk(""); // Reset kết quả tìm kiếm
+      setDebouncedQuery(""); // Reset kết quả tìm kiếm
     }
   };
 
