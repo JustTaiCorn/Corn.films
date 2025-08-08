@@ -1,7 +1,7 @@
-import { Alert, AlertTitle, Stack, Typography, Button, Box } from "@mui/material";
+import { Stack, Button, Box } from "@mui/material";
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode';
-import uiConfigs from "../../configs/ui.configs";
+import uiConfigs from "../../api/configs/ui.configs";
 import { useSelector } from "react-redux";
 import { useEffect, useRef, useState } from "react";
 

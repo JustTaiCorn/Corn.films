@@ -21,7 +21,7 @@ const MainLayout = () => {
                         flexGrow={1}
                         overflow="hidden"
                         minHeight="100vh"
-                        marginLeft={{ xs: "30px", lg: "45px" }}
+                        marginLeft={{ xs: 0, sm: 0, md: "45px", lg: "45px" }}
 
                     >
                         <Topbar />

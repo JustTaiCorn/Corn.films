@@ -1,10 +1,9 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { TextField, Button, Box, Typography, CircularProgress, Container, Paper } from "@mui/material";
+import { TextField, Button, Typography, CircularProgress, Container, Paper } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { resetPassword } from "../redux/features/userThunks";
 import { toast } from "react-toastify";
-import uiConfigs from "../configs/ui.configs";
 const ResetPasswordPage = () => {
 	const [password, setPassword] = useState("");
 	const [confirmPassword, setConfirmPassword] = useState("");

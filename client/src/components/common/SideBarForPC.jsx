@@ -5,12 +5,12 @@ import WbSunnyOutlinedIcon from "@mui/icons-material/WbSunnyOutlined";
 import { Box, Button, IconButton, Stack, Divider } from "@mui/material";
 import { useState, memo } from "react";
 import { Link } from "react-router-dom";
-import { themeModes } from "../../configs/theme.configs";
+import { themeModes } from "../../api/configs/theme.configs";
 import { setThemeMode } from "../../redux/features/themeModeSlice";
 import Logo from "./Logo";
 import UserMenu from "./UserMenu";
 import Sidebar from "./Sidebar";
-import menuConfigs from "../../configs/menu.configs";
+import menuConfigs from "../../api/configs/menu.configs";
 
 const SidebarForPC = memo(function SidebarForPC() {
   const { user } = useSelector((state) => state.user);
@@ -72,9 +72,10 @@ const SidebarForPC = memo(function SidebarForPC() {
         </Box>
       </Box>
 
-      {/* Desktop sidebar (mới) */}
+      {/* Desktop sidebar */}
       <Box
         sx={{
+          minHeight: "90vh",
           width: "15%",
           minWidth: "220px",
           maxWidth: "250px",

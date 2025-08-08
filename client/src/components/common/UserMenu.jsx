@@ -3,7 +3,7 @@ import { ListItemButton, ListItemIcon, ListItemText, Menu, Typography } from "@m
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import menuConfigs from "../../configs/menu.configs";
+import menuConfigs from "../../api/configs/menu.configs";
 import { logout } from "../../redux/features/userThunks"; // Thêm import này
 
 const UserMenu = () => {

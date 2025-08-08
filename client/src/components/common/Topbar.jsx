@@ -17,7 +17,6 @@ import {
     CircularProgress
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import CloseIcon from '@mui/icons-material/Close';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { styled } from '@mui/material/styles';
@@ -71,8 +70,6 @@ export default function Topbar() {
     const [debouncedQuery, setDebouncedQuery] = useState("");
     const navigate = useNavigate();
     const searchRef = useRef(null);
-
-    // Triển khai debounce đúng cách
     const debounceSearch = useCallback(
         debounce((query) => {
             setDebouncedQuery(query);

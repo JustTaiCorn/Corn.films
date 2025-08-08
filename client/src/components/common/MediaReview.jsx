@@ -7,9 +7,7 @@ import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
 import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import ThumbDownOutlinedIcon from "@mui/icons-material/ThumbDownOutlined";
-import ReplyIcon from "@mui/icons-material/Reply";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+
 import { toast } from "react-toastify";
 import dayjs from "dayjs";
 import { useSelector } from "react-redux";
@@ -25,25 +23,9 @@ const ReviewItem = ({ review, onRemoved }) => {
   const [dislikesCount, setDislikesCount] = useState(review.dislikes ? review.dislikes.length : 0);
   const [userLiked, setUserLiked] = useState(user ? review.likes?.includes(user.id) : false);
   const [userDisliked, setUserDisliked] = useState(user ? review.dislikes?.includes(user.id) : false);
-  const [replyContent, setReplyContent] = useState("");
-  const [showReplyForm, setShowReplyForm] = useState(false);
-  const [showReplies, setShowReplies] = useState(false);
-  const [replies, setReplies] = useState([]);
 
-  const [replyLoading, setReplyLoading] = useState(false);
 
-  useEffect(() => {
-    // Ensure replies is always an array
-    const replyArray = Array.isArray(review.replies) ? review.replies : [];
 
-    // Filter out any undefined or null replies 
-    setReplies(replyArray.filter(reply => reply));
-
-    // If there are replies, expand them by default for non-logged in users
-    if (!user && replyArray.length > 0) {
-      setShowReplies(true);
-    }
-  }, [review, user]);
 
   const onRemove = async () => {
     if (onRequest) return;
@@ -143,41 +125,7 @@ const ReviewItem = ({ review, onRemoved }) => {
     setOnRequest(false);
   };
 
-  const handleSubmitReply = async () => {
-    if (!user) {
-      toast.error("Please login to reply");
-      return;
-    }
 
-    if (!replyContent.trim()) {
-      toast.error("Reply cannot be empty");
-      return;
-    }
-
-    setReplyLoading(true);
-
-    const { response, err } = await reviewApi.reply({
-      reviewId: review.id,
-      content: replyContent
-    });
-
-    if (err) {
-      toast.error(err.message);
-    } else if (response) {
-      // Add the new reply to the list with user data
-      const newReply = {
-        ...response,
-        user: { username: user.username }
-      };
-      setReplies([...replies, newReply]);
-      setReplyContent("");
-      setShowReplyForm(false);
-      setShowReplies(true);
-      toast.success("Reply added successfully");
-    }
-
-    setReplyLoading(false);
-  };
 
   return (
     <Box sx={{
@@ -204,7 +152,7 @@ const ReviewItem = ({ review, onRemoved }) => {
             {review.content}
           </Typography>
 
-          {/* Like/Dislike/Reply buttons */}
+          {/* Like/Dislike buttons */}
           <Stack
             direction={{ xs: 'column', sm: 'row' }}
             spacing={2}
@@ -231,97 +179,12 @@ const ReviewItem = ({ review, onRemoved }) => {
               </Button>
             </Stack>
 
-            <Stack direction="row" spacing={2} alignItems="center">
-              <Button
-                startIcon={<ReplyIcon />}
-                onClick={() => user ? setShowReplyForm(!showReplyForm) : toast.error("Please login to reply")}
-                sx={{ minWidth: '90px' }}
-              >
-                Reply
-              </Button>
 
-              {replies && replies.length > 0 && (
-                <Button
-                  startIcon={showReplies ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-                  onClick={() => setShowReplies(!showReplies)}
-                  sx={{
-                    minWidth: '120px',
-                    whiteSpace: 'nowrap',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis'
-                  }}
-                >
-                  {replies.length} {replies.length === 1 ? "reply" : "replies"}
-                </Button>
-              )}
-            </Stack>
           </Stack>
 
-          {/* Reply form */}
-          {showReplyForm && user && (
-            <Box sx={{ mt: 2, pl: 2, borderLeft: "2px solid", borderColor: "divider" }}>
-              <Stack direction="row" spacing={2} alignItems="flex-start">
-                <TextAvatar text={user.username} sx={{ width: 32, height: 32 }} />
-                <Stack spacing={1} flexGrow={1}>
-                  <TextField
-                    multiline
-                    rows={2}
-                    placeholder="Write your reply"
-                    value={replyContent}
-                    onChange={(e) => setReplyContent(e.target.value)}
-                    size="small"
-                    fullWidth
-                  />
-                  <Stack direction="row" spacing={1} justifyContent="flex-end">
-                    <Button
-                      variant="outlined"
-                      size="small"
-                      onClick={() => setShowReplyForm(false)}
-                    >
-                      Cancel
-                    </Button>
-                    <LoadingButton
-                      variant="contained"
-                      size="small"
-                      loading={replyLoading}
-                      onClick={handleSubmitReply}
-                    >
-                      Reply
-                    </LoadingButton>
-                  </Stack>
-                </Stack>
-              </Stack>
-            </Box>
-          )}
 
-          {/* Replies list */}
-          {showReplies && replies && replies.length > 0 && (
-            <Box sx={{ mt: 2, pl: 2, borderLeft: "2px solid", borderColor: "divider" }}>
-              <Stack spacing={2}>
-                {replies.map((reply, index) => {
-                  // Skip rendering if the reply doesn't have user info
-                  if (!reply || !reply.user) return null;
 
-                  return (
-                    <Stack key={reply.id || reply._id || index} direction="row" spacing={1}>
-                      <TextAvatar text={reply.user?.username} sx={{ width: 32, height: 32 }} />
-                      <Stack spacing={0.5} flexGrow={1}>
-                        <Stack direction="row" spacing={1} alignItems="center">
-                          <Typography variant="subtitle2" fontWeight="700">
-                            {reply.user?.username}
-                          </Typography>
-                          <Typography variant="caption">
-                            {dayjs(reply.createdAt).format("DD-MM-YYYY HH:mm:ss")}
-                          </Typography>
-                        </Stack>
-                        <Typography variant="body2">{reply.content}</Typography>
-                      </Stack>
-                    </Stack>
-                  );
-                })}
-              </Stack>
-            </Box>
-          )}
+
 
           {user && user.id === review.user.id && (
             <LoadingButton

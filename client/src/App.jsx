@@ -7,16 +7,13 @@ import "react-toastify/dist/ReactToastify.css";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-// import PageWrapper from "./components/common/PageWrapper";
 import routes from "./routes/routes";
-// import MainLayout from "./components/layout/MainLayout";
-import themeConfigs from "./configs/theme.configs";
+import themeConfigs from "./api/configs/theme.configs";
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { Suspense, lazy, useEffect } from "react";
 import GlobalLoading from "./components/common/GlobalLoading";
 import { checkAuth } from "./redux/features/userThunks";
-// import SplashCursor from "./utils/SplashCursor";
 const MainLayout = lazy(() => import("./components/layout/MainLayout"));
 const PageWrapper = lazy(() => import("./components/common/PageWrapper"));
 

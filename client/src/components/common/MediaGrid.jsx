@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 import MediaItem from "./MediaItem";
-import uiConfigs from "../../configs/ui.configs";
+import uiConfigs from "../../api/configs/ui.configs";
 import { Col, Row } from 'antd';
 const MediaGrid = ({ medias }) => {
 

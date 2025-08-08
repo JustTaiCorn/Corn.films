@@ -30,21 +30,7 @@ router.post(
   requestHandler.validate,
   reviewController.create
 );
-
 router.delete("/:reviewId", verifyToken, reviewController.remove);
-
-router.post(
-  "/reply/:reviewId",
-  verifyToken,
-  body("content")
-    .exists()
-    .withMessage("content is required")
-    .isLength({ min: 1 })
-    .withMessage("content can not be empty"),
-  requestHandler.validate,
-  reviewController.replyReview
-);
-
 router.post("/like/:reviewId", verifyToken, reviewController.likeReview);
 router.post("/dislike/:reviewId", verifyToken, reviewController.dislikeReview);
 export default router;

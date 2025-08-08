@@ -1,13 +1,12 @@
-import { Box, Button, Chip, Divider, Stack, Typography } from "@mui/material";
+import { Box, Chip, Divider, Stack, Typography } from "@mui/material";
 import { grey } from "@mui/material/colors";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
-import CircularRate from "../components/common/CircularRate";
 import Container from "../components/common/Container";
-import ImageHeader from "../components/common/ImageHeader";
+import ImageHeader from "../api/configs/ImageHeader";
 
-import uiConfigs from "../configs/ui.configs";
+import uiConfigs from "../api/configs/ui.configs";
 import { useDetail } from "../api/modules/media.api";
 import RecommendSlide from "../components/common/RecommendSlide";
 import MediaPlayer from "../components/common/MediaPlayer";
@@ -85,7 +84,6 @@ const MediaDetail = () => {
                         <Box sx={{ width: { xs: "70%", sm: "50%", md: "40%" }, margin: { xs: "0 auto 2rem", md: "0 2rem 0 0" } }}>
                             <Box sx={{ paddingTop: "140%", ...uiConfigs.style.backgroundImage(`https://image.tmdb.org/t/p/w500${posterUrl}`) }} />
                         </Box>
-                        {/* poster */}
 
                         {/* media info */}
                         <Box sx={{ width: { xs: "100%", md: "60%" }, color: "text.primary" }}>
@@ -114,21 +112,16 @@ const MediaDetail = () => {
                                         label={quality}
                                     />
                                 </Stack>
-                                {/* title */}
 
                                 {/* rate and genres */}
                                 <Stack direction="row" spacing={1} alignItems="center">
-                                    {/* rate */}
-                                    <CircularRate value={media.vote_average} />
-                                    {/* rate */}
+
                                     <Divider orientation="vertical" />
                                     {/* genres */}
                                     {genres.map((theLoai, index) => (
                                         <Chip variant="filled" color="primary" key={index} label={theLoai.name} />
                                     ))}
-                                    {/* genres */}
                                 </Stack>
-                                {/* rate and genres */}
                                 <Stack direction="column" spacing={1} alignItems="left">
                                     <Stack direction="row" spacing={5} alignItems="left">
                                         <Typography variant="body1" sx={{ color: grey[500] }}>Đang phát:</Typography>
@@ -167,33 +160,21 @@ const MediaDetail = () => {
                                 <Typography variant="body1" sx={{ ...uiConfigs.style.typoLines(5) }}>
                                     {content}
                                 </Typography>
-
-                                {/* overview */}
                             </Stack>
                         </Box>
-                        {/* media info */}
                     </Box>
                 </Box>
-                {/* media content */}
-                {/* media watch */}
                 <Container header="Watch now">
                     <div ref={playerRef}>
                         <MediaPlayer useRef={iframeRef} />
                     </div>
                 </Container>
-                {/* media watch */}
-                {/* media episodes */}
                 <Container>
                     <EpisodeList episodes={episodes} />
                 </Container>
-                {/* media episodes */}
-
-
-                {/* media recommendation */}
                 <Container header="you may also like">
                     <RecommendSlide category={media.category[0].slug} country={media.country[0].slug} />
                 </Container>
-                {/* media recommendation */}
             </Box >
         </>
     );

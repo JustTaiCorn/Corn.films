@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import reviewApi from "../api/modules/review.api";
 import Container from "../components/common/Container";
-import uiConfigs from "../configs/ui.configs";
+import uiConfigs from "../api/configs/ui.configs";
 import { setGlobalLoading } from "../redux/features/globalLoadingSlice";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { routesGen } from "../routes/routes";

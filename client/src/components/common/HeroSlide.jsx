@@ -4,7 +4,7 @@ import { Autoplay, Thumbs, Navigation } from 'swiper/modules';
 import { Link } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { routesGen } from "../../routes/routes";
-import uiConfigs from "../../configs/ui.configs";
+import uiConfigs from "../../api/configs/ui.configs";
 import { useList } from "../../api/modules/media.api";
 import { useState } from "react";
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';

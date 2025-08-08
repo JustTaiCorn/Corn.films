@@ -3,17 +3,16 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import { Box, Button, Chip, Divider, Stack, Typography } from "@mui/material";
 import { grey } from "@mui/material/colors";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, Link, useLocation } from "react-router-dom";
 import Container from "../components/common/Container";
-import ImageHeader from "../components/common/ImageHeader";
+import ImageHeader from "../api/configs/ImageHeader";
 
-import uiConfigs from "../configs/ui.configs";
+import uiConfigs from "../api/configs/ui.configs";
 import { useDetail } from "../api/modules/media.api";
 
 import { setGlobalLoading } from "../redux/features/globalLoadingSlice";
-import MediaVideosSlide from "../components/common/MediaVideosSlide";
 import RecommendSlide from "../components/common/RecommendSlide";
 import { resetSelectedEpisode } from "../redux/features/episodeSlice";
 import BackdropSlide from "../components/common/BackdropSlide";
@@ -27,7 +26,6 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import MovieShareModal from "../components/common/MovieShareModal";
 const MediaDetail = () => {
   const dispatch = useDispatch();
-  const videoRef = useRef(null);
   const { slug } = useParams();
   const [posters, setPosters] = useState([]);
   const [backdrops, setBackdrops] = useState([]);
@@ -209,7 +207,6 @@ const MediaDetail = () => {
             <Box sx={{ width: { xs: "70%", sm: "50%", md: "40%" }, margin: { xs: "0 auto 2rem", md: "0 2rem 0 0" } }}>
               <Box sx={{ height: "300px", width: "250px", ...uiConfigs.style.backgroundImage(posterPath), borderRadius: 10, boxShadow: 3, margin: "0 auto" }} />
             </Box>
-            {/* poster */}
 
             {/* media info */}
             <Box sx={{ width: { xs: "100%", md: "60%" }, color: "text.primary" }}>
@@ -238,18 +235,14 @@ const MediaDetail = () => {
                     label={quality}
                   />
                 </Stack>
-                {/* title */}
 
                 {/* rate and genres */}
                 <Stack direction="row" spacing={1} alignItems="center">
-                  {/* rate */}
-                  {/* rate */}
                   <Divider orientation="vertical" />
                   {/* genres */}
                   {genres.map((theLoai, index) => (
                     <Chip variant="filled" color="primary" key={index} label={theLoai.name} />
                   ))}
-                  {/* genres */}
                 </Stack>
                 {/* media details */}
                 <Stack spacing={1}>
@@ -278,7 +271,6 @@ const MediaDetail = () => {
                   ))}
                   {/* overview */}
                 </Stack>
-                {/* overview */}
                 <Typography variant="body1" sx={{ ...uiConfigs.style.typoLines(5) }}>
                   {content}
                 </Typography>
@@ -300,16 +292,10 @@ const MediaDetail = () => {
                   <MovieShareModal movieUrl={movieUrl} />
 
                 </Stack>
-                {/* buttons */}
               </Stack>
             </Box>
-            {/* media info */}
           </Box>
         </Box>
-        {/* media content */}
-        {/* media watch */}
-        {/* media episodes */}
-        {/* media backdrop */}
         {
           backdrops?.length > 0 && (
             <Container header="backdrops">
@@ -317,8 +303,6 @@ const MediaDetail = () => {
             </Container>
           )
         }
-        {/* media backdrop */}
-        {/* media posters */}
         {
           posters?.length > 0 && (
             <Container header="posters">
@@ -326,14 +310,11 @@ const MediaDetail = () => {
             </Container>
           )
         }
-        {/* media posters */}
-        {/* media videos */}
         <MediaReview media={media} slug={Slug} />
         {/* media recommendation */}
         <Container header="you may also like">
           <RecommendSlide category={media.category[0].slug} country={media.country[0].slug} />
         </Container>
-        {/* media recommendation */}
       </Box >
     </>
   );

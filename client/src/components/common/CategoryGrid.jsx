@@ -1,8 +1,8 @@
 import { Col, Row } from "antd"
-import uiConfigs from "../../configs/ui.configs"
+
 import { Box } from "@mui/material"
 import ItemCategory from "./ItemCategory"
-
+import uiConfigs from "../../api/configs/ui.configs"
 
 function CategoryGrid({ items }) {
     return (

@@ -3,7 +3,7 @@ import { Box } from "@mui/material";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useParams, useSearchParams } from "react-router-dom";
-import uiConfigs from "../configs/ui.configs";
+import uiConfigs from "../api/configs/ui.configs";
 import { setGlobalLoading } from "../redux/features/globalLoadingSlice";
 import { useList } from "../api/modules/media.api";
 import MediaGrid from "../components/common/MediaGrid";

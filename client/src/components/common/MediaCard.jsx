@@ -1,21 +1,6 @@
-import { Box, Stack, Typography, styled } from '@mui/material';
+import { Box, Stack, Typography, } from '@mui/material';
 import { useList } from '../../api/modules/media.api';
 import { Swiper, SwiperSlide } from 'swiper/react';
-
-// Badge hiển thị phụ đề
-const SubtitleBadge = styled(Box)(({ theme }) => ({
-    position: 'absolute',
-    top: 10,
-    right: 10,
-    backgroundColor: 'rgba(0, 0, 0, 0.7)',
-    color: '#fff',
-    padding: '4px 8px',
-    borderRadius: '4px',
-    fontSize: '12px',
-    fontWeight: 'bold',
-    zIndex: 10,
-}));
-
 const MediaCard = ({ mediaType }) => {
     const { data } = useList({
         mediaType,

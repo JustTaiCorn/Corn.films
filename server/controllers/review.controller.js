@@ -152,48 +152,6 @@ const getReviewsOfUser = async (req, res) => {
   }
 };
 
-const replyReview = async (req, res) => {
-  try {
-    const { reviewId } = req.params;
-    const { content } = req.body;
-
-    const review = await reviewModel.findById(reviewId);
-
-    if (!review) {
-      return res.status(404).json({
-        success: false,
-        message: "Review not found",
-      });
-    }
-
-    const reply = new reviewModel({
-      user: req.user.id,
-      content,
-      mediaId: review.mediaId,
-      mediaTitle: review.mediaTitle,
-      mediaPoster: review.mediaPoster,
-      mediaSlug: review.mediaSlug,
-    });
-
-    await reply.save();
-
-    review.replies.push(reply._id);
-    await review.save();
-
-    res.status(201).json({
-      success: true,
-      ...reply._doc,
-      id: reply.id,
-    });
-  } catch (error) {
-    console.error("Error replying to review:", error);
-    res.status(500).json({
-      success: false,
-      message: "Something went wrong",
-    });
-  }
-};
-
 const likeReview = async (req, res) => {
   try {
     const { reviewId } = req.params;
@@ -299,7 +257,6 @@ export default {
   remove,
   getReviewsOfUser,
   getReviewsByMediaId,
-  replyReview,
   likeReview,
   dislikeReview,
 };
