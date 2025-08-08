@@ -2,7 +2,7 @@ import { Box, Stack, TextField, Toolbar } from "@mui/material";
 import { useState, useEffect, useCallback } from "react";
 import { useSearch } from "../api/modules/media.api";
 import MediaGrid from "../components/common/MediaGrid";
-import uiConfigs from "../configs/ui.configs";
+import uiConfigs from "../api/configs/ui.configs";
 import debounce from "lodash.debounce"; // Thêm thư viện debounce
 
 const MediaSearch = () => {
