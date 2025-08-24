@@ -58,8 +58,8 @@ const HeroSlide = ({ mediaType }) => {
               <SwiperSlide key={index}>
                 <Box sx={{
                   paddingTop: {
-                    xs: "90%",
-                    sm: "90%",
+                    xs: "70%",
+                    sm: "70%",
                     md: "60%",
                     lg: "45%"
                   },
@@ -67,22 +67,14 @@ const HeroSlide = ({ mediaType }) => {
                   backgroundSize: "cover",
                   backgroundAttachment: "fixed",
                   backgroundImage: `url(${thumbUrl})`,
-                  borderRadius: 5,
-                }} />
-                <Box sx={{
-                  width: "40%",
-                  height: "100%",
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  ...uiConfigs.style.horizontalGradientBgImage[theme.palette.mode]
                 }} />
                 <Box sx={{
                   width: "100%",
                   height: "100%",
                   position: "absolute",
-                  top: 100,
+                  top: 50,
                   left: 0,
+                  ml: { xs: 3, md: 0 },
                   paddingX: { sm: "10px", md: "5rem", lg: "5rem" }
                 }}>
                   <Box sx={{
@@ -90,20 +82,20 @@ const HeroSlide = ({ mediaType }) => {
                     display: "flex",
                     alignItems: "center",
                     color: "text.primary",
-                    width: { xs: "90%", sm: "unset", md: "30%", lg: "40%" }
+                    width: { xs: "90%", md: "30%", lg: "40%" },
                   }}>
-                    <Stack spacing={2} direction="column">
+                    <Stack spacing={{ xs: 0.5, sm: 2 }} direction="column">
                       {/* title */}
                       <Typography
-                        variant="h4"
-                        fontSize={{ xs: "1rem", md: "1rem", lg: "2rem" }}
+                        variant="h3"
+                        fontSize={{ xs: "0.75rem", md: "1rem", lg: "2rem" }}
                         fontWeight="700"
                       >
                         {movie.name}
                       </Typography>
                       <Typography
                         variant="body1"
-                        fontSize={{ xs: "0.75rem", md: "0.8rem", lg: "1rem" }}
+                        fontSize={{ xs: "0.65rem", md: "0.8rem", lg: "1rem" }}
                         fontWeight="400"
                       >
                         {movie.origin_name}
@@ -200,8 +192,8 @@ const HeroSlide = ({ mediaType }) => {
                           to={`${routesGen.mediaWatch(movie.slug)}#player`}
                           sx={{
                             width: "max-content",
-                            fontSize: { xs: '0.7rem', sm: '0.8rem', md: '0.9rem' },
-                            padding: { xs: '6px 8px', sm: '8px 12px', md: '8px 16px' }
+                            fontSize: { xs: '0.5rem', sm: '0.8rem', md: '0.9rem' },
+                            padding: { xs: '2px 4px', sm: '6px 10px', md: '8px 16px' }
                           }}
                         >
                           watch now
@@ -214,8 +206,8 @@ const HeroSlide = ({ mediaType }) => {
                           to={routesGen.mediaDetail(movie.slug)}
                           sx={{
                             width: "max-content",
-                            fontSize: { xs: '0.7rem', sm: '0.8rem', md: '0.9rem' },
-                            padding: { xs: '6px 8px', sm: '8px 12px', md: '8px 16px' },
+                            fontSize: { xs: '0.5rem', sm: '0.8rem', md: '0.9rem' },
+                            padding: { xs: '2px 4px', sm: '6px 10px', md: '8px 16px' },
 
                           }}
                           endIcon={<ArrowForwardIosIcon />}

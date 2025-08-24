@@ -20,11 +20,12 @@ const EpisodeList = ({ episodes }) => {
     return (
         <Paper
             sx={{
-                p: 3,
-                mb: 3,
+                p: 2,
+                mx: "auto",
                 borderRadius: 2,
                 backgroundColor: grey[100],
                 boxShadow: 3,
+                width: "95%",
                 minHeight: "100px",
                 maxHeight: isMobile ? "200px" : "400px",
                 overflow: "auto",

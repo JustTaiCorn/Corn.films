@@ -16,7 +16,7 @@ const Sidebar = ({ open, toggleSidebar }) => {
   const { user } = useSelector((state) => state.user);
   const { appState } = useSelector((state) => state.appState);
   const { themeMode } = useSelector((state) => state.themeMode);
-  const sidebarWidth = uiConfigs.size.sidebarWith;
+
 
   const onSwitchTheme = () => {
     const theme = themeMode === themeModes.dark ? themeModes.light : themeModes.dark;
@@ -97,7 +97,7 @@ const Sidebar = ({ open, toggleSidebar }) => {
       sx={{
         "& .MuiDrawer-Paper": {
           boxSizing: "border-box",
-          width: sidebarWidth,
+          width: "300px",
           borderRight: "0px"
         }
       }}

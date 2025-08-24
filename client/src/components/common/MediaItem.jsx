@@ -35,8 +35,9 @@ const MediaItem = ({ media }) => {
   return (
     <Box sx={{
       padding: { xs: 0.5, sm: 0.75, md: 1 },
-      margin: { xs: 0.15, sm: 0.25, md: 0.5 },
-      maxWidth: { xs: "70%", sm: "70%", md: "80%" },
+      margin: { xs: 0.15 },
+      maxWidth: { xs: "90%", sm: "70%", md: "80%" },
+      minHeight: { xs: "200px", sm: "250px", md: "300px" },
       "&:hover": {
         "& img": {
           filter: "brightness(0.7)",
@@ -55,6 +56,7 @@ const MediaItem = ({ media }) => {
           boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
         }}>
           <img
+            loading="lazy"
             src={posterPath}
             alt={title}
             style={{

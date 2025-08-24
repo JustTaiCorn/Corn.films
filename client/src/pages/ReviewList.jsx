@@ -60,7 +60,7 @@ const ReviewItem = ({ review, onRemoved }) => {
           >
             <Typography
               variant="h6"
-              sx={{ ...uiConfigs.style.typoLines(1, "left") }}
+              sx={ {textAlign:"left" }}
             >
               {review.mediaTitle}
             </Typography>

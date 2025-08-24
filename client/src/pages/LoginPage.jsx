@@ -8,7 +8,6 @@ import {
     Container,
     Paper,
     CircularProgress,
-    Alert,
 } from "@mui/material";
 import { Lock, Mail } from "@mui/icons-material";
 import Input from "../components/common/Input"; // Using the same Input component
@@ -21,7 +20,7 @@ const LoginPage = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
-    const dispatch = useDispatch(); // Added useDispatch
+    const dispatch = useDispatch(); 
     const { isLoading } = useSelector((state) => state.user);
 
     const handleLogin = async (e) => {
@@ -162,7 +161,7 @@ const LoginPage = () => {
                                 color="text.secondary"
                                 sx={{ fontSize: { xs: "0.75rem", sm: "0.875rem" } }}
                             >
-                                Don't have an account?{" "}
+                                Don&#39;t have an account?{" "}
                                 <Link
                                     to="/sign-up"
                                     style={{ color: "red", textDecoration: "none" }}

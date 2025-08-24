@@ -66,7 +66,9 @@ const MediaDetail = () => {
     const thumbUrl = media.thumb_url
         ? `https://img.ophim.live/uploads/movies/${media.thumb_url}`
         : "https://via.placeholder.com/500x750";
-    const posterUrl = posters[0]?.file_path || "";
+    const posterPath = posters[0]?.file_path
+        ? `https://image.tmdb.org/t/p/w500${posters[0].file_path}`
+        : `https://img.ophim.live/uploads/movies/${media.poster_url}`;
 
 
 
@@ -76,13 +78,33 @@ const MediaDetail = () => {
     return (
         <>
             <ImageHeader imgPath={thumbUrl} />
-            <Box sx={{ color: "primary.contrastText", ...uiConfigs.style.mainContent, }}>
+            <Box sx={{  ...uiConfigs.style.mainContent, }}>
                 {/* media content */}
                 <Box sx={{ marginTop: { xs: "-10rem", md: "-15rem", lg: "-20rem" } }}>
                     <Box sx={{ display: "flex", flexDirection: { md: "row", xs: "column" } }}>
                         {/* poster */}
-                        <Box sx={{ width: { xs: "70%", sm: "50%", md: "40%" }, margin: { xs: "0 auto 2rem", md: "0 2rem 0 0" } }}>
-                            <Box sx={{ paddingTop: "140%", ...uiConfigs.style.backgroundImage(`https://image.tmdb.org/t/p/w500${posterUrl}`) }} />
+                        <Box sx={{ width: { xs: "70%", sm: "50%", md: "40%" }, marginX: "auto", }}>
+                            <Box
+                                component="img"
+                                src={posterPath}
+                                alt="Poster"
+                                sx={{
+                                    width: {
+                                        xs: 250,   // màn nhỏ
+                                        sm: 300,   // màn vừa
+                                        md: 350,   // màn lớn
+                                        lg: 400,   // màn rất lớn
+                                    },
+                                    height: {
+                                        xs: 300,
+                                        sm: 350,
+                                        md: 400,
+                                        lg: 550,
+                                    },
+                                    objectFit: 'cover',
+                                    borderRadius: 2,
+                                }}
+                            />
                         </Box>
 
                         {/* media info */}
@@ -94,9 +116,13 @@ const MediaDetail = () => {
                                         variant="h4"
                                         fontSize={{ xs: "2rem", md: "2rem", lg: "4rem" }}
                                         fontWeight="700"
-                                        sx={{ ...uiConfigs.style.typoLines(2, "left") }}
+                                        sx={{ textAlign: "left",
+                                            display: "-webkit-box",
+                                            overflow: "hidden",
+                                            WebkitBoxOrient: "vertical",
+                                            WebkitLineClamp: 2,}}
                                     >
-                                        {`${title} ${year}`}
+                                        {`${title}`}
                                     </Typography>
                                     <Typography variant="h5" fontWeight="500" sx={{ color: "text.secondary" }}
                                         fontSize={{ xs: "1rem", md: "1rem", lg: "3rem" }}>{media.origin_name}</Typography>
@@ -157,7 +183,7 @@ const MediaDetail = () => {
                                     </Stack>
                                 </Stack>
                                 {/* overview */}
-                                <Typography variant="body1" sx={{ ...uiConfigs.style.typoLines(5) }}>
+                                <Typography variant="body1" >
                                     {content}
                                 </Typography>
                             </Stack>
@@ -166,16 +192,17 @@ const MediaDetail = () => {
                 </Box>
                 <Container header="Watch now">
                     <div ref={playerRef}>
-                        <MediaPlayer useRef={iframeRef} />
+                        <MediaPlayer />
                     </div>
                 </Container>
-                <Container>
-                    <EpisodeList episodes={episodes} />
-                </Container>
-                <Container header="you may also like">
-                    <RecommendSlide category={media.category[0].slug} country={media.country[0].slug} />
-                </Container>
-            </Box >
+            </Box>
+            <Box sx={{ display: "flex", justifyContent: "center" }}>
+                <EpisodeList episodes={episodes} />
+            </Box>
+            <Container header="you may also like">
+                <RecommendSlide category={media.category[0].slug} country={media.country[0].slug} />
+            </Container>
+
         </>
     );
 };

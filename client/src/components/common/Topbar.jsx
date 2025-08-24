@@ -3,8 +3,6 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import {
     Box,
     IconButton,
-    InputBase,
-    alpha,
     Badge,
     Avatar,
     Tooltip,
@@ -14,56 +12,14 @@ import {
     ListItem,
     ListItemAvatar,
     ListItemText,
-    CircularProgress
+    CircularProgress, TextField, InputAdornment
 } from '@mui/material';
-import SearchIcon from '@mui/icons-material/Search';
 import CloseIcon from '@mui/icons-material/Close';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import { styled } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import { useSearch } from '../../api/modules/media.api';
 import debounce from 'lodash.debounce';
 import { routesGen } from '../../routes/routes';
-
-const Search = styled('div')(({ theme, isFocused }) => ({
-    position: 'relative',
-    borderRadius: 24,
-    padding: 5,
-    backgroundColor: alpha(theme.palette.common.white, 0.08),
-    '&:hover': {
-        backgroundColor: alpha(theme.palette.common.white, 0.12),
-    },
-    width: '100%',
-    display: 'flex',
-    alignItems: 'center',
-    border: isFocused ? `1px solid ${theme.palette.primary.main}` : 'none',
-}));
-
-const SearchIconWrapper = styled('div')(({ theme }) => ({
-    padding: theme.spacing(0, 1),
-    height: '100%',
-    position: 'absolute',
-    pointerEvents: 'none',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    color: alpha(theme.palette.common.white, 0.7)
-}));
-
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-    color: theme.palette.text.primary,
-    width: '100%',
-    '& .MuiInputBase-input': {
-        padding: theme.spacing(1, 1, 1, 0),
-        paddingLeft: `calc(1em + ${theme.spacing(3)})`,
-        paddingRight: '2.5rem',
-        transition: theme.transitions.create('width'),
-        width: '100%',
-        [theme.breakpoints.up('md')]: {
-            width: '45ch',
-        },
-    },
-}));
 
 export default function Topbar() {
     const [searchQuery, setSearchQuery] = useState("");
@@ -94,7 +50,6 @@ export default function Topbar() {
         }
     };
 
-    // Xử lý đóng dropdown khi bấm ra ngoài vùng tìm kiếm
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (searchRef.current && !searchRef.current.contains(event.target)) {
@@ -124,40 +79,68 @@ export default function Topbar() {
                 display: { xs: "none", md: 'flex' },
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                width: '100%',
+                maxWidth: "100vw",
                 height: 70,
-                padding: 2,
-                mt: 4,
-                mb: 2,
-                mr: 2,
-                backgroundColor: 'background.paper',
-                borderRadius: 10,
+                pr: 4,
+                my: 2,
+                mx: "auto",
                 position: 'relative',
             }}
         >
-            <Box sx={{ display: 'flex', alignItems: 'center', position: 'relative' }} ref={searchRef}>
-                <Search>
-                    <SearchIconWrapper>
-                        <SearchIcon />
-                    </SearchIconWrapper>
-                    <StyledInputBase
+            <Box sx={{
+                display: 'flex',
+                alignItems: 'center',
+                position: 'relative',
+                flex: '1', // Cho phép co giãn nhưng không quá lớn
+                maxWidth: 500 // Giới hạn tối đa cho container search
+            }} ref={searchRef}>
+                <Box sx={{
+
+                    width: '100%',
+                    maxWidth: 400, // Giới hạn width tối đa
+                    minWidth: 250, // Width tối thiểu
+                    display: 'flex',
+                    alignItems: 'center',
+                }}>
+
+                    <TextField
+                        sx={{ width: "100%", height: "50%" }}
                         placeholder="Tìm kiếm phim..."
                         value={searchQuery}
                         onChange={onQueryChange}
+                        slotProps={{
+                            input: {
+                                startAdornment: (
+                                    <InputAdornment position="start">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+                                            className="lucide lucide-search-icon lucide-search">
+                                            <path d="m21 21-4.34-4.34" />
+                                            <circle cx="11" cy="11" r="8" />
+                                        </svg>
+                                    </InputAdornment>
+                                ),
+                                endAdornment: (
+                                    <InputAdornment position="start">
+                                        {searchQuery && (
+                                            <IconButton
+                                                size="small"
+                                                sx={{ position: 'absolute', right: 8 }}
+                                                onClick={() => {
+                                                    setSearchQuery("");
+                                                    setDebouncedQuery("");
+                                                }}
+                                            >
+                                                <CloseIcon fontSize="small" />
+                                            </IconButton>
+                                        )}
+                                    </InputAdornment>
+                                ),
+                            },
+                        }}
                     />
-                    {searchQuery && (
-                        <IconButton
-                            size="small"
-                            sx={{ position: 'absolute', right: 8 }}
-                            onClick={() => {
-                                setSearchQuery("");
-                                setDebouncedQuery("");
-                            }}
-                        >
-                            <CloseIcon fontSize="small" />
-                        </IconButton>
-                    )}
-                </Search>
+
+                </Box>
 
                 {/* Search Results Dropdown */}
                 {data?.items && (
@@ -165,7 +148,7 @@ export default function Topbar() {
                         sx={{
                             position: 'absolute',
                             top: '100%',
-                            width: '100%',
+                            width: '80%',
                             maxHeight: '70vh',
                             overflow: 'auto',
                             mt: 4,

@@ -36,7 +36,7 @@ const App = () => {
   return (
     <>
       <QueryClientProvider client={queryClient}>
-        <ReactQueryDevtools initialIsOpen={false} />
+        {/* <ReactQueryDevtools initialIsOpen={false} /> */}
         {/* <SplashCursor /> */}
         <ThemeProvider theme={themeConfigs.custom({ mode: themeMode })}>
           {/* config toastify */}
@@ -81,7 +81,6 @@ const App = () => {
               </Routes>
             </BrowserRouter>
           </Suspense>
-          {/* app routes */}
         </ThemeProvider>
       </QueryClientProvider>
     </>

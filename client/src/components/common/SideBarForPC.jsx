@@ -90,7 +90,7 @@ const SidebarForPC = memo(function SidebarForPC() {
           display: { xs: "none", md: "flex" },
           flexDirection: "column",
           zIndex: 1200,
-          borderRadius: "16px",
+          borderRadius: "10px",
           boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)"
         }}
       >
@@ -112,10 +112,10 @@ const SidebarForPC = memo(function SidebarForPC() {
                 borderRadius: 2,
                 padding: "10px 16px",
                 transition: "all 0.3s ease",
-                textTransform: "none",
+                textTransform: "uppercase",
                 fontWeight: "medium",
                 "&:hover": {
-                  bgcolor: appState.includes(item.state) ? "primary.dark" : "action.hover",
+                  bgcolor: "primary.dark"
                 },
                 fontSize: { md: '0.9rem' },
               }}

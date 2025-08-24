@@ -5,7 +5,7 @@ import uiConfigs from "../../api/configs/ui.configs";
 import { useSelector } from "react-redux";
 import { useEffect, useRef, useState } from "react";
 
-export default function MediaPlayer() {
+const MediaPlayer = () => {
     const selectedEpisode = useSelector((state) => state.episode.selectedEpisode);
     const iframeRef = useRef();
     const [isTheaterMode, setIsTheaterMode] = useState(false);
@@ -46,7 +46,11 @@ export default function MediaPlayer() {
             })
         }}>
             <Stack sx={{
-                ...uiConfigs.style.mainContent,
+                margin: "auto",
+                p: 2,
+                width: "100%",
+                minHeight: { sm: "400px", md: "600px" },
+                boxSizing: "border-box",
                 position: 'relative',
                 zIndex: 2,
             }}>
@@ -97,4 +101,6 @@ export default function MediaPlayer() {
             </Stack>
         </Box>
     );
-}
+};
+
+export default MediaPlayer;

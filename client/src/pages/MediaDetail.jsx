@@ -90,13 +90,12 @@ const MediaDetail = () => {
   if (!media) return null;
   const quality = media.quality || "HD";
   const actor = media.actor.length === 1 && media.actor[0] === "" ? "Chưa cập nhật" : media.actor;
-  const actorsString = actor === "Chưa cập nhật" ? "Chưa cập nhật" : actor.join(", ");
+  const actorsString = actor === "Chưa cập nhật" ? "Chưa cập nhật" : actor
   const director =
     media.director?.length === 1 && media.director[0] === ""
       ? "Chưa cập nhật"
       : media.director;
   const title = media.title || media.name || "No Title";
-  const year = media.year ? `(${media.year})` : "";
   const genres = media.category || [];
   const content = media.content.replace(/<\/?p>/g, '') || "No content available";
   const thumbUrl = media.thumb_url
@@ -199,13 +198,33 @@ const MediaDetail = () => {
   return (
     <>
       <ImageHeader imgPath={thumbUrl} />
-      <Box sx={{ color: "primary.contrastText", ...uiConfigs.style.mainContent, }}>
+      <Box sx={{ ...uiConfigs.style.mainContent, }}>
         {/* media content */}
         <Box sx={{ marginTop: { xs: "-10rem", md: "-15rem", lg: "-20rem" } }}>
           <Box sx={{ display: "flex", flexDirection: { md: "row", xs: "column" } }}>
             {/* poster */}
-            <Box sx={{ width: { xs: "70%", sm: "50%", md: "40%" }, margin: { xs: "0 auto 2rem", md: "0 2rem 0 0" } }}>
-              <Box sx={{ height: "300px", width: "250px", ...uiConfigs.style.backgroundImage(posterPath), borderRadius: 10, boxShadow: 3, margin: "0 auto" }} />
+            <Box sx={{ width: { xs: "70%", sm: "50%", md: "40%" }, marginX: "auto", }}>
+              <Box
+                component="img"
+                src={posterPath}
+                alt="Poster"
+                sx={{
+                  width: {
+                    xs: 250,   // màn nhỏ
+                    sm: 300,   // màn vừa
+                    md: 350,   // màn lớn
+                    lg: 400,   // màn rất lớn
+                  },
+                  height: {
+                    xs: 300,
+                    sm: 350,
+                    md: 400,
+                    lg: 550,
+                  },
+                  objectFit: 'cover',
+                  borderRadius: 2,
+                }}
+              />
             </Box>
 
             {/* media info */}
@@ -217,9 +236,15 @@ const MediaDetail = () => {
                     variant="h4"
                     fontSize={{ xs: "2rem", md: "2rem", lg: "4rem" }}
                     fontWeight="700"
-                    sx={{ ...uiConfigs.style.typoLines(2, "left") }}
+                    sx={{
+                      textAlign: "left",
+                      display: "-webkit-box",
+                      overflow: "hidden",
+                      WebkitBoxOrient: "vertical",
+                      WebkitLineClamp: 1
+                    }}
                   >
-                    {`${title} ${year}`}
+                    {`${title}`}
                   </Typography>
                   <Typography variant="h5" fontWeight="500" sx={{ color: "text.secondary" }}
                     fontSize={{ xs: "1rem", md: "1rem", lg: "3rem" }}>{media.origin_name}</Typography>
@@ -271,7 +296,7 @@ const MediaDetail = () => {
                   ))}
                   {/* overview */}
                 </Stack>
-                <Typography variant="body1" sx={{ ...uiConfigs.style.typoLines(5) }}>
+                <Typography variant="body1" >
                   {content}
                 </Typography>
 

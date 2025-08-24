@@ -39,7 +39,6 @@ export const login = (email, password) => async (dispatch) => {
       password,
     });
 
-    // Kiểm tra xem người dùng đã xác thực email hay chưa
     if (!response.data.user.isVerified) {
       dispatch(setError("Vui lòng xác thực email trước khi đăng nhập"));
       return;

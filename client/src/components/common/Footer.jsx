@@ -7,15 +7,14 @@ import GitHubIcon from '@mui/icons-material/GitHub';
 
 const Footer = () => {
   return (
-    <Paper square={true} sx={{
-      backgroundImage: "unset",
+    <Paper sx={{
       padding: { xs: "1.5rem", md: "2rem" },
       backgroundColor: "background.paper",
       borderRadius: { xs: 0, md: "16px" },
       boxShadow: "0px -4px 10px rgba(0, 0, 0, 0.1)",
       width: "100%",
       mt: 4,
-      marginLeft: { xs: 0, md: "19%" },
+      marginLeft: { xs: 0, md: "17%" },
       marginBottom: { xs: 0, md: "15px" },
       maxWidth: { md: "80%" }
     }}>
@@ -52,7 +51,6 @@ const Footer = () => {
             <Typography variant="body2" sx={{ color: "text.secondary" }}>
               Địa chỉ: 123 Đường ABC, Quận XYZ, TP.Hà Nội
             </Typography>
-            <Divider sx={{ width: "100%", my: 1 }} />
             {/* Các icon mạng xã hội */}
             <Stack direction="row" spacing={2}>
               <IconButton color="primary" size="small" sx={{ border: '1px solid', borderColor: 'text.disabled' }}>

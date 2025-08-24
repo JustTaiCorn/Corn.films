@@ -6,8 +6,8 @@ const AutoSwiper = ({ children }) => {
     <Box sx={{
       "& .swiper-slide": {
         width: {
-          xs: "50%",
-          sm: "35%",
+          xs: "30%",
+          sm: "25%",
           md: "25%",
           lg: "20.5%"
         }
@@ -16,7 +16,7 @@ const AutoSwiper = ({ children }) => {
       <Swiper
         slidesPerView="auto"
         grabCursor={true}
-        style={{ width: "100%", height: "max-content" }}
+        style={{ width: "100%", height: "max-content", }}
       >
         {children}
       </Swiper>
