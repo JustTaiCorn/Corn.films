@@ -55,12 +55,10 @@ const routes = [
   {
     index: true,
     element: <HomePage />,
-    state: "home"
   },
   {
     path: "/search",
     element: <MediaSearch />,
-    state: "search"
   },
   {
     path: "/:type",
@@ -137,10 +135,6 @@ const routes = [
       <ProfilePage />
     </ProtectedRoute>
   },
-  {
-    path: "lich-chieu",
-    element: <ScheduleMedia />,
-  }
 ];
 
 export default routes;

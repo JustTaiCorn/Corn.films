@@ -2,7 +2,6 @@ import { Drawer, List, ListItemButton, ListItemIcon, ListItemText, Stack, Toolba
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import Logo from "./Logo";
-import uiConfigs from "../../api/configs/ui.configs";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import WbSunnyOutlinedIcon from "@mui/icons-material/WbSunnyOutlined";
 
@@ -14,7 +13,6 @@ const Sidebar = ({ open, toggleSidebar }) => {
   const dispatch = useDispatch();
 
   const { user } = useSelector((state) => state.user);
-  const { appState } = useSelector((state) => state.appState);
   const { themeMode } = useSelector((state) => state.themeMode);
 
 
@@ -39,7 +37,7 @@ const Sidebar = ({ open, toggleSidebar }) => {
             sx={{
               borderRadius: "10px",
               marginY: 1,
-              backgroundColor: appState.includes(item.state) ? "primary.main" : "unset"
+              backgroundColor:  "primary.main"
             }}
             component={Link}
             to={item.path}
@@ -60,7 +58,7 @@ const Sidebar = ({ open, toggleSidebar }) => {
               sx={{
                 borderRadius: "10px",
                 marginY: 1,
-                backgroundColor: appState.includes(item.state) ? "primary.main" : "unset"
+                backgroundColor:"primary.main"
               }}
               component={Link}
               to={item.path}

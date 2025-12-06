@@ -36,7 +36,7 @@ const MediaItem = ({ media }) => {
     <Box sx={{
       padding: { xs: 0.5, sm: 0.75, md: 1 },
       margin: { xs: 0.15 },
-      maxWidth: { xs: "90%", sm: "70%", md: "80%" },
+      maxWidth: { xs: "90%", sm: "100%", md: "100%" },
       minHeight: { xs: "200px", sm: "250px", md: "300px" },
       "&:hover": {
         "& img": {

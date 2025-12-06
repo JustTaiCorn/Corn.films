@@ -14,7 +14,6 @@ import menuConfigs from "../../api/configs/menu.configs";
 
 const SidebarForPC = memo(function SidebarForPC() {
   const { user } = useSelector((state) => state.user);
-  const { appState } = useSelector((state) => state.appState);
   const { themeMode } = useSelector((state) => state.themeMode);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -29,7 +28,7 @@ const SidebarForPC = memo(function SidebarForPC() {
 
   return (
     <>
-      {/* Mobile sidebar (giữ nguyên) */}
+      {/* Mobile sidebar */}
       <Sidebar open={sidebarOpen} toggleSidebar={toggleSidebar} />
 
       {/* Mobile top bar */}
@@ -95,29 +94,29 @@ const SidebarForPC = memo(function SidebarForPC() {
         }}
       >
         {/* Logo */}
-        <Box sx={{ mb: 4, mt: 2, display: "flex", justifyContent: "center" }}>
+        <Box sx={{ mb: 3, mt: 1, display: "flex", justifyContent: "center" }}>
           <Logo />
         </Box>
 
         {/* Menu Items */}
-        <Stack spacing={1} sx={{ flexGrow: 1 }}>
+        <Stack spacing={0.5} sx={{ flexGrow: 1, overflowY: "auto" }}>
           {menuConfigs.main.map((item, index) => (
             <Button
               key={index}
               startIcon={item.icon}
               sx={{
                 justifyContent: "flex-start",
-                color: appState.includes(item.state) ? "primary.contrastText" : "text.primary",
-                bgcolor: appState.includes(item.state) ? "primary.main" : "transparent",
+                color:   "text.primary",
+                bgcolor:   "transparent",
                 borderRadius: 2,
                 padding: "10px 16px",
-                transition: "all 0.3s ease",
+                transition: "all 0.2s ease",
                 textTransform: "uppercase",
                 fontWeight: "medium",
                 "&:hover": {
-                  bgcolor: "primary.dark"
+                  bgcolor:  "action.hover"
                 },
-                fontSize: { md: '0.9rem' },
+                fontSize: { md: '0.85rem' },
               }}
               component={Link}
               to={item.path}
@@ -127,9 +126,11 @@ const SidebarForPC = memo(function SidebarForPC() {
             </Button>
           ))}
         </Stack>
-        <Divider />
+
+        <Divider sx={{ my: 2 }} />
+
         {/* Bottom section - Theme toggle & User */}
-        <Stack spacing={2} sx={{ mt: 3 }}>
+        <Stack spacing={1.5}>
           {/* Theme toggle */}
           <Button
             startIcon={themeMode === themeModes.dark ? <DarkModeOutlinedIcon /> : <WbSunnyOutlinedIcon />}
@@ -137,7 +138,14 @@ const SidebarForPC = memo(function SidebarForPC() {
             sx={{
               justifyContent: "flex-start",
               color: "text.primary",
-              textTransform: "none"
+              textTransform: "none",
+              padding: "8px 16px",
+              borderRadius: 2,
+              fontSize: "0.9rem",
+              transition: "all 0.2s ease",
+              "&:hover": {
+                bgcolor: "action.hover"
+              }
             }}
           >
             {themeMode === themeModes.dark ? "Dark Mode" : "Light Mode"}
@@ -151,15 +159,24 @@ const SidebarForPC = memo(function SidebarForPC() {
               to="/log-in"
               fullWidth
               sx={{
-                maxHeight: "40px",
+                height: "44px",
+                textTransform: "uppercase",
+                fontWeight: "bold",
+                borderRadius: 2,
+                fontSize: "0.9rem",
+                boxShadow: 2,
+
               }}
             >
               sign in
             </Button>
           ) : (
-            <Box sx={{ width: "100%" }}>
-              <UserMenu vertical={true} />
-            </Box>
+            <UserMenu
+              buttonSx={{
+                width: "100%",
+                padding: "10px 12px"
+              }}
+            />
           )}
         </Stack>
       </Box>

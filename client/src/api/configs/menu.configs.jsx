@@ -52,11 +52,6 @@ const main = [
     icon: <CategoryOutlinedIcon />,
     state: "the loai",
   },
-  {
-    display: "Lịch chiếu",
-    path: "/lich-chieu",
-    icon: <CalendarMonth />,
-  }
 ];
 
 const user = [

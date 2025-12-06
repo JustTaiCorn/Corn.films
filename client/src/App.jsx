@@ -63,17 +63,15 @@ const App = () => {
                       <Route
                         index
                         key={index}
-                        element={route.state ? (
-                          <PageWrapper state={route.state}>{route.element}</PageWrapper>
-                        ) : route.element}
+                        element={
+                          <PageWrapper>{route.element}</PageWrapper>
+                      }
                       />
                     ) : (
                       <Route
                         path={route.path}
                         key={index}
-                        element={route.state ? (
-                          <PageWrapper state={route.state}>{route.element}</PageWrapper>
-                        ) : route.element}
+                        element={ <PageWrapper>{route.element}</PageWrapper>}
                       />
                     )
                   ))}

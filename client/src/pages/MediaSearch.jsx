@@ -9,7 +9,6 @@ const MediaSearch = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState("");
 
-  // Triển khai debounce đúng cách
   const debounceSearch = useCallback(
     debounce((query) => {
       setDebouncedQuery(query);
@@ -19,22 +18,18 @@ const MediaSearch = () => {
 
   const { data, isLoading } = useSearch({
     query: debouncedQuery,
-    enabled: !!debouncedQuery.trim() // Thêm điều kiện kích hoạt
+    enabled: !!debouncedQuery.trim()
   });
   console.log(data);
   const onQueryChange = (e) => {
     const newQuery = e.target.value;
     setSearchQuery(newQuery);
-
-    // Chỉ debounce khi có nội dung hợp lệ
     if (newQuery.trim().length >= 3) {
       debounceSearch(newQuery.trim());
     } else {
-      setDebouncedQuery(""); // Reset kết quả tìm kiếm
+      setDebouncedQuery("");
     }
   };
-
-  // Cleanup debounce khi unmount
   useEffect(() => {
     return () => debounceSearch.cancel();
   }, [debounceSearch]);
@@ -53,7 +48,6 @@ const MediaSearch = () => {
             onChange={onQueryChange}
           />
 
-          {/* Chỉ hiển thị khi có query hợp lệ */}
           {debouncedQuery && (
             <MediaGrid
               medias={data?.items || []}
