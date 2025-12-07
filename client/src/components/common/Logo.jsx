@@ -1,12 +1,11 @@
-import { Typography, useTheme } from '@mui/material';
-
 const Logo = () => {
-  const theme = useTheme();
-
   return (
-    <Typography fontWeight="700" fontSize="1.7rem">
-      TAI<span style={{ color: theme.palette.primary.main }}>CORN</span>
-    </Typography>
+    <div className="flex items-center gap-2">
+      <span className="text-2xl font-bold">
+        <span className="text-red-600">Corn</span>
+        <span className="text-foreground">Films</span>
+      </span>
+    </div>
   );
 };
 

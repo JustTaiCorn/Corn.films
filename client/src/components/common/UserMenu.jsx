@@ -1,32 +1,28 @@
-import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
-import {
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-  Menu,
-  Typography,
-  Box,
-  Avatar,
-  Divider
-} from "@mui/material";
+import { LogOut } from "lucide-react";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import menuConfigs from "../../api/configs/menu.configs";
 import { logout } from "../../redux/features/userThunks";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 
-const UserMenu = () => {
+const UserMenu = ({ buttonSx }) => {
   const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
-  const [anchorEl, setAnchorEl] = useState(null);
   const navigate = useNavigate();
-
-  const toggleMenu = (e) => setAnchorEl(e.currentTarget);
 
   const handleLogout = async () => {
     await dispatch(logout());
     navigate("/");
-    setAnchorEl(null);
   };
 
   if (!user) {
@@ -34,140 +30,45 @@ const UserMenu = () => {
   }
 
   return (
-    <>
-      <Box
-        onClick={toggleMenu}
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          gap: 1.5,
-          padding: "10px 12px",
-          borderRadius: 2,
-          cursor: "pointer",
-          transition: "all 0.2s ease",
-          bgcolor: "action.hover",
-          "&:hover": {
-            bgcolor: "action.selected",
-          }
-        }}
-      >
-        <Avatar
-          sx={{
-            width: 36,
-            height: 36,
-            bgcolor: "primary.main",
-            fontSize: "1rem",
-            fontWeight: "bold"
-          }}
-        >
-          {user.username?.charAt(0).toUpperCase()}
-        </Avatar>
-        <Box sx={{ flexGrow: 1, minWidth: 0 }}>
-          <Typography
-            variant="body2"
-            fontWeight="600"
-            noWrap
-            sx={{
-              textTransform: "capitalize",
-              color: "text.primary"
-            }}
-          >
-            {user.username}
-          </Typography>
-          <Typography
-            variant="caption"
-            sx={{
-              color: "text.secondary",
-              fontSize: "0.75rem"
-            }}
-          >
-            View profile
-          </Typography>
-        </Box>
-      </Box>
-
-      <Menu
-        open={Boolean(anchorEl)}
-        anchorEl={anchorEl}
-        onClose={() => setAnchorEl(null)}
-        PaperProps={{
-          sx: {
-            padding: 1,
-            minWidth: 200,
-            mt: 1,
-            borderRadius: 2,
-            boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.15)"
-          }
-        }}
-        transformOrigin={{ horizontal: "left", vertical: "top" }}
-        anchorOrigin={{ horizontal: "left", vertical: "bottom" }}
-      >
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <div className="flex items-center gap-2 cursor-pointer p-2 rounded-md hover:bg-secondary transition-colors" style={buttonSx}>
+          <Avatar className="h-9 w-9">
+            <AvatarFallback className="font-bold bg-primary text-primary-foreground">
+              {user.username?.charAt(0).toUpperCase()}
+            </AvatarFallback>
+          </Avatar>
+          <div className="flex flex-col items-start min-w-0 flex-1">
+            <span className="text-sm font-semibold truncate capitalize text-foreground max-w-[120px]">
+              {user.username}
+            </span>
+            <span className="text-xs text-muted-foreground">View profile</span>
+          </div>
+        </div>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="w-56" align="end" forceMount>
+        <DropdownMenuLabel className="font-normal">
+          <div className="flex flex-col space-y-1">
+            <p className="text-sm font-medium leading-none">{user.username}</p>
+            <p className="text-xs leading-none text-muted-foreground">{user.id}</p>
+          </div>
+        </DropdownMenuLabel>
+        <DropdownMenuSeparator />
         {menuConfigs.user?.map((item, index) => (
-          <ListItemButton
-            component={Link}
-            to={item.path}
-            key={index}
-            onClick={() => setAnchorEl(null)}
-            sx={{
-              borderRadius: 1,
-              mb: 0.5,
-              transition: "all 0.2s ease",
-              "&:hover": {
-                bgcolor: "action.hover"
-              }
-            }}
-          >
-            <ListItemIcon sx={{ minWidth: 40 }}>
+          <DropdownMenuItem key={index} asChild>
+            <Link to={item.path} className="cursor-pointer">
               {item.icon}
-            </ListItemIcon>
-            <ListItemText
-              disableTypography
-              primary={
-                <Typography
-                  textTransform="uppercase"
-                  fontSize="0.85rem"
-                  fontWeight="500"
-                >
-                  {item.display}
-                </Typography>
-              }
-            />
-          </ListItemButton>
+              <span className="ml-2 uppercase text-xs font-medium">{item.display}</span>
+            </Link>
+          </DropdownMenuItem>
         ))}
-
-        <Divider sx={{ my: 1 }} />
-
-        <ListItemButton
-          sx={{
-            borderRadius: 1,
-            transition: "all 0.2s ease",
-            "&:hover": {
-              bgcolor: "error.light",
-              "& .MuiListItemIcon-root, & .MuiTypography-root": {
-                color: "error.dark"
-              }
-            }
-          }}
-          onClick={handleLogout}
-        >
-          <ListItemIcon sx={{ minWidth: 40 }}>
-            <LogoutOutlinedIcon />
-          </ListItemIcon>
-          <ListItemText
-            disableTypography
-            primary={
-              <Typography
-                textTransform="uppercase"
-                fontSize="0.85rem"
-                fontWeight="500"
-              >
-                sign out
-              </Typography>
-            }
-          />
-        </ListItemButton>
-      </Menu>
-    </>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem onClick={handleLogout} className="text-destructive focus:text-destructive cursor-pointer">
+          <LogOut className="mr-2 h-4 w-4" />
+          <span className="uppercase text-xs font-medium">sign out</span>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 };
 

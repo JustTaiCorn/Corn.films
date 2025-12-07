@@ -1,7 +1,5 @@
-import { Paper, Box, LinearProgress, Toolbar, CircularProgress } from "@mui/material";
 import { useEffect, useState } from "react";
-import Logo from "./Logo";
-import { LoadingButton } from "@mui/lab";
+import { Loader2 } from "lucide-react";
 
 const GlobalLoading = ({ isLoading }) => {
   const [shouldShow, setShouldShow] = useState(false);
@@ -27,25 +25,14 @@ const GlobalLoading = ({ isLoading }) => {
   }
 
   return (
-    <Paper sx={{
-      transition: "all .3s ease",
-      position: "fixed",
-      width: "100vw",
-      height: "100vh",
-      zIndex: 999
-    }}>
-      <Toolbar />
-      <LinearProgress />
-      <Box sx={{
-        position: "absolute",
-        margin: "auto",
-        top: "50%",
-        left: "40%",
-
-      }}>
-        <CircularProgress size={100} />
-      </Box>
-    </Paper>
+    <div className="fixed inset-0 z-[2000] flex items-center justify-center bg-background/90 backdrop-blur-sm transition-all duration-300">
+      <div className="flex flex-col items-center gap-4">
+        <Loader2 className="h-16 w-16 animate-spin text-primary" />
+        <div className="h-1 w-48 overflow-hidden rounded-full bg-muted">
+          <div className="h-full w-1/2 animate-[progress_1s_infinite_ease-in-out] bg-primary rounded-full origin-left-right" />
+        </div>
+      </div>
+    </div>
   );
 };
 

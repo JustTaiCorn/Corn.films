@@ -1,10 +1,10 @@
-import { Box, Stack, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import { routesGen } from "../../routes/routes";
 import { useEffect, useState } from "react";
 import getTMDBImages from "../../api/configs/images.config";
+import { cn } from "@/lib/utils";
 
-const MediaItem = ({ media }) => {
+const MediaItem = ({ media, className }) => {
   const [posters, setPosters] = useState([]);
 
   useEffect(() => {
@@ -33,81 +33,30 @@ const MediaItem = ({ media }) => {
     : `https://img.ophim.live/uploads/movies/${poster_url}`;
 
   return (
-    <Box sx={{
-      padding: { xs: 0.5, sm: 0.75, md: 1 },
-      margin: { xs: 0.15 },
-      maxWidth: { xs: "90%", sm: "100%", md: "100%" },
-      minHeight: { xs: "200px", sm: "250px", md: "300px" },
-      "&:hover": {
-        "& img": {
-          filter: "brightness(0.7)",
-        },
-      },
-    }}>
-      <Link to={routesGen.mediaDetail(slug)} style={{ textDecoration: 'none' }}>
+    <div className={cn("p-1 sm:p-2 m-0.5 w-full max-w-full min-h-[300px]  group", className)}>
+      <Link to={routesGen.mediaDetail(slug)} className="no-underline block">
         {/* Poster Image */}
-        <Box sx={{
-          position: 'relative',
-          width: '100%',
-          height: { xs: "160px", sm: "220px", md: "280px", lg: "300px" },
-          marginBottom: 1,
-          overflow: "hidden",
-          borderRadius: { xs: 2, sm: 3 },
-          boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-        }}>
+        <div className="relative w-full h-[300px]    mb-2 overflow-hidden rounded-lg sm:rounded-xl shadow-md">
           <img
             loading="lazy"
             src={posterPath}
             alt={title}
-            style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
-              borderRadius: 'inherit',
-              transition: "all 0.3s ease",
-            }}
+            className="absolute top-0 left-0 w-full h-full object-cover transition-all duration-300 group-hover:brightness-75 group-hover:scale-105"
           />
-        </Box>
+        </div>
 
         {/* Text content below poster */}
-        <Stack spacing={0.5} sx={{ mt: 0.5, textAlign: 'center', height: { xs: "60px", sm: "70px" } }}>
-          <Typography
-            variant="body1"
-            fontWeight="700"
-            color="primary"
-            sx={{
-              fontSize: { xs: '0.75rem', sm: '0.85rem', md: '0.95rem' },
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              display: '-webkit-box',
-              WebkitLineClamp: 1,
-              WebkitBoxOrient: 'vertical',
-            }}
-          >
+        <div className="flex flex-col gap-0.5 mt-1 text-center h-[60px] sm:h-[70px]">
+          <h6 className="text-primary font-bold text-xs sm:text-sm md:text-base line-clamp-1 overflow-hidden text-ellipsis px-1">
             {title}
-          </Typography>
+          </h6>
 
-          <Typography
-            variant="body2"
-            color="text.secondary"
-            sx={{
-              color: '#aaa',
-              fontSize: { xs: '0.7rem', sm: '0.75rem', md: '0.8rem' },
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              display: '-webkit-box',
-              WebkitLineClamp: 1,
-              WebkitBoxOrient: 'vertical',
-            }}
-          >
-            {origin_name || time && `${time} - ` || year}
-          </Typography>
-        </Stack>
+          <p className="text-muted-foreground text-[10px] sm:text-xs md:text-sm line-clamp-1 overflow-hidden text-ellipsis px-1">
+            {origin_name || (time && `${time} - `) || year}
+          </p>
+        </div>
       </Link>
-    </Box>
+    </div>
   );
 };
 

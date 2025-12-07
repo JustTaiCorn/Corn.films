@@ -1,6 +1,6 @@
-import { Box, Stack, Typography, } from '@mui/material';
 import { useList } from '../../api/modules/media.api';
 import { Swiper, SwiperSlide } from 'swiper/react';
+
 const MediaCard = ({ mediaType }) => {
     const { data } = useList({
         mediaType,
@@ -9,142 +9,56 @@ const MediaCard = ({ mediaType }) => {
     const medias = data?.items || [];
 
     return (
-        <Box sx={{
-            "& .swiper-slide": {
-                width: {
-                    xs: "50%",
-                    sm: "50%",
-                    md: "50%",
-                    lg: "32.5%"
-                }
-            }
-        }}>
+        <div className="[&_.swiper-slide]:w-1/2 [&_.swiper-slide]:sm:w-1/2 [&_.swiper-slide]:md:w-1/2 [&_.swiper-slide]:lg:w-[32.5%]">
             <Swiper
                 slidesPerView="auto"
                 spaceBetween={10}
             >
                 {medias?.map((media, index) => (
                     <SwiperSlide key={index}>
-                        <Box sx={{
-                            position: 'relative',
-                            width: '100%',
-                            height: { xs: "100px", md: "280px" }, // Tăng chiều cao để chứa poster
-                            cursor: 'pointer',
-                        }}>
-
-                            {/* Thumbnail làm background */}
-                            <Box sx={{
-                                position: 'absolute',
-                                top: 0,
-                                left: 0,
-                                width: '100%',
-                                height: { xs: "100px", md: "200px" }, // Chiều cao thumbnail cố định
-                                borderRadius: '8px',
-                                overflow: 'hidden',
-                                transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-                                '&:hover': {
-                                    transform: 'translateY(-5px)',
-                                    boxShadow: '0 8px 25px rgba(0,0,0,0.4)',
-                                    '& img': {
-                                        filter: 'brightness(0.85)',
-                                        transform: 'scale(1.05)',
-                                    }
-                                }
-                            }}>
+                        <div className="relative w-full h-[100px] md:h-[280px] cursor-pointer group">
+                            {/* Thumbnail Background */}
+                            <div className="absolute top-0 left-0 w-full h-[100px] md:h-[200px] rounded-lg overflow-hidden transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-lg">
                                 <img
                                     src={`https://img.ophim.live/uploads/movies/${media.thumb_url}`}
                                     alt={media.name}
-                                    style={{
-                                        width: '100%',
-                                        height: '100%',
-                                        objectFit: 'cover',
-                                        transition: 'filter 0.3s ease, transform 0.3s ease',
-                                    }}
+                                    className="w-full h-full object-cover transition-all duration-300 group-hover:brightness-75 group-hover:scale-105"
                                 />
-                            </Box>
+                            </div>
 
-                            {/* Poster và thông tin chồng lên thumbnail */}
-                            <Box sx={{
-                                position: 'absolute',
-                                bottom: 20,
-                                left: 10,
-                                right: 10,
-                                zIndex: 5,
-                                display: { xs: "none", md: "block" }
-                            }}>
-                                <Stack direction={{ xs: "column", md: "row" }} spacing={2} sx={{
-                                    backgroundColor: "transparent", // Background mờ
-                                    padding: '10px',
-                                    borderRadius: '8px',
-
-                                }}>
-                                    {/* Poster nhỏ */}
-                                    <Box sx={{
-                                        position: 'relative',
-                                        flexShrink: 0,
-                                    }}>
+                            {/* Poster and Info Overlay */}
+                            <div className="absolute bottom-[20px] left-[10px] right-[10px] z-[5] hidden md:block">
+                                <div className="flex flex-col md:flex-row gap-4 p-2.5 rounded-lg bg-transparent">
+                                    {/* Small Poster */}
+                                    <div className="relative shrink-0">
                                         <img
                                             src={`https://img.ophim.live/uploads/movies/${media.poster_url}`}
                                             alt={`${media.name} poster`}
-                                            style={{
-                                                width: '60px',
-                                                height: '80px',
-                                                objectFit: 'cover',
-                                                borderRadius: '6px',
-                                                border: '2px solid rgba(255,255,255,0.3)',
-                                            }}
+                                            className="w-[60px] h-[80px] object-cover rounded-md border-2 border-white/30"
                                         />
-                                    </Box>
+                                    </div>
 
-                                    {/* Thông tin phim */}
-                                    <Stack spacing={0.5} sx={{ backgroundColor: "rgba(0,0,0,0.5)", padding: "10px", borderRadius: "8px", width: "100%" }}
-
-                                    >
-                                        <Typography sx={{
-                                            color: '#fff',
-                                            fontSize: '14px',
-                                            fontWeight: 'bold',
-                                            overflow: 'hidden',
-                                            textOverflow: 'ellipsis',
-                                            display: '-webkit-box',
-                                            WebkitLineClamp: 1,
-                                            WebkitBoxOrient: 'vertical',
-                                        }}>
+                                    {/* Movie Info */}
+                                    <div className="flex flex-col gap-0.5 bg-black/50 p-2.5 rounded-lg w-full">
+                                        <p className="text-white text-sm font-bold line-clamp-1 overflow-hidden text-ellipsis">
                                             {media.name}
-                                        </Typography>
-                                        <Typography sx={{
-                                            color: '#ddd',
-                                            fontSize: '12px',
-                                            overflow: 'hidden',
-                                            textOverflow: 'ellipsis',
-                                            display: '-webkit-box',
-                                            WebkitLineClamp: 1,
-                                            WebkitBoxOrient: 'vertical',
-                                        }}>
+                                        </p>
+                                        <p className="text-[#ddd] text-xs line-clamp-1 overflow-hidden text-ellipsis">
                                             {media.origin_name || media.subtitle || ''}
-                                        </Typography>
-                                        <Stack direction="row" spacing={1} sx={{
-                                            flexWrap: 'wrap',
-                                            gap: 0.5,
-                                        }}>
-                                            <Typography sx={{ color: '#bbb', fontSize: '11px' }}>
-                                                {media.episode_current}
-                                            </Typography>
-                                            <Typography sx={{ color: '#bbb', fontSize: '11px' }}>
-                                                {media.year}
-                                            </Typography>
-                                            <Typography sx={{ color: '#bbb', fontSize: '11px' }}>
-                                                {media.time}
-                                            </Typography>
-                                        </Stack>
-                                    </Stack>
-                                </Stack>
-                            </Box>
-                        </Box>
+                                        </p>
+                                        <div className="flex flex-row flex-wrap gap-2"> // Corrected spacing syntax
+                                            <p className="text-[#bbb] text-[11px]">{media.episode_current}</p>
+                                            <p className="text-[#bbb] text-[11px]">{media.year}</p>
+                                            <p className="text-[#bbb] text-[11px]">{media.time}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </SwiperSlide>
                 ))}
             </Swiper>
-        </Box>
+        </div>
     );
 };
 

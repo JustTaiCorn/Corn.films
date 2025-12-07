@@ -1,9 +1,12 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { TextField, Button, Typography, CircularProgress, Container, Paper } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { resetPassword } from "../redux/features/userThunks";
 import { toast } from "react-toastify";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Loader2 } from "lucide-react";
+
 const ResetPasswordPage = () => {
 	const [password, setPassword] = useState("");
 	const [confirmPassword, setConfirmPassword] = useState("");
@@ -35,118 +38,50 @@ const ResetPasswordPage = () => {
 	};
 
 	return (
-		<Container
-			maxWidth="sm"
-			sx={{
-				mt: 10,
-				minHeight: "70vh",
-				display: "flex",
-				alignItems: "center",
-				justifyContent: "center",
-			}}
-		>
-			<Paper
-				elevation={3}
-				sx={{
-					p: { xs: 2, sm: 3, md: 4 },
-					backgroundColor: "rgba(66, 66, 66, 0.9)",
-					backdropFilter: "blur(10px)",
-					borderRadius: 2,
-					maxWidth: 480,
-				}}
-			>
-				<Typography
-					variant="h5"
-					align="center"
-					sx={{
-						fontWeight: "bold",
-						background: "primary.main",
-						WebkitBackgroundClip: "text",
-						WebkitTextFillColor: "transparent",
-						mb: 2,
-					}}
-				>
+		<div className="mt-20 min-h-[70vh] flex items-center justify-center px-4">
+			<div className="bg-zinc-800/90 backdrop-blur-md rounded-lg shadow-xl p-6 sm:p-8 w-full max-w-sm">
+				<h2 className="text-2xl font-bold text-center mb-2 bg-gradient-to-r from-red-500 to-red-600 bg-clip-text text-transparent">
 					Reset Password
-				</Typography>
+				</h2>
 				{error && (
-					<Typography color="error" variant="body2" textAlign="center" mb={2}>
+					<p className="text-red-500 text-center text-sm mb-4">
 						{error}
-					</Typography>
+					</p>
 				)}
 				{message && (
-					<Typography color="success" variant="body2" textAlign="center" mb={2}>
+					<p className="text-green-500 text-center text-sm mb-4">
 						{message}
-					</Typography>
+					</p>
 				)}
 
-				<form onSubmit={handleSubmit}>
-					<TextField
-						fullWidth
+				<form onSubmit={handleSubmit} className="flex flex-col gap-4">
+					<Input
 						type="password"
-						label="New Password"
+						placeholder="New Password"
 						value={password}
 						onChange={(e) => setPassword(e.target.value)}
 						required
-						variant="outlined"
-						sx={{
-							mb: 3,
-							"& .MuiOutlinedInput-root": {
-								backgroundColor: "#424242",
-								color: "white",
-								"& fieldset": { borderColor: "#616161" },
-								"&:hover fieldset": { borderColor: "#" },
-								"&.Mui-focused fieldset": { borderColor: "#fb5a5a" },
-							},
-							"& .MuiInputLabel-root": { color: "gray" },
-							"& .MuiInputLabel-root.Mui-focused": { color: "#fb5a5a" },
-						}}
+						className="bg-zinc-700 border-zinc-600 text-white focus:border-red-500"
 					/>
-					<TextField
-						fullWidth
+					<Input
 						type="password"
-						label=" Corfirm New Password"
+						placeholder="Confirm New Password"
 						value={confirmPassword}
 						onChange={(e) => setConfirmPassword(e.target.value)}
 						required
-						variant="outlined"
-						sx={{
-							mb: 3,
-							"& .MuiOutlinedInput-root": {
-								backgroundColor: "#424242",
-								color: "white",
-								"& fieldset": { borderColor: "#616161" },
-								"&:hover fieldset": { borderColor: "#" },
-								"&.Mui-focused fieldset": { borderColor: "#fb5a5a" },
-							},
-							"& .MuiInputLabel-root": { color: "gray" },
-							"& .MuiInputLabel-root.Mui-focused": { color: "#fb5a5a" },
-						}}
+						className="bg-zinc-700 border-zinc-600 text-white focus:border-red-500"
 					/>
+
 					<Button
-						fullWidth
 						type="submit"
-						variant="contained"
-						color="success"
-						size="large"
 						disabled={isLoading}
-						sx={{
-							py: 1.5,
-							background: "linear-gradient(to right, #fb5a5a, #fb5a5a)",
-							color: "white",
-							fontWeight: "bold",
-							borderRadius: "8px",
-							textTransform: "none",
-							"&:hover": {
-								background: "linear-gradient(to right, #a83333, #fb5a5a)",
-							},
-							"&:disabled": { opacity: 0.5 },
-						}}
+						className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 mt-2"
 					>
-						{isLoading ? <CircularProgress size={24} color="inherit" /> : "Set New Password"}
+						{isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : "Set New Password"}
 					</Button>
 				</form>
-			</Paper>
-		</Container>
+			</div>
+		</div>
 	);
 };
 

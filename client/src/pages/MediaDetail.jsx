@@ -1,18 +1,11 @@
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import LoadingButton from "@mui/lab/LoadingButton";
-import PlayArrowIcon from "@mui/icons-material/PlayArrow";
-import { Box, Button, Chip, Divider, Stack, Typography } from "@mui/material";
-import { grey } from "@mui/material/colors";
+import { Play, Heart, HeartOff, Share2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, Link, useLocation } from "react-router-dom";
 import Container from "../components/common/Container";
-import ImageHeader from "../api/configs/ImageHeader";
-
-import uiConfigs from "../api/configs/ui.configs";
+import ImageHeader from "../api/configs/ImageHeader"; // Need to refactor this too
 import { useDetail } from "../api/modules/media.api";
 
-import { setGlobalLoading } from "../redux/features/globalLoadingSlice";
 import RecommendSlide from "../components/common/RecommendSlide";
 import { resetSelectedEpisode } from "../redux/features/episodeSlice";
 import BackdropSlide from "../components/common/BackdropSlide";
@@ -22,8 +15,12 @@ import MediaReview from "../components/common/MediaReview";
 import favoriteApi from "../api/modules/favorite.api";
 import { addFavorite, removeFavorite, setListFavorites } from "../redux/features/userSlice";
 import { toast } from "react-toastify";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import MovieShareModal from "../components/common/MovieShareModal";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
+import { Loader2 } from "lucide-react";
+
 const MediaDetail = () => {
   const dispatch = useDispatch();
   const { slug } = useParams();
@@ -43,14 +40,13 @@ const MediaDetail = () => {
     const path = location.pathname;
     setMovieUrl(`${baseUrl}${path}`);
   }, [location.pathname]);
+
   useEffect(() => {
     window.scrollTo(0, 0);
     dispatch(resetSelectedEpisode());
   }, [slug, dispatch]);
 
-  useEffect(() => {
-    dispatch(setGlobalLoading(isLoading));
-  }, [isLoading, dispatch]);
+
 
   useEffect(() => {
     if (Array.isArray(listFavorites) && listFavorites.length > 0 && media) {
@@ -87,10 +83,11 @@ const MediaDetail = () => {
 
     fetchImages();
   }, [media]);
+
   if (!media) return null;
   const quality = media.quality || "HD";
   const actor = media.actor.length === 1 && media.actor[0] === "" ? "Chưa cập nhật" : media.actor;
-  const actorsString = actor === "Chưa cập nhật" ? "Chưa cập nhật" : actor
+  const actorsString = actor === "Chưa cập nhật" ? "Chưa cập nhật" : actor;
   const director =
     media.director?.length === 1 && media.director[0] === ""
       ? "Chưa cập nhật"
@@ -116,7 +113,6 @@ const MediaDetail = () => {
 
     try {
       if (isFavorite && Array.isArray(listFavorites)) {
-        // Tìm favorite cần xóa
         const favorite = listFavorites.find(
           (item) => item.mediaId === media._id
         );
@@ -124,7 +120,6 @@ const MediaDetail = () => {
           const { response, err } = await favoriteApi.remove({ favoriteId: favorite.mediaId });
 
           if (response) {
-            // Sửa chỗ này để truyền đúng định dạng mà reducer mong đợi
             dispatch(removeFavorite({ mediaId: media._id }));
             setIsFavorite(false);
             toast.success("Đã xóa khỏi danh sách yêu thích");
@@ -133,17 +128,15 @@ const MediaDetail = () => {
           }
         }
       } else {
-        // Kiểm tra trong danh sách hiện tại trước khi gọi API
         const alreadyFavorited = Array.isArray(listFavorites) &&
           listFavorites.some(item => item.mediaId === media._id);
 
         if (alreadyFavorited) {
           setIsFavorite(true);
           setOnRequest(false);
-          return; // Không gọi API nếu đã có trong danh sách
+          return;
         }
 
-        // Thêm vào favorites
         const body = {
           mediaId: media._id,
           mediaTitle: media.title || media.name || "Không tiêu đề",
@@ -172,175 +165,106 @@ const MediaDetail = () => {
     }
   };
 
-  const renderFavoriteButton = () => (
-    <LoadingButton
-      variant="contained"
-      size="large"
-      startIcon={isFavorite ? <FavoriteIcon /> : <FavoriteBorderIcon />}
-      loadingPosition="start"
-      loading={onRequest}
-      onClick={onFavoriteClick}
-      sx={{
-        bgcolor: isFavorite ? "primary.main" : "secondary.main",
-        "& .MuiButton-startIcon": { marginRight: 1 },
-        fontSize: { xs: "0.875rem", sm: "1rem" },
-        padding: { xs: "6px 12px", sm: "8px 16px", md: "10px 20px" },
-        minWidth: { xs: "120px", sm: "150px", md: "180px" },
-        "& .MuiSvgIcon-root": {
-          fontSize: { xs: "1rem", sm: "1.25rem", md: "1.5rem" },
-        },
-      }}
-    >
-      {isFavorite ? "Đã yêu thích" : "Yêu thích"}
-    </LoadingButton>
-  );
-
   return (
     <>
       <ImageHeader imgPath={thumbUrl} />
-      <Box sx={{ ...uiConfigs.style.mainContent, }}>
-        {/* media content */}
-        <Box sx={{ marginTop: { xs: "-10rem", md: "-15rem", lg: "-20rem" } }}>
-          <Box sx={{ display: "flex", flexDirection: { md: "row", xs: "column" } }}>
-            {/* poster */}
-            <Box sx={{ width: { xs: "70%", sm: "50%", md: "40%" }, marginX: "auto", }}>
-              <Box
-                component="img"
-                src={posterPath}
-                alt="Poster"
-                sx={{
-                  width: {
-                    xs: 250,   // màn nhỏ
-                    sm: 300,   // màn vừa
-                    md: 350,   // màn lớn
-                    lg: 400,   // màn rất lớn
-                  },
-                  height: {
-                    xs: 300,
-                    sm: 350,
-                    md: 400,
-                    lg: 550,
-                  },
-                  objectFit: 'cover',
-                  borderRadius: 2,
-                }}
-              />
-            </Box>
+      <div className="text-foreground max-w-[1366px] mx-auto px-5 md:px-0 mt-[-10rem] md:mt-[-15rem] lg:mt-[-20rem] relative ">
+        <div className="flex flex-col md:flex-row gap-8">
+          {/* poster */}
+          <div className="w-[70%]  md:w-[40%] mx-auto md:mx-0 shrink-0">
+            <img
+              src={posterPath}
+              alt="Poster"
+              className="w-full h-auto object-cover rounded-xl aspect-[2/3]"
+            />
+          </div>
 
-            {/* media info */}
-            <Box sx={{ width: { xs: "100%", md: "60%" }, color: "text.primary" }}>
-              <Stack spacing={5}>
-                {/* title */}
-                <Stack spacing={1}>
-                  <Typography
-                    variant="h4"
-                    fontSize={{ xs: "2rem", md: "2rem", lg: "4rem" }}
-                    fontWeight="700"
-                    sx={{
-                      textAlign: "left",
-                      display: "-webkit-box",
-                      overflow: "hidden",
-                      WebkitBoxOrient: "vertical",
-                      WebkitLineClamp: 1
-                    }}
-                  >
-                    {`${title}`}
-                  </Typography>
-                  <Typography variant="h5" fontWeight="500" sx={{ color: "text.secondary" }}
-                    fontSize={{ xs: "1rem", md: "1rem", lg: "3rem" }}>{media.origin_name}</Typography>
-                  <Chip
-                    sx={{
-                      width: "max-content",
-                      color: "white",
-                      py: 0.5,
-                      fontSize: "0.75rem",
-                      textAlign: "center"
-                    }}
-                    variant="outlined"
-                    label={quality}
-                  />
-                </Stack>
+          {/* media info */}
+          <div className="w-full md:w-[60%] flex flex-col gap-6">
+            <div className="flex flex-col gap-2">
+              <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold line-clamp-2 leading-tight">
+                {title}
+              </h1>
+              <h2 className="text-xl md:text-2xl font-medium text-muted-foreground">{media.origin_name}</h2>
+              <Badge variant="outline" className="w-max px-2 py-1 text-xs border-primary text-foreground">{quality}</Badge>
+            </div>
 
-                {/* rate and genres */}
-                <Stack direction="row" spacing={1} alignItems="center">
-                  <Divider orientation="vertical" />
-                  {/* genres */}
-                  {genres.map((theLoai, index) => (
-                    <Chip variant="filled" color="primary" key={index} label={theLoai.name} />
-                  ))}
-                </Stack>
-                {/* media details */}
-                <Stack spacing={1}>
-                  <Box sx={{ mt: 2, mb: 2 }}></Box>
-                  {[
-                    { label: "Đang phát", value: media.episode_current },
-                    { label: "Tổng số tập", value: media.episode_total },
-                    { label: "Thời lượng", value: media.time },
-                    { label: "Quốc gia", value: media.country[0].name },
-                    { label: "Diễn viên", value: actorsString },
-                    { label: "Đạo diễn", value: director },
-                    { label: "Lượt xem", value: media.view }
-                  ].map((item, index) => (
-                    <Stack direction="row" spacing={2} alignItems="flex-start" key={index} sx={{ mb: 1 }}>
-                      <Typography variant="body1" sx={{
-                        color: grey[500],
-                        minWidth: '100px',
-                        whiteSpace: 'nowrap'
-                      }}>
-                        {item.label}:
-                      </Typography>
-                      <Typography variant="body1">
-                        {item.value}
-                      </Typography>
-                    </Stack>
-                  ))}
-                  {/* overview */}
-                </Stack>
-                <Typography variant="body1" >
-                  {content}
-                </Typography>
+            <div className="flex flex-row items-center gap-2">
+              <Separator orientation="vertical" className="h-6 bg-primary" />
+              {genres.map((theLoai, index) => (
+                <Badge key={index} className="bg-primary hover:bg-primary/90 text-primary-foreground">{theLoai.name}</Badge>
+              ))}
+            </div>
 
-                {/* buttons */}
-                <Stack direction="row" spacing={1}>
-                  <Button
-                    variant="contained"
-                    sx={{ width: "max-content" }}
-                    size="large"
-                    startIcon={<PlayArrowIcon />}
-                    LinkComponent={Link}
-                    to={`/xem-phim/${media.slug}#player`}
-                  >
-                    watch now
-                  </Button>
+            <div className="flex flex-col gap-2 text-sm text-gray-300">
+              {[
+                { label: "Đang phát", value: media.episode_current },
+                { label: "Tổng số tập", value: media.episode_total },
+                { label: "Thời lượng", value: media.time },
+                { label: "Quốc gia", value: media.country?.[0]?.name },
+                { label: "Diễn viên", value: actorsString },
+                { label: "Đạo diễn", value: director },
+                { label: "Lượt xem", value: media.view }
+              ].map((item, index) => (
+                <div className="flex flex-row gap-4" key={index}>
+                  <span className="min-w-[100px] text-muted-foreground font-medium">{item.label}:</span>
+                  <span className="text-foreground line-clamp-1">{item.value}</span>
+                </div>
+              ))}
+            </div>
 
-                  {renderFavoriteButton()}
-                  <MovieShareModal movieUrl={movieUrl} />
+            <p className="text-base leading-relaxed ">
+              {content}
+            </p>
 
-                </Stack>
-              </Stack>
-            </Box>
-          </Box>
-        </Box>
-        {
-          backdrops?.length > 0 && (
-            <Container header="backdrops">
-              <BackdropSlide backdrops={backdrops} />
-            </Container>
-          )
-        }
-        {
-          posters?.length > 0 && (
-            <Container header="posters">
-              <PosterSlide posters={posters} />
-            </Container>
-          )
-        }
+            <div className="flex flex-row gap-3 flex-wrap">
+              <Button size="lg" asChild className="uppercase font-bold">
+                <Link to={`/xem-phim/${media.slug}#player`}>
+                  <Play className="mr-2 h-5 w-5 fill-current" />
+                  Watch Now
+                </Link>
+              </Button>
+
+              <Button
+                size="lg"
+                variant={isFavorite ? "default" : "secondary"}
+                onClick={onFavoriteClick}
+                disabled={onRequest}
+                className="uppercase font-bold min-w-[150px]"
+              >
+                {onRequest ? (
+                  <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                ) : isFavorite ? (
+                  <Heart className="mr-2 h-5 w-5 fill-current" />
+                ) : (
+                  <Heart className="mr-2 h-5 w-5" />
+                )}
+                {isFavorite ? "Đã yêu thích" : "Yêu thích"}
+              </Button>
+
+              <MovieShareModal movieUrl={movieUrl} />
+            </div>
+          </div>
+        </div>
+
+        {backdrops?.length > 0 && (
+          <Container header="backdrops">
+            <BackdropSlide backdrops={backdrops} />
+          </Container>
+        )}
+
+        {posters?.length > 0 && (
+          <Container header="posters">
+            <PosterSlide posters={posters} />
+          </Container>
+        )}
+
         <MediaReview media={media} slug={Slug} />
-        {/* media recommendation */}
+
         <Container header="you may also like">
-          <RecommendSlide category={media.category[0].slug} country={media.country[0].slug} />
+          <RecommendSlide category={media.category?.[0]?.slug} country={media.country?.[0]?.slug} />
         </Container>
-      </Box >
+      </div>
     </>
   );
 };

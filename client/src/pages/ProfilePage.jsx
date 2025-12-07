@@ -1,9 +1,12 @@
 import { useState } from "react";
-import { Avatar, Box, Button, Divider, Paper, Stack, TextField, Typography, Alert, CircularProgress } from "@mui/material";
 import TextAvatar from "../components/common/TextAvatar";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { updateProfile, updatePassword } from "../redux/features/userThunks";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
+import { Alert, AlertDescription } from "../components/ui/alert";
 
 export default function ProfilePage() {
     const { user, isLoading } = useSelector((state) => state.user);
@@ -19,7 +22,6 @@ export default function ProfilePage() {
         e.preventDefault();
         setErrorProfile("");
 
-        // Validate
         if (!username.trim()) {
             setErrorProfile("Username is required");
             return;
@@ -37,7 +39,6 @@ export default function ProfilePage() {
         e.preventDefault();
         setErrorPassword("");
 
-        // Validate
         if (!currentPassword) {
             setErrorPassword("Current password is required");
             return;
@@ -60,149 +61,113 @@ export default function ProfilePage() {
             setNewPassword("");
             setConfirmPassword("");
         } catch (error) {
-
             setErrorPassword(error.response?.data?.message || "Failed to update password");
             console.log(error);
         }
     };
 
     return (
-        <Paper sx={{ width: "90%", mt: 10, mx: "auto", p: 2, bgcolor: "grey.900" }}>
-            <Stack spacing={2} direction={{ xs: "column", md: "row" }} alignItems="center">
-                <Box sx={{ textAlign: "center", width: { xs: "100%", md: "30%" } }}>
-                    <Typography sx={{ fontSize: 28, fontWeight: "bold", color: "white", mb: 2, textTransform: "uppercase" }}>
-                        Profile avatar
-                    </Typography>
-                    <Avatar sx={{ width: 200, height: 200, bgcolor: "grey.700", mx: "auto" }}>
-                        <TextAvatar text={user?.username?.charAt(0) || "U"} />
-                    </Avatar>
-                    <Button variant="contained" color="primary" size="small" sx={{ mt: 2, display: "block", mx: "auto" }}>
-                        Change avatar
-                    </Button>
-                </Box>
-                <Divider orientation="vertical" flexItem sx={{ display: { xs: "none", md: "block" } }} />
-                <Box sx={{ width: { xs: "100%", md: "70%" }, mt: { xs: 4, md: 0 } }}>
+        <div className="w-[90%] mt-20 mx-auto p-4 md:p-8 bg-zinc-900 rounded-lg shadow-lg text-foreground">
+            <div className="flex flex-col md:flex-row gap-8 items-start">
+                {/* Avatar Section */}
+                <div className="w-full md:w-[30%] flex flex-col items-center gap-4">
+                    <h2 className="text-2xl font-bold uppercase mb-2">Profile avatar</h2>
+                    <div className="w-[200px] h-[200px] bg-zinc-700 rounded-full flex items-center justify-center overflow-hidden">
+                        <div className="scale-[5.0]"> {/* Scale up text avatar for larger size */}
+                            <TextAvatar text={user?.username?.charAt(0) || "U"} />
+                        </div>
+                    </div>
+                    {/* Placeholder for change avatar logic if needed */}
+                    {/* <Button variant="default" size="sm">Change avatar</Button> */}
+                </div>
+
+                <div className="hidden md:block h-auto self-stretch border-r border-zinc-700" />
+                <Separator className="md:hidden" />
+
+                {/* Forms Section */}
+                <div className="w-full md:w-[70%] flex flex-col gap-12">
                     {/* Form 1: Profile Info */}
-                    <form onSubmit={handleUpdateProfile}>
-                        <Typography sx={{ fontSize: 28, fontWeight: "bold", color: "white", mb: 2, textTransform: "uppercase" }}>
-                            Update your Profile info
-                        </Typography>
+                    <form onSubmit={handleUpdateProfile} className="flex flex-col gap-4">
+                        <h2 className="text-2xl font-bold uppercase mb-2">Update your Profile info</h2>
 
                         {errorProfile && (
-                            <Alert severity="error" sx={{ mb: 2 }}>
-                                {errorProfile}
+                            <Alert variant="destructive">
+                                <AlertDescription>{errorProfile}</AlertDescription>
                             </Alert>
                         )}
 
-                        <Paper sx={{ p: 4, bgcolor: "grey.800", mb: 4 }}>
-                            <Stack spacing={2} direction="column">
-                                <Stack spacing={2} direction={{ xs: "column", sm: "row" }} alignItems="center">
-                                    <Typography sx={{ fontSize: 18, color: "white", fontWeight: "bold", width: { xs: "100%", sm: "30%" } }}>
-                                        Email Address
-                                    </Typography>
-                                    <TextField
-                                        placeholder="Email"
-                                        disabled
-                                        fullWidth
-                                        value={user?.email}
-                                    />
-                                </Stack>
-                                <Stack spacing={2} direction={{ xs: "column", sm: "row" }} alignItems="center">
-                                    <Typography sx={{ fontSize: 18, color: "white", fontWeight: "bold", width: { xs: "100%", sm: "30%" } }}>
-                                        Username
-                                    </Typography>
-                                    <TextField
-                                        placeholder="Username"
-                                        fullWidth
-                                        value={username}
-                                        onChange={(e) => setUsername(e.target.value)}
-
-                                    />
-                                </Stack>
-                                <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-                                    <Button
-                                        type="submit"
-                                        variant="contained"
-                                        color="primary"
-                                        sx={{ mt: 1 }}
-                                        disabled={isLoading}
-                                    >
-                                        Update Profile
-                                    </Button>
-                                </Box>
-                            </Stack>
-                        </Paper>
+                        <div className="p-6 bg-zinc-800 rounded-lg flex flex-col gap-6">
+                            <div className="flex flex-col sm:flex-row gap-4 sm:items-center">
+                                <span className="text-lg font-bold w-full sm:w-[30%]">Email Address</span>
+                                <Input
+                                    value={user?.email}
+                                    disabled
+                                    className="bg-zinc-700 border-none text-gray-300"
+                                />
+                            </div>
+                            <div className="flex flex-col sm:flex-row gap-4 sm:items-center">
+                                <span className="text-lg font-bold w-full sm:w-[30%]">Username</span>
+                                <Input
+                                    placeholder="Username"
+                                    value={username}
+                                    onChange={(e) => setUsername(e.target.value)}
+                                    className="bg-zinc-700 border-transparent focus:border-primary"
+                                />
+                            </div>
+                            <div className="flex justify-end">
+                                <Button type="submit" disabled={isLoading}>Update Profile</Button>
+                            </div>
+                        </div>
                     </form>
 
                     {/* Form 2: Password Update */}
-                    <form onSubmit={handleUpdatePassword}>
-                        <Typography sx={{ fontSize: 28, fontWeight: "bold", color: "white", mb: 2, textTransform: "uppercase" }}>
-                            Update your Password
-                        </Typography>
+                    <form onSubmit={handleUpdatePassword} className="flex flex-col gap-4">
+                        <h2 className="text-2xl font-bold uppercase mb-2">Update your Password</h2>
 
                         {errorPassword && (
-                            <Alert severity="error" sx={{ mb: 2 }}>
-                                {errorPassword}
+                            <Alert variant="destructive">
+                                <AlertDescription>{errorPassword}</AlertDescription>
                             </Alert>
                         )}
 
-                        <Paper sx={{ p: 4, bgcolor: "grey.800" }}>
-                            <Stack spacing={4} direction="column">
-                                <Stack spacing={2} direction={{ xs: "column", sm: "row" }} alignItems="center">
-                                    <Typography sx={{ fontSize: 18, color: "white", fontWeight: "bold", width: { xs: "100%", sm: "30%" } }}>
-                                        Current Password
-                                    </Typography>
-                                    <TextField
-                                        type="password"
-                                        placeholder="Enter current password"
-                                        fullWidth
-                                        value={currentPassword}
-                                        onChange={(e) => setCurrentPassword(e.target.value)}
-
-                                    />
-                                </Stack>
-                                <Stack spacing={2} direction={{ xs: "column", sm: "row" }} alignItems="center">
-                                    <Typography sx={{ fontSize: 18, color: "white", fontWeight: "bold", width: { xs: "100%", sm: "30%" } }}>
-                                        New Password
-                                    </Typography>
-                                    <TextField
-                                        type="password"
-                                        placeholder="Enter new password"
-                                        fullWidth
-                                        value={newPassword}
-                                        onChange={(e) => setNewPassword(e.target.value)}
-
-                                    />
-                                </Stack>
-                                <Stack spacing={2} direction={{ xs: "column", sm: "row" }} alignItems="center">
-                                    <Typography sx={{ fontSize: 18, color: "white", fontWeight: "bold", width: { xs: "100%", sm: "30%" } }}>
-                                        Confirm Password
-                                    </Typography>
-                                    <TextField
-                                        type="password"
-                                        placeholder="Confirm new password"
-                                        fullWidth
-                                        value={confirmPassword}
-                                        onChange={(e) => setConfirmPassword(e.target.value)}
-
-                                    />
-                                </Stack>
-                                <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-                                    <Button
-                                        type="submit"
-                                        variant="contained"
-                                        color="primary"
-                                        sx={{ mt: 1 }}
-                                        disabled={isLoading}
-                                    >
-                                        Update Password
-                                    </Button>
-                                </Box>
-                            </Stack>
-                        </Paper>
+                        <div className="p-6 bg-zinc-800 rounded-lg flex flex-col gap-6">
+                            <div className="flex flex-col sm:flex-row gap-4 sm:items-center">
+                                <span className="text-lg font-bold w-full sm:w-[30%]">Current Password</span>
+                                <Input
+                                    type="password"
+                                    placeholder="Enter current password"
+                                    value={currentPassword}
+                                    onChange={(e) => setCurrentPassword(e.target.value)}
+                                    className="bg-zinc-700 border-transparent focus:border-primary"
+                                />
+                            </div>
+                            <div className="flex flex-col sm:flex-row gap-4 sm:items-center">
+                                <span className="text-lg font-bold w-full sm:w-[30%]">New Password</span>
+                                <Input
+                                    type="password"
+                                    placeholder="Enter new password"
+                                    value={newPassword}
+                                    onChange={(e) => setNewPassword(e.target.value)}
+                                    className="bg-zinc-700 border-transparent focus:border-primary"
+                                />
+                            </div>
+                            <div className="flex flex-col sm:flex-row gap-4 sm:items-center">
+                                <span className="text-lg font-bold w-full sm:w-[30%]">Confirm Password</span>
+                                <Input
+                                    type="password"
+                                    placeholder="Confirm new password"
+                                    value={confirmPassword}
+                                    onChange={(e) => setConfirmPassword(e.target.value)}
+                                    className="bg-zinc-700 border-transparent focus:border-primary"
+                                />
+                            </div>
+                            <div className="flex justify-end">
+                                <Button type="submit" disabled={isLoading}>Update Password</Button>
+                            </div>
+                        </div>
                     </form>
-                </Box>
-            </Stack>
-        </Paper>
+                </div>
+            </div>
+        </div>
     );
 }

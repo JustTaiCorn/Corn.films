@@ -1,4 +1,3 @@
-import { Box, Typography } from "@mui/material";
 import PasswordCriteria from "./PasswordCriteria";
 
 const PasswordStrengthMeter = ({ password }) => {
@@ -13,11 +12,11 @@ const PasswordStrengthMeter = ({ password }) => {
     const strength = getStrength(password);
 
     const getColor = (strength) => {
-        if (strength === 0) return "error.main";
-        if (strength === 1) return "error.light";
-        if (strength === 2) return "warning.main";
-        if (strength === 3) return "warning.light";
-        return "success.main";
+        if (strength === 0) return "bg-red-500";
+        if (strength === 1) return "bg-red-400";
+        if (strength === 2) return "bg-yellow-500";
+        if (strength === 3) return "bg-yellow-300";
+        return "bg-green-500";
     };
 
     const getStrengthText = (strength) => {
@@ -29,39 +28,26 @@ const PasswordStrengthMeter = ({ password }) => {
     };
 
     return (
-        <Box sx={{ mt: 1 }}>
-            <Box
-                sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    mb: 1,
-                }}
-            >
-                <Typography variant="caption" color="grey.400">
+        <div className="mt-2">
+            <div className="flex justify-between items-center mb-1">
+                <span className="text-xs text-gray-400">
                     Password strength
-                </Typography>
-                <Typography variant="caption" color="grey.400">
+                </span>
+                <span className="text-xs text-gray-400">
                     {getStrengthText(strength)}
-                </Typography>
-            </Box>
+                </span>
+            </div>
 
-            <Box sx={{ display: "flex", gap: 0.5 }}>
+            <div className="flex gap-1 h-1">
                 {[...Array(4)].map((_, index) => (
-                    <Box
+                    <div
                         key={index}
-                        sx={{
-                            height: 4,
-                            flex: 1,
-                            borderRadius: "9999px",
-                            bgcolor: index < strength ? getColor(strength) : "grey.600",
-                            transition: "background-color 0.3s",
-                        }}
+                        className={`flex-1 rounded-full transition-colors duration-300 ${index < strength ? getColor(strength) : "bg-gray-600"}`}
                     />
                 ))}
-            </Box>
+            </div>
             <PasswordCriteria password={password} />
-        </Box>
+        </div>
     );
 };
 

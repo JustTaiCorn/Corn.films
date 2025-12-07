@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+
 import { Outlet } from "react-router-dom";
 import Footer from "../common/Footer";
 import GlobalLoading from "../common/GlobalLoading";
@@ -9,31 +9,26 @@ const MainLayout = () => {
     return (
         <>
 
-            <Box display="flex" minHeight="100vh" flexDirection="column">
-                <Box display="flex" flexGrow={1} flexDirection="row">
+
+            <div className="flex min-h-screen flex-col">
+                <div className="flex flex-grow flex-row">
                     {/* sidebar */}
                     <SideBarForPC />
                     {/* sidebar */}
 
                     {/* main */}
-                    <Box
-                        component="main"
-                        flexGrow={1}
-                        overflow="hidden"
-                        minHeight="100vh"
-                        marginLeft={{ xs: 0, sm: 0, md: "45px", lg: "45px" }}
-
+                    <main
+                        className="flex-grow overflow-hidden min-h-screen ml-0 md:ml-[320px] lg:ml-[320px] flex flex-col"
                     >
                         <Topbar />
                         <Outlet />
-                        <GlobalLoading />
-                    </Box>
+                    </main>
                     {/* main */}
-                </Box>
+                </div>
                 {/* footer */}
                 <Footer />
                 {/* footer */}
-            </Box>
+            </div>
         </>
     );
 };

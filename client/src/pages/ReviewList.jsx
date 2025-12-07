@@ -1,16 +1,15 @@
-import { LoadingButton } from "@mui/lab";
-import { Box, Button, Divider, Stack, Typography } from "@mui/material";
-import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
+import dayjs from "dayjs";
 import reviewApi from "../api/modules/review.api";
 import Container from "../components/common/Container";
-import uiConfigs from "../api/configs/ui.configs";
 import { setGlobalLoading } from "../redux/features/globalLoadingSlice";
-import DeleteIcon from "@mui/icons-material/Delete";
 import { routesGen } from "../routes/routes";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { Loader2, Trash2 } from "lucide-react";
 
 const ReviewItem = ({ review, onRemoved }) => {
   const [onRequest, setOnRequest] = useState(false);
@@ -29,65 +28,40 @@ const ReviewItem = ({ review, onRemoved }) => {
   };
 
   return (
-    <Box sx={{
-      position: "relative",
-      display: "flex",
-      flexDirection: { xs: "column", md: "row" },
-      padding: 1,
-      opacity: onRequest ? 0.6 : 1,
-      "&:hover": { backgroundColor: "background.paper" }
-    }}>
-      <Box sx={{ width: { xs: 0, md: "10%" } }}>
+    <div className={`relative flex flex-col md:flex-row p-4 gap-4 hover:bg-zinc-800 rounded-md transition-colors ${onRequest ? "opacity-60" : "opacity-100"}`}>
+      <div className="w-full md:w-[10%] shrink-0">
         <Link
           to={routesGen.mediaDetail(review.mediaSlug)}
-          style={{ color: "unset", textDecoration: "none" }}
         >
-          <Box sx={{
-            paddingTop: "160%",
-            ...uiConfigs.style.backgroundImage(`https://img.ophim.live/uploads/movies/${review.mediaPoster}`)
-          }} />
+          <div
+            className="pt-[160%] bg-cover bg-center rounded-md"
+            style={{ backgroundImage: `url(https://img.ophim.live/uploads/movies/${review.mediaPoster})` }}
+          />
         </Link>
-      </Box>
+      </div>
 
-      <Box sx={{
-        width: { xs: "100%", md: "80%" },
-        padding: { xs: 0, md: "0 2rem" }
-      }}>
-        <Stack spacing={1}>
-          <Link
-            to={routesGen.mediaDetail(review.mediaSlug)}
-            style={{ color: "unset", textDecoration: "none" }}
-          >
-            <Typography
-              variant="h6"
-              sx={ {textAlign:"left" }}
-            >
-              {review.mediaTitle}
-            </Typography>
-          </Link>
-          <Typography variant="caption">
-            {dayjs(review.createdAt).format("DD-MM-YYYY HH:mm:ss")}
-          </Typography>
-          <Typography>{review.content}</Typography>
-        </Stack>
-      </Box>
+      <div className="w-full md:w-[80%] flex flex-col gap-2">
+        <Link
+          to={routesGen.mediaDetail(review.mediaSlug)}
+          className="hover:text-primary transition-colors text-foreground"
+        >
+          <h6 className="text-xl font-bold">{review.mediaTitle}</h6>
+        </Link>
+        <span className="text-xs text-muted-foreground">
+          {dayjs(review.createdAt).format("DD-MM-YYYY HH:mm:ss")}
+        </span>
+        <p className="text-gray-300 line-clamp-3">{review.content}</p>
+      </div>
 
-      <LoadingButton
-        variant="contained"
-        sx={{
-          position: { xs: "relative", md: "absolute" },
-          right: { xs: 0, md: "10px" },
-          marginTop: { xs: 2, md: 0 },
-          width: "max-content"
-        }}
-        startIcon={<DeleteIcon />}
-        loadingPosition="start"
-        loading={onRequest}
+      <Button
+        className="md:absolute right-4 top-4 w-max bg-red-600 hover:bg-red-700"
         onClick={onRemove}
+        disabled={onRequest}
       >
+        {onRequest ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Trash2 className="mr-2 h-4 w-4" />}
         remove
-      </LoadingButton>
-    </Box>
+      </Button>
+    </div>
   );
 };
 
@@ -98,7 +72,6 @@ const ReviewList = () => {
   const [count, setCount] = useState(0);
 
   const dispatch = useDispatch();
-
   const skip = 2;
 
   useEffect(() => {
@@ -108,9 +81,6 @@ const ReviewList = () => {
       dispatch(setGlobalLoading(false));
       if (err) toast.error(err.message);
       if (response) {
-
-
-
         setCount(response.reviews.length);
         setReviews([...response.reviews]);
         setFilteredReviews([...response.reviews].splice(0, skip));
@@ -126,32 +96,30 @@ const ReviewList = () => {
   };
 
   const onRemoved = (id) => {
-    console.log({ reviews });
     const newReviews = [...reviews].filter(e => e.id !== id);
-    console.log({ newReviews });
     setReviews(newReviews);
     setFilteredReviews([...newReviews].splice(0, page * skip));
     setCount(count - 1);
   };
 
   return (
-    <Box sx={{ ...uiConfigs.style.mainContent }}>
+    <div className="mt-20 max-w-[1366px] mx-auto px-5 md:px-0 text-foreground">
       <Container header={`Your reviews (${count})`}>
-        <Stack spacing={2}>
+        <div className="flex flex-col gap-4">
           {filteredReviews.map((item) => (
-            <Box key={item.id}>
+            <div key={item.id}>
               <ReviewItem review={item} onRemoved={onRemoved} />
-              <Divider sx={{
-                display: { xs: "block", md: "none" }
-              }} />
-            </Box>
+              <Separator className="my-4 md:hidden" />
+            </div>
           ))}
           {filteredReviews.length < reviews.length && (
-            <Button onClick={onLoadMore}>load more</Button>
+            <div className="flex justify-center mt-8">
+              <Button variant="secondary" onClick={onLoadMore}>load more</Button>
+            </div>
           )}
-        </Stack>
+        </div>
       </Container>
-    </Box>
+    </div>
   );
 };
 

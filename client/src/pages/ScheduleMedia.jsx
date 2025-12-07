@@ -1,17 +1,8 @@
-import {
-    Box,
-    Typography,
-    Grid,
-    CardContent,
-    styled,
-    Paper
-} from '@mui/material';
-import { useState, useEffect, useRef } from 'react'; // Thêm useRef
+import { useState, useEffect, useRef } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
-import { useTheme } from '@mui/material/styles'; // Thêm import này
+import { cn } from "@/lib/utils";
 
-// Import Swiper styles
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
@@ -66,176 +57,98 @@ const dates = (() => {
     });
 })();
 
-// Styled date slide
-const DateSlide = styled(Box)(({ isActive, theme }) => ({
-    padding: '15px 5px',
-    textAlign: 'center',
-    color: theme.palette.mode === 'dark' ? 'white' : theme.palette.text.primary,
-    opacity: 1,
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    backgroundColor: isActive
-        ? theme.palette.mode === 'dark'
-            ? 'rgba(38, 40, 49, 0.7)'
-            : 'rgba(230, 230, 230, 0.7)'
-        : 'transparent',
-    borderBottom: isActive
-        ? `3px solid ${theme.palette.mode === 'dark' ? '#e6b800' : theme.palette.primary.main}`
-        : 'none',
-    '& .MuiTypography-body1': {
-        color: isActive
-            ? theme.palette.mode === 'dark'
-                ? '#e6b800'
-                : theme.palette.primary.main
-            : theme.palette.mode === 'dark'
-                ? 'white'
-                : theme.palette.text.primary
-    }
-}));
-
 export default function ScheduleMedia() {
-    const theme = useTheme(); // Lấy theme hiện tại
     const [currentDateIndex, setCurrentDateIndex] = useState(2);
     const [currentMovies, setCurrentMovies] = useState([]);
     const swiperRef = useRef(null);
+
     useEffect(() => {
-        // Lấy phim của ngày hiện tại
         const dayMovies = moviesByDate[currentDateIndex] || [];
         setCurrentMovies(dayMovies);
     }, [currentDateIndex]);
 
-
-    // Thêm hàm xử lý khi click vào ngày
     const handleDateClick = (index) => {
         if (swiperRef.current && swiperRef.current.swiper) {
             swiperRef.current.swiper.slideTo(index);
             setCurrentDateIndex(index);
         }
     };
+
     useEffect(() => {
         window.scrollTo(0, 0);
-    })
+    }, [])
 
     return (
-        <>
-            <Paper sx={{
-                color: theme.palette.mode === 'dark' ? '#fff' : theme.palette.text.primary,
-                mr: 2,
-                ml: 1,
-                minHeight: '100vh',
-                backgroundColor: 'unset',
-                borderRadius: 5
-            }}>
-                {/* Header */}
-                <Box sx={{ display: 'flex', alignItems: 'center', p: 3, pb: 1 }}>
-                    <Typography variant="h5" component="div" sx={{ fontWeight: 'bold', alignItems: 'center' }}>
-                        <Box component="span" sx={{ mr: 1, fontSize: '1.5rem' }}>📅</Box>
-                        Lịch chiếu
-                    </Typography>
-                </Box>
+        <div className="min-h-screen text-foreground p-4 bg-transparent rounded-3xl mt-20 max-w-[1366px] mx-auto">
+            <div className="flex items-center p-6 border-b border-border/10">
+                <span className="text-3xl mr-2">📅</span>
+                <h1 className="text-2xl font-bold">Lịch chiếu</h1>
+            </div>
 
-                {/* Swiper dates section with clickable slides */}
-                <Box sx={{ position: 'relative', mb: 4, }}>
-                    <Swiper
-                        ref={swiperRef}
-                        modules={[Navigation]}
-                        breakpoints={{
-                            640: { slidesPerView: 5 },
-                            768: { slidesPerView: 6 },
-                            1024: { slidesPerView: 7 },
-                        }}
-                        style={{ padding: '0 20px' }}
-                        navigation={false}
-                        initialSlide={currentDateIndex}
-                    >
-                        {dates.map((item, index) => (
+            <div className="relative mb-8">
+                <Swiper
+                    ref={swiperRef}
+                    modules={[Navigation]}
+                    breakpoints={{
+                        640: { slidesPerView: 5 },
+                        768: { slidesPerView: 6 },
+                        1024: { slidesPerView: 7 },
+                    }}
+                    style={{ padding: '0 20px' }}
+                    navigation={false}
+                    initialSlide={currentDateIndex}
+                >
+                    {dates.map((item, index) => {
+                        const isActive = index === currentDateIndex;
+                        return (
                             <SwiperSlide key={item.id}>
-                                <DateSlide
-                                    isActive={index === currentDateIndex}
+                                <div
                                     onClick={() => handleDateClick(index)}
-                                    sx={{ cursor: 'pointer' }}
+                                    className={cn(
+                                        "py-4 px-2 text-center cursor-pointer flex flex-col justify-center transition-all h-full border-b-4",
+                                        isActive
+                                            ? "bg-zinc-800/70 border-primary"
+                                            : "border-transparent hover:bg-zinc-800/30"
+                                    )}
                                 >
-                                    <Typography variant="body2" sx={{
-                                        color: theme.palette.mode === 'dark' ? '#aaa' : theme.palette.text.secondary,
-                                        mb: 0.5
-                                    }}>
+                                    <p className={cn("text-sm mb-1", isActive ? "text-primary dark:text-yellow-500" : "text-muted-foreground")}>
                                         {item.date}
-                                    </Typography>
-                                    <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+                                    </p>
+                                    <p className={cn("text-base font-bold", isActive ? "text-primary dark:text-yellow-500" : "text-foreground")}>
                                         {item.day}
-                                    </Typography>
-                                </DateSlide>
+                                    </p>
+                                </div>
                             </SwiperSlide>
-                        ))}
-                    </Swiper>
-                </Box>
+                        );
+                    })}
+                </Swiper>
+            </div>
 
-                {/* Movie grid */}
-                <Box sx={{ p: 3, pt: 0, }}>
-                    {currentMovies.length > 0 ? (
-                        <Grid container spacing={2}>
-                            {currentMovies.map((movie) => (
-                                <Grid item xs={12} md={6} lg={3} key={movie.id}>
-                                    <Box
-                                        sx={{
-                                            bgcolor: theme.palette.mode === 'dark'
-                                                ? 'rgba(37, 40, 48, 0.8)'
-                                                : 'rgba(245, 245, 245, 0.9)',
-                                            borderRadius: 2,
-                                            transition: 'all 0.3s',
-                                            cursor: 'pointer',
-                                            height: '100%',
-                                            '&:hover': {
-                                                transform: 'translateY(-5px)',
-                                                boxShadow: '0 10px 20px rgba(0, 0, 0, 0.2)'
-                                            },
-                                        }}
-                                    >
-                                        <CardContent sx={{ display: 'flex', p: 2 }}>
-                                            <Box
-                                                component="img"
-                                                src={movie.image || "/api/placeholder/80/110"}
-                                                alt={movie.title}
-                                                sx={{
-                                                    width: 80,
-                                                    height: 110,
-                                                    borderRadius: 1,
-                                                    objectFit: 'cover',
-                                                    mr: 2
-                                                }}
-                                            />
-                                            <Box>
-                                                <Typography variant="subtitle1" sx={{
-                                                    fontWeight: 'bold',
-                                                    mb: 0.5,
-                                                    color: theme.palette.text.primary
-                                                }}>
-                                                    {movie.title}
-                                                </Typography>
-                                                <Typography variant="body2" sx={{
-                                                    color: theme.palette.mode === 'dark' ? '#aaa' : theme.palette.text.secondary
-                                                }}>
-                                                    {movie.episode}
-                                                </Typography>
-                                            </Box>
-                                        </CardContent>
-                                    </Box>
-                                </Grid>
-                            ))}
-                        </Grid>
-                    ) : (
-                        <Typography sx={{
-                            textAlign: 'center',
-                            py: 4,
-                            color: theme.palette.text.secondary
-                        }}>
-                            Không có lịch chiếu nào cho ngày này
-                        </Typography>
-                    )}
-                </Box>
-            </Paper>
-        </>
+            <div className="p-6 pt-0">
+                {currentMovies.length > 0 ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                        {currentMovies.map((movie) => (
+                            <div key={movie.id} className="bg-zinc-100/90 dark:bg-zinc-800/80 rounded-lg transition-transform hover:-translate-y-1 hover:shadow-xl cursor-pointer">
+                                <div className="flex p-4">
+                                    <img
+                                        src={movie.image || "/api/placeholder/80/110"}
+                                        alt={movie.title}
+                                        className="w-20 h-[110px] rounded object-cover mr-4"
+                                    />
+                                    <div>
+                                        <h3 className="font-bold text-lg mb-1">{movie.title}</h3>
+                                        <p className="text-sm text-muted-foreground">{movie.episode}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                ) : (
+                    <p className="text-center py-8 text-muted-foreground">
+                        Không có lịch chiếu nào cho ngày này
+                    </p>
+                )}
+            </div>
+        </div>
     );
 }

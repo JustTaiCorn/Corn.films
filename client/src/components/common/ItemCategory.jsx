@@ -1,4 +1,4 @@
-import { Box, Button } from "@mui/material";
+import { Button } from "@/components/ui/button";
 import { useLocation, useNavigate } from "react-router";
 
 const ItemCategory = ({ item }) => {
@@ -10,21 +10,15 @@ const ItemCategory = ({ item }) => {
         navigate(`${basePath}/${item.slug}`, { state: { name: item.name } });
     };
     return (
-        <Box>
+        <div>
             <Button
-                variant="outlined"
-                fullWidth
+                variant="outline"
+                className="w-full p-6 capitalize rounded-full hover:text-white"
                 onClick={handleClick}
-                sx={{
-                    p: 2,
-                    textTransform: "capitalize",
-                    borderRadius: "20px",
-                    ":hover": { color: "white", }
-                }}
             >
                 {item.name}
             </Button>
-        </Box>
+        </div>
     );
 };
 

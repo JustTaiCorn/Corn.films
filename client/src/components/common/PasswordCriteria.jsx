@@ -1,5 +1,4 @@
-import { Box, Typography } from "@mui/material";
-import { CheckCircle, Cancel } from "@mui/icons-material";
+import { CheckCircle, XCircle } from "lucide-react";
 
 const PasswordCriteria = ({ password }) => {
     const criteria = [
@@ -14,26 +13,23 @@ const PasswordCriteria = ({ password }) => {
     ];
 
     return (
-        <Box sx={{ mt: 1, display: "flex", flexDirection: "column", gap: 0.5, color: "grey.400" }}>
+        <div className="mt-2 flex flex-col gap-1 text-gray-400">
             {criteria.map((item) => (
-                <Box
+                <div
                     key={item.label}
-                    sx={{ display: "flex", alignItems: "center", gap: 1 }}
+                    className="flex items-center gap-2"
                 >
                     {item.met ? (
-                        <CheckCircle sx={{ fontSize: 16, color: "green" }} />
+                        <CheckCircle className="h-4 w-4 text-green-500" />
                     ) : (
-                        <Cancel sx={{ fontSize: 16, color: "grey.500" }} />
+                        <XCircle className="h-4 w-4 text-gray-500" />
                     )}
-                    <Typography
-                        variant="caption"
-                        sx={{ color: item.met ? "green" : "grey.400" }}
-                    >
+                    <span className={`text-xs ${item.met ? "text-green-500" : "text-gray-400"}`}>
                         {item.label}
-                    </Typography>
-                </Box>
+                    </span>
+                </div>
             ))}
-        </Box>
+        </div>
     );
 };
 

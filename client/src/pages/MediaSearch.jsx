@@ -1,9 +1,8 @@
-import { Box, Stack, TextField, Toolbar } from "@mui/material";
 import { useState, useEffect, useCallback } from "react";
 import { useSearch } from "../api/modules/media.api";
 import MediaGrid from "../components/common/MediaGrid";
-import uiConfigs from "../api/configs/ui.configs";
-import debounce from "lodash.debounce"; // Thêm thư viện debounce
+import debounce from "lodash.debounce";
+import { Input } from "@/components/ui/input";
 
 const MediaSearch = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -20,7 +19,7 @@ const MediaSearch = () => {
     query: debouncedQuery,
     enabled: !!debouncedQuery.trim()
   });
-  console.log(data);
+
   const onQueryChange = (e) => {
     const newQuery = e.target.value;
     setSearchQuery(newQuery);
@@ -30,33 +29,30 @@ const MediaSearch = () => {
       setDebouncedQuery("");
     }
   };
+
   useEffect(() => {
     return () => debounceSearch.cancel();
   }, [debounceSearch]);
 
   return (
-    <>
-      <Toolbar />
-      <Box sx={{ ...uiConfigs.style.mainContent }}>
-        <Stack spacing={2}>
-          <TextField
-            color="primary"
-            placeholder="Tìm kiếm phim"
-            sx={{ width: "100%" }}
-            autoFocus
-            value={searchQuery}
-            onChange={onQueryChange}
-          />
+    <div className="mt-20 max-w-[1366px] mx-auto text-foreground px-5 md:px-0 min-h-screen">
+      <div className="flex flex-col gap-8 w-full">
+        <Input
+          placeholder="Tìm kiếm phim..."
+          className="w-full h-12 text-lg"
+          autoFocus
+          value={searchQuery}
+          onChange={onQueryChange}
+        />
 
-          {debouncedQuery && (
-            <MediaGrid
-              medias={data?.items || []}
-              isLoading={isLoading}
-            />
-          )}
-        </Stack>
-      </Box>
-    </>
+        {debouncedQuery && (
+          <MediaGrid
+            medias={data?.items || []}
+            isLoading={isLoading} // MediaGrid likely ignores this prop in pure tailwind version if not handled, but good to keep
+          />
+        )}
+      </div>
+    </div>
   );
 };
 

@@ -1,105 +1,42 @@
-import { Stack, Button, Box } from "@mui/material";
-import DarkModeIcon from '@mui/icons-material/DarkMode';
-import LightModeIcon from '@mui/icons-material/LightMode';
-import uiConfigs from "../../api/configs/ui.configs";
 import { useSelector } from "react-redux";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Moon, Sun } from "lucide-react";
 
 const MediaPlayer = () => {
     const selectedEpisode = useSelector((state) => state.episode.selectedEpisode);
-    const iframeRef = useRef();
     const [isTheaterMode, setIsTheaterMode] = useState(false);
-
-    useEffect(() => {
-        const updateIframeHeight = () => {
-            if (iframeRef.current) {
-                const height = iframeRef.current.offsetWidth * 9 / 16 + "px";
-                iframeRef.current.setAttribute("height", height);
-            }
-        };
-
-        updateIframeHeight();
-        window.addEventListener("resize", updateIframeHeight);
-
-        return () => window.removeEventListener("resize", updateIframeHeight);
-    }, [selectedEpisode]);
 
     const toggleTheaterMode = () => {
         setIsTheaterMode(prev => !prev);
     };
 
     return (
-        <Box sx={{
-            position: 'relative',
-            zIndex: 100,
-            ...(isTheaterMode && {
-                '&::before': {
-                    content: '""',
-                    position: 'fixed',
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    backgroundColor: 'rgb(0, 0, 0)',
-                    zIndex: -1
-                }
-            })
-        }}>
-            <Stack sx={{
-                margin: "auto",
-                p: 2,
-                width: "100%",
-                minHeight: { sm: "400px", md: "600px" },
-                boxSizing: "border-box",
-                position: 'relative',
-                zIndex: 2,
-            }}>
-
-                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                    <Box sx={{
-                        width: '100%',
-                        maxWidth: '1000px',
-                        transition: 'all 0.3s ease',
-                        ...(isTheaterMode && {
-                            transform: 'scale(1.2)',
-                        })
-                    }}>
+        <div className={`relative z-50 ${isTheaterMode ? "before:fixed before:inset-0 before:bg-black before:-z-10" : ""}`}>
+            <div className="m-auto p-4 w-full box-border relative z-10">
+                <div className="flex flex-col items-center">
+                    <div
+                        className={`w-full max-w-[1000px] transition-all duration-300 `}
+                    >
                         <iframe
                             src={selectedEpisode?.link_embed}
                             title={selectedEpisode?.filename}
                             allowFullScreen
-                            ref={iframeRef}
-                            style={{
-                                width: "100%",
-                                borderRadius: "12px",
-                                border: `2px solid ${isTheaterMode ? '#000' : '#e40000'}`,
-                                boxShadow: isTheaterMode
-                                    ? '0 0 30px rgba(255, 0, 0, 0.3)'
-                                    : '0 4px 8px rgba(0, 0, 0, 0.1)',
-                            }}
+                            className={`w-full aspect-video rounded-xl border-2 ${isTheaterMode ? 'border-black shadow-[0_0_30px_rgba(255,0,0,0.3)]' : 'border-[#e40000] shadow-md'}`}
                         />
-                    </Box>
+                    </div>
 
                     <Button
-                        variant={isTheaterMode ? "contained" : "outlined"}
-                        color="error"
-                        startIcon={isTheaterMode ? <LightModeIcon /> : <DarkModeIcon />}
+                        variant={isTheaterMode ? "default" : "outline"}
+                        className={`mt-4 rounded-full px-6 py-2 text-sm capitalize ${isTheaterMode ? "bg-destructive text-destructive-foreground hover:bg-destructive/90" : "border-destructive text-destructive hover:bg-destructive/10"}`}
                         onClick={toggleTheaterMode}
-                        sx={{
-                            mt: isTheaterMode ? 10 : 1,
-                            borderRadius: '20px',
-                            px: 3,
-                            py: 1,
-                            fontSize: '0.9rem',
-                            textTransform: 'none'
-                        }}
                     >
+                        {isTheaterMode ? <Sun className="mr-2 h-4 w-4" /> : <Moon className="mr-2 h-4 w-4" />}
                         {isTheaterMode ? "Bật đèn" : "Tắt đèn"}
                     </Button>
-                </Box>
-
-            </Stack>
-        </Box>
+                </div>
+            </div>
+        </div>
     );
 };
 

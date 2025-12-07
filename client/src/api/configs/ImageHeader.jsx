@@ -1,30 +1,9 @@
-import { Box, useTheme } from "@mui/material";
-import uiConfigs from "./ui.configs";
-
-
 const ImageHeader = ({ imgPath }) => {
-  const theme = useTheme();
-
   return (
-    <Box sx={{
-      zIndex: "-1",
-      position: "relative",
-      paddingTop: { xs: "60%", sm: "40%", md: "35%" },
-      backgroundPosition: "center",
-      backgroundSize: "cover",
-      backgroundImage: `url(${imgPath})`,
-      backgroundAttachment: "fixed",
-      "&::before": {
-        content: '""',
-        position: "absolute",
-        left: 0,
-        bottom: 0,
-        width: "100%",
-        height: "100%",
-        pointerEvents: "none",
-        ...uiConfigs.style.gradientBgImage[theme.palette.mode]
-      }
-    }} />
+    <div
+      className="relative z-0 pt-[60%] sm:pt-[40%] md:pt-[35%] bg-center bg-cover bg-fixed before:content-[''] before:absolute before:inset-0 before:bg-gradient-to-t before:from-background before:to-transparent"
+      style={{ backgroundImage: `url(${imgPath})` }}
+    />
   );
 };
 

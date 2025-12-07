@@ -1,14 +1,14 @@
-import { ThemeProvider } from "@mui/material/styles";
+
 import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer } from "react-toastify";
-import CssBaseline from "@mui/material/CssBaseline";
+
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import routes from "./routes/routes";
-import themeConfigs from "./api/configs/theme.configs";
+
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { Suspense, lazy, useEffect } from "react";
@@ -38,48 +38,46 @@ const App = () => {
       <QueryClientProvider client={queryClient}>
         {/* <ReactQueryDevtools initialIsOpen={false} /> */}
         {/* <SplashCursor /> */}
-        <ThemeProvider theme={themeConfigs.custom({ mode: themeMode })}>
-          {/* config toastify */}
-          <ToastContainer
-            position="bottom-left"
-            autoClose={5000}
-            hideProgressBar={false}
-            newestOnTop={false}
-            closeOnClick
-            pauseOnFocusLoss
-            pauseOnHover
-            theme={themeMode}
-          />
-          {/* mui reset css */}
-          <CssBaseline />
 
-          {/* app routes */}
-          <Suspense fallback={<GlobalLoading />}>
-            <BrowserRouter>
-              <Routes>
-                <Route path="/" element={<MainLayout />}>
-                  {routes.map((route, index) => (
-                    route.index ? (
-                      <Route
-                        index
-                        key={index}
-                        element={
-                          <PageWrapper>{route.element}</PageWrapper>
+        {/* config toastify */}
+        <ToastContainer
+          position="bottom-left"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          pauseOnFocusLoss
+          pauseOnHover
+          theme={themeMode}
+        />
+
+        {/* app routes */}
+        <Suspense fallback={<GlobalLoading isLoading={true} />}>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<MainLayout />}>
+                {routes.map((route, index) => (
+                  route.index ? (
+                    <Route
+                      index
+                      key={index}
+                      element={
+                        <PageWrapper>{route.element}</PageWrapper>
                       }
-                      />
-                    ) : (
-                      <Route
-                        path={route.path}
-                        key={index}
-                        element={ <PageWrapper>{route.element}</PageWrapper>}
-                      />
-                    )
-                  ))}
-                </Route>
-              </Routes>
-            </BrowserRouter>
-          </Suspense>
-        </ThemeProvider>
+                    />
+                  ) : (
+                    <Route
+                      path={route.path}
+                      key={index}
+                      element={<PageWrapper>{route.element}</PageWrapper>}
+                    />
+                  )
+                ))}
+              </Route>
+            </Routes>
+          </BrowserRouter>
+        </Suspense>
+
       </QueryClientProvider>
     </>
   );

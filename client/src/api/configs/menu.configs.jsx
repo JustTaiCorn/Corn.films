@@ -1,55 +1,57 @@
-import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
-import SlideshowOutlinedIcon from "@mui/icons-material/SlideshowOutlined";
-import LiveTvOutlinedIcon from "@mui/icons-material/LiveTvOutlined";
-import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
-import PublicOutlinedIcon from "@mui/icons-material/PublicOutlined";
-import CategoryOutlinedIcon from "@mui/icons-material/CategoryOutlined";
-import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
-import RateReviewOutlinedIcon from "@mui/icons-material/RateReviewOutlined";
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import { CalendarMonth } from "@mui/icons-material";
+import {
+  Home,
+  Clapperboard,
+  Tv,
+  MonitorPlay,
+  Projector,
+  Globe,
+  LayoutGrid,
+  Heart,
+  MessageSquare,
+  User
+} from "lucide-react";
+
 const main = [
   {
     display: "Trang chủ",
     path: "/",
-    icon: <HomeOutlinedIcon />,
+    icon: <Home size={24} />,
     state: "trang chu",
   },
   {
     display: "Phim lẻ",
     path: "/phim-le",
-    icon: <SlideshowOutlinedIcon />,
+    icon: <Clapperboard size={24} />,
     state: "phim le",
   },
   {
     display: "Phim bộ",
     path: "/phim-bo",
-    icon: <LiveTvOutlinedIcon />,
+    icon: <Tv size={24} />,
     state: "phim bo",
   },
-
   {
     display: "Tv Shows",
     path: "/tv-shows",
-    icon: <LiveTvOutlinedIcon />,
+    icon: <MonitorPlay size={24} />,
     state: "tv-show",
   },
   {
     display: "Hoạt hình",
     path: "/hoat-hinh",
-    icon: <SlideshowOutlinedIcon />,
+    icon: <Projector size={24} />,
     state: "hoat hinh",
   },
   {
     display: "Quốc gia",
     path: "/quoc-gia",
-    icon: <PublicOutlinedIcon />,
+    icon: <Globe size={24} />,
     state: "quoc gia",
   },
   {
     display: "Thể loại",
     path: "/the-loai",
-    icon: <CategoryOutlinedIcon />,
+    icon: <LayoutGrid size={24} />,
     state: "the loai",
   },
 ];
@@ -58,25 +60,18 @@ const user = [
   {
     display: "favorites",
     path: "/favorites",
-    icon: <FavoriteBorderOutlinedIcon />,
+    icon: <Heart size={24} />,
   },
   {
     display: "reviews",
     path: "/reviews",
-    icon: <RateReviewOutlinedIcon />,
+    icon: <MessageSquare size={24} />,
   },
   {
     display: "profile",
     path: "/profile",
-    icon: <AccountCircleIcon />,
+    icon: <User size={24} />,
   },
-
-  // {
-  //   display: "password update",
-  //   path: "/password-update",
-  //   icon: <LockResetOutlinedIcon />,
-  //   state: "password.update"
-  // }
 ];
 
 const menuConfigs = { main, user };

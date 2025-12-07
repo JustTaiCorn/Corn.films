@@ -1,47 +1,42 @@
-
-import { Box } from "@mui/material";
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+
 import { useParams, useSearchParams } from "react-router-dom";
-import uiConfigs from "../api/configs/ui.configs";
-import { setGlobalLoading } from "../redux/features/globalLoadingSlice";
 import { useList } from "../api/modules/media.api";
 import MediaGrid from "../components/common/MediaGrid";
 import Paginations from "../components/common/Paginations";
+
 const MediaList = () => {
   const { type: mediaType } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
-  const currPage = parseInt(searchParams.get("page"));
-  console.log("currPage", currPage);
+  const currPage = parseInt(searchParams.get("page")) || 1;
   const { isLoading, data } = useList({ mediaType, currPage });
-  const dispatch = useDispatch();
 
 
   const medias = data?.items || [];
   const totalItems = data?.params?.pagination?.totalItems || 0;
-  const totalItemsPerPage = data?.params?.pagination?.totalItemsPerPage || 1;
-  const totalPage = Math.ceil(totalItems / totalItemsPerPage);
+  const totalItemsPerPage = data?.params?.pagination?.totalItemsPerPage || 10; // Default to 10 if undefined
+  const totalPage = Math.ceil(totalItems / totalItemsPerPage) || 1;
 
   const onPageChange = (page) => {
     setSearchParams({ page });
   };
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [mediaType, currPage]);
 
-  useEffect(() => {
-    dispatch(setGlobalLoading(isLoading));
-  }
-    , [isLoading, dispatch]);
 
   return (
-    <>
-      <Box sx={{ ...uiConfigs.style.mainContent, mt: 20 }}>
-        <MediaGrid medias={medias} isLoading={isLoading} />
-        <Paginations totalPages={totalPage} onPageChange={onPageChange}
+    <div className="mt-20 max-w-[1366px] mx-auto text-foreground">
+      <MediaGrid medias={medias} />
+      {totalPage > 1 && (
+        <Paginations
+          currentPage={currPage}
+          totalPages={totalPage}
+          onPageChange={onPageChange}
         />
-      </Box>
-    </>
+      )}
+    </div>
   )
 };
 

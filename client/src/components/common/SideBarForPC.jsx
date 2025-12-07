@@ -1,16 +1,18 @@
 import { useSelector, useDispatch } from "react-redux";
-import MenuIcon from "@mui/icons-material/Menu";
-import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
-import WbSunnyOutlinedIcon from "@mui/icons-material/WbSunnyOutlined";
-import { Box, Button, IconButton, Stack, Divider } from "@mui/material";
+import { Menu as MenuIcon, Moon, Sun } from "lucide-react";
 import { useState, memo } from "react";
 import { Link } from "react-router-dom";
-import { themeModes } from "../../api/configs/theme.configs";
 import { setThemeMode } from "../../redux/features/themeModeSlice";
 import Logo from "./Logo";
 import UserMenu from "./UserMenu";
 import Sidebar from "./Sidebar";
 import menuConfigs from "../../api/configs/menu.configs";
+import { Button } from "@/components/ui/button";
+
+const themeModes = {
+  dark: "dark",
+  light: "light"
+};
 
 const SidebarForPC = memo(function SidebarForPC() {
   const { user } = useSelector((state) => state.user);
@@ -19,7 +21,7 @@ const SidebarForPC = memo(function SidebarForPC() {
 
   const dispatch = useDispatch();
 
-  const onSwithTheme = () => {
+  const onSwitchTheme = () => {
     const theme = themeMode === themeModes.dark ? themeModes.light : themeModes.dark;
     dispatch(setThemeMode(theme));
   };
@@ -32,160 +34,72 @@ const SidebarForPC = memo(function SidebarForPC() {
       <Sidebar open={sidebarOpen} toggleSidebar={toggleSidebar} />
 
       {/* Mobile top bar */}
-      <Box
-        sx={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          right: 0,
-          zIndex: 999,
-          display: { xs: "flex", md: "none" },
-          justifyContent: "space-between",
-          alignItems: "center",
-          padding: 2,
-          bgcolor: "background.paper"
-        }}
-      >
-        <IconButton
-          color="inherit"
-          onClick={toggleSidebar}
-        >
+      <div className="fixed top-0 left-0 right-0 z-999 flex items-center justify-between bg-background p-4 shadow-sm md:hidden">
+        <Button variant="ghost" size="icon" onClick={toggleSidebar}>
           <MenuIcon />
-        </IconButton>
+        </Button>
 
         <Logo />
 
-        <Box>
+        <div>
           {!user ? (
-            <Button
-              variant="contained"
-              component={Link}
-              to="/log-in"
-              size="small"
-            >
-              sign in
+            <Button asChild size="sm">
+              <Link to="/log-in">sign in</Link>
             </Button>
           ) : (
             <UserMenu />
           )}
-        </Box>
-      </Box>
+        </div>
+      </div>
 
       {/* Desktop sidebar */}
-      <Box
-        sx={{
-          minHeight: "90vh",
-          width: "15%",
-          minWidth: "220px",
-          maxWidth: "250px",
-          height: "90vh",
-          position: "fixed",
-          top: "5vh",
-          left: "5vh",
-          bgcolor: "background.paper",
-          borderRight: "1px solid",
-          borderColor: "divider",
-          padding: 2,
-          display: { xs: "none", md: "flex" },
-          flexDirection: "column",
-          zIndex: 1200,
-          borderRadius: "10px",
-          boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)"
-        }}
-      >
+      <div className="hidden md:fixed md:top-[5vh] md:left-6 md:flex md:h-[90vh] md:w-[250px] md:flex-col md:bg-card md:p-4 md:shadow-lg md:rounded-xl ">
         {/* Logo */}
-        <Box sx={{ mb: 3, mt: 1, display: "flex", justifyContent: "center" }}>
+        <div className="mb-6 mt-2 flex justify-center">
           <Logo />
-        </Box>
+        </div>
 
         {/* Menu Items */}
-        <Stack spacing={0.5} sx={{ flexGrow: 1, overflowY: "auto" }}>
+        <div className="flex-grow overflow-y-auto flex flex-col gap-1">
           {menuConfigs.main.map((item, index) => (
             <Button
               key={index}
-              startIcon={item.icon}
-              sx={{
-                justifyContent: "flex-start",
-                color:   "text.primary",
-                bgcolor:   "transparent",
-                borderRadius: 2,
-                padding: "10px 16px",
-                transition: "all 0.2s ease",
-                textTransform: "uppercase",
-                fontWeight: "medium",
-                "&:hover": {
-                  bgcolor:  "action.hover"
-                },
-                fontSize: { md: '0.85rem' },
-              }}
-              component={Link}
-              to={item.path}
-              variant="text"
+              variant="ghost"
+              asChild
+              className="justify-start gap-4 text-primary uppercase font-medium hover:bg-secondary"
             >
-              {item.display}
+              <Link to={item.path}>
+                {item.icon}
+                {item.display}
+              </Link>
             </Button>
           ))}
-        </Stack>
+        </div>
 
-        <Divider sx={{ my: 2 }} />
+        <div className="my-4 h-px bg-border" />
 
         {/* Bottom section - Theme toggle & User */}
-        <Stack spacing={1.5}>
+        <div className="flex flex-col gap-3">
           {/* Theme toggle */}
           <Button
-            startIcon={themeMode === themeModes.dark ? <DarkModeOutlinedIcon /> : <WbSunnyOutlinedIcon />}
-            onClick={onSwithTheme}
-            sx={{
-              justifyContent: "flex-start",
-              color: "text.primary",
-              textTransform: "none",
-              padding: "8px 16px",
-              borderRadius: 2,
-              fontSize: "0.9rem",
-              transition: "all 0.2s ease",
-              "&:hover": {
-                bgcolor: "action.hover"
-              }
-            }}
+            variant="ghost"
+            onClick={onSwitchTheme}
+            className="justify-start gap-4 text-foreground normal-case hover:bg-secondary"
           >
+            {themeMode === themeModes.dark ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
             {themeMode === themeModes.dark ? "Dark Mode" : "Light Mode"}
           </Button>
 
           {/* User info or sign in */}
           {!user ? (
-            <Button
-              variant="contained"
-              component={Link}
-              to="/log-in"
-              fullWidth
-              sx={{
-                height: "44px",
-                textTransform: "uppercase",
-                fontWeight: "bold",
-                borderRadius: 2,
-                fontSize: "0.9rem",
-                boxShadow: 2,
-
-              }}
-            >
-              sign in
+            <Button asChild className="w-full uppercase font-bold">
+              <Link to="/log-in">sign in</Link>
             </Button>
           ) : (
-            <UserMenu
-              buttonSx={{
-                width: "100%",
-                padding: "10px 12px"
-              }}
-            />
+            <UserMenu />
           )}
-        </Stack>
-      </Box>
-
-      {/* Content margin for desktop */}
-      <Box sx={{
-        marginLeft: { xs: 0, md: '270px' },
-        transition: "margin 0.3s ease"
-      }}></Box>
+        </div>
+      </div>
     </>
   );
 });

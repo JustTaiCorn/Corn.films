@@ -1,25 +1,15 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-
-import {
-    Box,
-    IconButton,
-    Badge,
-    Avatar,
-    Tooltip,
-    Typography,
-    Paper,
-    List,
-    ListItem,
-    ListItemAvatar,
-    ListItemText,
-    CircularProgress, TextField, InputAdornment
-} from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import { useNavigate } from 'react-router-dom';
+import { Search, X, Bell } from "lucide-react";
+import { Link, useNavigate } from 'react-router-dom';
 import { useSearch } from '../../api/modules/media.api';
 import debounce from 'lodash.debounce';
 import { routesGen } from '../../routes/routes';
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Loader2 } from "lucide-react";
 
 export default function Topbar() {
     const [searchQuery, setSearchQuery] = useState("");
@@ -35,32 +25,29 @@ export default function Topbar() {
 
     const { data, isLoading } = useSearch({
         query: debouncedQuery,
-        enabled: !!debouncedQuery.trim() // Thêm điều kiện kích hoạt
+        enabled: !!debouncedQuery.trim()
     });
 
     const onQueryChange = (e) => {
         const newQuery = e.target.value;
         setSearchQuery(newQuery);
 
-        // Chỉ debounce khi có nội dung hợp lệ
         if (newQuery.trim().length >= 3) {
             debounceSearch(newQuery.trim());
         } else {
-            setDebouncedQuery(""); // Reset kết quả tìm kiếm
+            setDebouncedQuery("");
         }
     };
 
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (searchRef.current && !searchRef.current.contains(event.target)) {
-                setDebouncedQuery(""); // Đóng dropdown khi click ra ngoài
+                setDebouncedQuery("");
             }
         };
 
-        // Thêm event listener khi component được mount
         document.addEventListener("mousedown", handleClickOutside);
 
-        // Cleanup event listener khi component unmount
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
             debounceSearch.cancel();
@@ -69,174 +56,96 @@ export default function Topbar() {
 
     const handleResultClick = (movie) => {
         navigate(routesGen.mediaDetail(movie.slug));
-        setDebouncedQuery(""); // Đóng dropdown sau khi chọn kết quả
+        setDebouncedQuery("");
     }
 
-
     return (
-        <Box
-            sx={{
-                display: { xs: "none", md: 'flex' },
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                maxWidth: "100vw",
-                height: 70,
-                pr: 4,
-                my: 2,
-                mx: "auto",
-                position: 'relative',
-            }}
-        >
-            <Box sx={{
-                display: 'flex',
-                alignItems: 'center',
-                position: 'relative',
-                flex: '1', // Cho phép co giãn nhưng không quá lớn
-                maxWidth: 500 // Giới hạn tối đa cho container search
-            }} ref={searchRef}>
-                <Box sx={{
-
-                    width: '100%',
-                    maxWidth: 400, // Giới hạn width tối đa
-                    minWidth: 250, // Width tối thiểu
-                    display: 'flex',
-                    alignItems: 'center',
-                }}>
-
-                    <TextField
-                        sx={{ width: "100%", height: "50%" }}
+        <div className="hidden md:flex items-center justify-between mx-auto my-4 h-[70px] max-w-[100vw] pr-8 relative">
+            <div
+                className="flex items-center relative flex-1 max-w-[500px]"
+                ref={searchRef}
+            >
+                <div className="w-full max-w-[400px] min-w-[250px] flex items-center relative gap-2">
+                    <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                    <Input
+                        className="pl-9 pr-10"
                         placeholder="Tìm kiếm phim..."
                         value={searchQuery}
                         onChange={onQueryChange}
-                        slotProps={{
-                            input: {
-                                startAdornment: (
-                                    <InputAdornment position="start">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                            stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-                                            className="lucide lucide-search-icon lucide-search">
-                                            <path d="m21 21-4.34-4.34" />
-                                            <circle cx="11" cy="11" r="8" />
-                                        </svg>
-                                    </InputAdornment>
-                                ),
-                                endAdornment: (
-                                    <InputAdornment position="start">
-                                        {searchQuery && (
-                                            <IconButton
-                                                size="small"
-                                                sx={{ position: 'absolute', right: 8 }}
-                                                onClick={() => {
-                                                    setSearchQuery("");
-                                                    setDebouncedQuery("");
-                                                }}
-                                            >
-                                                <CloseIcon fontSize="small" />
-                                            </IconButton>
-                                        )}
-                                    </InputAdornment>
-                                ),
-                            },
-                        }}
                     />
-
-                </Box>
+                    {searchQuery && (
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            className="absolute right-0 top-0 h-full w-9 hover:bg-transparent"
+                            onClick={() => {
+                                setSearchQuery("");
+                                setDebouncedQuery("");
+                            }}
+                        >
+                            <X className="h-4 w-4 text-muted-foreground" />
+                        </Button>
+                    )}
+                </div>
 
                 {/* Search Results Dropdown */}
-                {data?.items && (
-                    <Paper
-                        sx={{
-                            position: 'absolute',
-                            top: '100%',
-                            width: '80%',
-                            maxHeight: '70vh',
-                            overflow: 'auto',
-                            mt: 4,
-                            borderRadius: 2,
-                            boxShadow: '0 4px 20px rgba(0,0,0,0.2)',
-                            bgcolor: 'background.paper',
-                            zIndex: 1300
-                        }}
-                    >
+                {data?.items && (debouncedQuery.trim().length > 0) && (
+                    <div className="absolute top-full left-0 w-[80%] max-h-[70vh] mt-4 rounded-lg shadow-lg bg-popover z-[1300] border overflow-hidden">
                         {isLoading ? (
-                            <Box sx={{ display: 'flex', justifyContent: 'center', p: 2 }}>
-                                <CircularProgress size={24} />
-                            </Box>
+                            <div className="flex justify-center p-4">
+                                <Loader2 className="h-6 w-6 animate-spin text-primary" />
+                            </div>
                         ) : data?.items.length > 0 ? (
-                            <>
-                                <List sx={{ width: '100%', p: 0 }}>
+                            <ScrollArea className="h-auto max-h-[70vh]">
+                                <div className="flex flex-col">
                                     {data.items.map((movie, index) => (
-                                        <ListItem
+                                        <div
                                             key={index}
-                                            button
+                                            className={`flex items-start p-3 cursor-pointer hover:bg-accent transition-colors ${index !== data.items.length - 1 ? 'border-b' : ''}`}
                                             onClick={() => handleResultClick(movie)}
-                                            alignItems="flex-start"
-                                            sx={{
-                                                py: 1.5,
-                                                borderBottom: index !== data.items.length - 1 ? '1px solid' : 'none',
-                                                borderColor: 'divider'
-                                            }}
                                         >
-                                            <ListItemAvatar>
-                                                <Avatar
-                                                    variant="rounded"
-                                                    src={`https://img.ophim.live/uploads/movies/${movie.poster_url}`}
-                                                    alt={movie.name}
-                                                    sx={{ width: 56, height: 70, mr: 1 }}
-                                                />
-                                            </ListItemAvatar>
-                                            <ListItemText
-                                                primary={movie.name}
-                                                secondary={
-                                                    <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                                                        <Typography component="span" variant="body2" color="text.secondary">
-                                                            {movie.origin_name}
-                                                        </Typography>
-                                                        <Box sx={{ display: 'flex', gap: 1, mt: 0.5 }}>
-                                                            {movie.quality && (
-                                                                <Typography component="span" variant="caption" sx={{ color: 'text.secondary' }}>
-                                                                    {movie.quality}
-                                                                </Typography>
-                                                            )}
-                                                            {movie.episode_current && (
-                                                                <Typography component="span" variant="caption" sx={{ color: 'text.secondary' }}>
-                                                                    • {movie.episode_current}
-                                                                </Typography>
-                                                            )}
-                                                        </Box>
-                                                    </Box>
-                                                }
-                                            />
-                                        </ListItem>
+                                            <Avatar className="h-[70px] w-14 rounded-none mr-2">
+                                                <AvatarImage src={`https://img.ophim.live/uploads/movies/${movie.poster_url}`} alt={movie.name} className="object-cover" />
+                                                <AvatarFallback className="rounded-none">IMG</AvatarFallback>
+                                            </Avatar>
+                                            <div className="flex flex-col gap-1">
+                                                <span className="text-sm font-medium text-foreground">{movie.name}</span>
+                                                <span className="text-xs text-muted-foreground">{movie.origin_name}</span>
+                                                <div className="flex gap-2 mt-0.5">
+                                                    {movie.quality && (
+                                                        <span className="text-[10px] bg-secondary text-secondary-foreground px-1 rounded">{movie.quality}</span>
+                                                    )}
+                                                    {movie.episode_current && (
+                                                        <span className="text-[10px] text-muted-foreground">• {movie.episode_current}</span>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </div>
                                     ))}
-                                </List>
-                            </>
+                                </div>
+                            </ScrollArea>
                         ) : searchQuery.trim() ? (
-                            <Box sx={{ p: 2, textAlign: 'center' }}>
-                                <Typography variant="body1">Không tìm thấy kết quả</Typography>
-                            </Box>
+                            <div className="p-4 text-center">
+                                <span className="text-sm text-muted-foreground">Không tìm thấy kết quả</span>
+                            </div>
                         ) : null}
-                    </Paper>
+                    </div>
                 )}
-            </Box>
+            </div>
 
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <Tooltip title="Thông báo">
-                    <IconButton sx={{ color: 'text.primary' }}>
-                        <Badge badgeContent={3} color="error">
-                            <NotificationsIcon />
-                        </Badge>
-                    </IconButton>
-                </Tooltip>
-                <Tooltip title="Tài khoản">
-                    <IconButton>
-                        <Avatar
-                            alt="User Profile"
-                            sx={{ width: 32, height: 32, bgcolor: 'primary.main' }}
-                        />
-                    </IconButton>
-                </Tooltip>
-            </Box>
-        </Box>
+            <div className="flex items-center gap-2">
+                <Button variant="ghost" size="icon" className="relative text-foreground">
+                    <Badge variant="destructive" className="absolute -top-1 -right-1 h-4 w-4 p-0 items-center justify-center text-[10px]">3</Badge>
+                    <Bell className="h-5 w-5" />
+                </Button>
+                <div title="Tài khoản">
+                    <Button variant="ghost" size="icon" className="rounded-full">
+                        <Avatar className="h-8 w-8">
+                            <AvatarFallback className="bg-primary text-primary-foreground">U</AvatarFallback>
+                        </Avatar>
+                    </Button>
+                </div>
+            </div>
+        </div>
     );
 }

@@ -1,89 +1,60 @@
-import { Paper, Stack, Box, Typography, Divider, IconButton } from '@mui/material';
 import Logo from './Logo';
-import FacebookOutlinedIcon from '@mui/icons-material/FacebookOutlined';
-import InstagramIcon from '@mui/icons-material/Instagram';
-import TwitterIcon from '@mui/icons-material/Twitter';
-import GitHubIcon from '@mui/icons-material/GitHub';
+import { Facebook, Instagram, Twitter, Github } from 'lucide-react';
+import { Button } from "@/components/ui/button";
 
 const Footer = () => {
   return (
-    <Paper sx={{
-      padding: { xs: "1.5rem", md: "2rem" },
-      backgroundColor: "background.paper",
-      borderRadius: { xs: 0, md: "16px" },
-      boxShadow: "0px -4px 10px rgba(0, 0, 0, 0.1)",
-      width: "100%",
-      mt: 4,
-      marginLeft: { xs: 0, md: "17%" },
-      marginBottom: { xs: 0, md: "15px" },
-      maxWidth: { md: "80%" }
-    }}>
-      <Stack
-        direction="column"
-        spacing={4}
-        sx={{ maxWidth: "1200px", margin: "0 auto" }}
-      >
+    <div className="mt-8 mb-4 ml-0 w-full max-w-[80%] rounded-none bg-card p-6 shadow-lg md:ml-[17%] md:rounded-2xl md:p-8">
+      <div className="mx-auto flex max-w-[1200px] flex-col gap-8">
         {/* Phần trên: Logo, mô tả, menu, liên hệ */}
-        <Stack
-          direction={{ xs: "column", md: "row" }}
-          spacing={{ xs: 4, md: 8 }}
-          alignItems="flex-start"
-          justifyContent="space-between"
-        >
+        <div className="flex flex-col items-start justify-between gap-8 md:flex-row">
           {/* Logo và mô tả */}
-          <Stack spacing={2} sx={{ maxWidth: { xs: "100%", md: "400px" }, alignItems: { xs: "center", md: "flex-start" } }}>
+          <div className="flex max-w-full flex-col items-center gap-4 md:max-w-[400px] md:items-start">
             <Logo />
-            <Typography variant="body2" sx={{ color: "text.secondary", textAlign: { xs: "center", md: "left" } }}>
+            <p className="text-center text-sm text-muted-foreground md:text-left">
               Toàn bộ nội dung trên trang web này được tổng hợp từ các nền tảng video chính thống trên Internet và không cung cấp dịch vụ phát trực tuyến chính thức. Nếu bạn phát hiện quyền lợi của mình bị xâm phạm, vui lòng thông báo cho chúng tôi.
-            </Typography>
-          </Stack>
+            </p>
+          </div>
           {/* Thông tin liên hệ */}
-          <Stack spacing={2} alignItems={{ xs: "center", md: "flex-start" }}>
-            <Typography variant="h6" sx={{ color: "primary.main", fontWeight: "bold" }}>
+          <div className="flex flex-col items-center gap-4 md:items-start">
+            <h6 className="font-bold text-primary text-lg">
               Liên Hệ
-            </Typography>
-            <Typography variant="body2" sx={{ color: "text.secondary" }}>
+            </h6>
+            <p className="text-sm text-muted-foreground">
               Email: keke@gmail.com
-            </Typography>
-            <Typography variant="body2" sx={{ color: "text.secondary" }}>
+            </p>
+            <p className="text-sm text-muted-foreground">
               Điện thoại: 0123456789
-            </Typography>
-            <Typography variant="body2" sx={{ color: "text.secondary" }}>
+            </p>
+            <p className="text-sm text-muted-foreground">
               Địa chỉ: 123 Đường ABC, Quận XYZ, TP.Hà Nội
-            </Typography>
+            </p>
             {/* Các icon mạng xã hội */}
-            <Stack direction="row" spacing={2}>
-              <IconButton color="primary" size="small" sx={{ border: '1px solid', borderColor: 'text.disabled' }}>
-                <FacebookOutlinedIcon />
-              </IconButton>
-              <IconButton color="primary" size="small" sx={{ border: '1px solid', borderColor: 'text.disabled' }}>
-                <InstagramIcon />
-              </IconButton>
-              <IconButton color="primary" size="small" sx={{ border: '1px solid', borderColor: 'text.disabled' }}>
-                <TwitterIcon />
-              </IconButton>
-              <IconButton color="primary" size="small" sx={{ border: '1px solid', borderColor: 'text.disabled' }}>
-                <GitHubIcon />
-              </IconButton>
-            </Stack>
-          </Stack>
-        </Stack>
+            <div className="flex gap-4">
+              <Button variant="outline" size="icon" className="text-primary border-muted-foreground/20 hover:bg-primary/10">
+                <Facebook className="h-4 w-4" />
+              </Button>
+              <Button variant="outline" size="icon" className="text-primary border-muted-foreground/20 hover:bg-primary/10">
+                <Instagram className="h-4 w-4" />
+              </Button>
+              <Button variant="outline" size="icon" className="text-primary border-muted-foreground/20 hover:bg-primary/10">
+                <Twitter className="h-4 w-4" />
+              </Button>
+              <Button variant="outline" size="icon" className="text-primary border-muted-foreground/20 hover:bg-primary/10">
+                <Github className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+        </div>
 
         {/* Phần dưới: Bản quyền */}
-        <Box sx={{ width: '100%', mt: 3, pt: 3, borderTop: '1px solid', borderColor: 'divider' }}>
-          <Typography
-            variant="body2"
-            sx={{
-              color: "text.secondary",
-              textAlign: "center",
-              fontSize: "0.875rem",
-            }}
-          >
+        <div className="mt-6 w-full border-t pt-6">
+          <p className="text-center text-sm text-muted-foreground">
             © 2025 XemPhim. All rights reserved
-          </Typography>
-        </Box>
-      </Stack>
-    </Paper>
+          </p>
+        </div>
+      </div>
+    </div>
   );
 };
 

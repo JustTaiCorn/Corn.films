@@ -1,17 +1,15 @@
-import PlayArrowIcon from "@mui/icons-material/PlayArrow";
-import { Box, Button, Chip, Divider, Stack, Typography, useTheme } from "@mui/material";
+import { Play, ChevronRight } from "lucide-react";
 import { Autoplay, Thumbs, Navigation } from 'swiper/modules';
 import { Link } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { routesGen } from "../../routes/routes";
-import uiConfigs from "../../api/configs/ui.configs";
 import { useList } from "../../api/modules/media.api";
 import { useState } from "react";
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import GlobalLoading from "../common/GlobalLoading";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
 const HeroSlide = ({ mediaType }) => {
-  const theme = useTheme();
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
   const [activeIndex, setActiveIndex] = useState(null);
 
@@ -24,8 +22,6 @@ const HeroSlide = ({ mediaType }) => {
     page: 1
   });
 
-
-  // Đảm bảo movies luôn là một mảng
   const movies = data?.items || [];
   if (isLoading) {
     return (
@@ -34,9 +30,7 @@ const HeroSlide = ({ mediaType }) => {
   }
 
   return (
-    <><Box sx={{
-      position: "relative",
-    }}>
+    <div className="relative">
       <Swiper
         grabCursor={true}
         loop={true}
@@ -56,191 +50,84 @@ const HeroSlide = ({ mediaType }) => {
               : "https://via.placeholder.com/500x750";
             return (
               <SwiperSlide key={index}>
-                <Box sx={{
-                  paddingTop: {
-                    xs: "70%",
-                    sm: "70%",
-                    md: "60%",
-                    lg: "45%"
-                  },
-                  backgroundPosition: "center",
-                  backgroundSize: "cover",
-                  backgroundAttachment: "fixed",
-                  backgroundImage: `url(${thumbUrl})`,
-                }} />
-                <Box sx={{
-                  width: "100%",
-                  height: "100%",
-                  position: "absolute",
-                  top: 50,
-                  left: 0,
-                  ml: { xs: 3, md: 0 },
-                  paddingX: { sm: "10px", md: "5rem", lg: "5rem" }
-                }}>
-                  <Box sx={{
-                    height: "100%",
-                    display: "flex",
-                    alignItems: "center",
-                    color: "text.primary",
-                    width: { xs: "90%", md: "30%", lg: "40%" },
-                  }}>
-                    <Stack spacing={{ xs: 0.5, sm: 2 }} direction="column">
+                <div className="w-full relative h-[450px] md:h-[850px] ">
+                  <img
+                    src={thumbUrl}
+                    alt={movie.name}
+                    className="absolute top-0 left-0 w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-background to-transparent " />
+                </div>
+                <div className="absolute top-[50px] left-0 w-full h-full pl-6 md:pl-0 px-2 sm:px-[10px] md:px-20 lg:px-20">
+                  <div className="h-full flex items-center w-[90%] md:w-[35%] lg:w-[45%] text-foreground">
+                    <div className="flex flex-col gap-2 sm:gap-4">
                       {/* title */}
-                      <Typography
-                        variant="h3"
-                        fontSize={{ xs: "0.75rem", md: "1rem", lg: "2rem" }}
-                        fontWeight="700"
-                      >
+                      <h3 className="text-xl md:text-2xl lg:text-4xl font-bold leading-tight">
                         {movie.name}
-                      </Typography>
-                      <Typography
-                        variant="body1"
-                        fontSize={{ xs: "0.65rem", md: "0.8rem", lg: "1rem" }}
-                        fontWeight="400"
-                      >
+                      </h3>
+                      <p className="text-xs md:text-sm lg:text-base font-normal line-clamp-2">
                         {movie.origin_name}
-                      </Typography>
-                      <Box sx={{
-                        display: "flex",
-                        flexDirection: "row",
-                        gap: 1,
-                        flexWrap: "wrap",
-                      }}>
+                      </p>
 
-                        <Chip
-                          label={movie.quality}
-                          color="primary"
-                          variant="outlined"
-                          size="small"
-                          sx={{
-                            fontSize: { xs: '0.6rem', sm: '0.7rem', md: '0.8rem' },
-                            height: { xs: '24px', sm: '28px', md: '32px' },
-                            '& .MuiChip-label': {
-                              padding: { xs: '0 6px', sm: '0 8px', md: '0 12px' }
-                            }
-                          }}
-                        />
-                        <Chip
-                          label={movie.year}
-                          color="primary"
-                          variant="outlined"
-                          size="small"
-                          sx={{
-                            fontSize: { xs: '0.6rem', sm: '0.7rem', md: '0.8rem' },
-                            height: { xs: '24px', sm: '28px', md: '32px' },
-                            '& .MuiChip-label': {
-                              padding: { xs: '0 6px', sm: '0 8px', md: '0 12px' }
-                            }
-                          }}
-                        />
-                        <Chip
-                          label={movie.lang}
-                          color="primary"
-                          variant="outlined"
-                          size="small"
-                          sx={{
-                            fontSize: { xs: '0.6rem', sm: '0.7rem', md: '0.8rem' },
-                            height: { xs: '24px', sm: '28px', md: '32px' },
-                            '& .MuiChip-label': {
-                              padding: { xs: '0 6px', sm: '0 8px', md: '0 12px' }
-                            }
-                          }}
-                        />
-                        <Chip
-                          label={movie.episode_current}
-                          color="primary"
-                          variant="outlined"
-                          size="small"
-                          sx={{
-                            fontSize: { xs: '0.6rem', sm: '0.7rem', md: '0.8rem' },
-                            height: { xs: '24px', sm: '28px', md: '32px' },
-                            '& .MuiChip-label': {
-                              padding: { xs: '0 6px', sm: '0 8px', md: '0 12px' }
-                            }
-                          }}
-                        />
-
-
-                      </Box>
-                      <Stack direction="row" spacing={1} alignItems="center">
-                        {/* rating */}
-                        <Divider orientation="vertical" />
-                        {/* genres */}
-                        {movie?.category?.map((theLoai, index) => (
-                          <Chip
-                            variant="filled"
-                            color="primary"
-                            key={index}
-                            label={theLoai?.name}
-                            sx={{
-                              fontSize: { xs: '0.6rem', sm: '0.7rem', md: '0.8rem' },
-                              height: { xs: '24px', sm: '28px', md: '32px' },
-                              '& .MuiChip-label': {
-                                padding: { xs: '0 6px', sm: '0 8px', md: '0 12px' }
-                              }
-                            }}
-                          />
+                      <div className="flex flex-row gap-2 flex-wrap">
+                        {[movie.quality, movie.year, movie.lang, movie.episode_current].map((label, i) => (
+                          label && (
+                            <Badge key={i} variant="secondary" className="text-[10px] sm:text-xs px-2 py-0.5 h-auto font-normal rounded-sm">
+                              {label}
+                            </Badge>
+                          )
                         ))}
-                      </Stack>
-                      {/* buttons */}
-                      <Stack direction="row" spacing={1} alignItems="center">
-                        <Button
-                          variant="contained"
-                          size="large"
-                          startIcon={<PlayArrowIcon />}
-                          component={Link}
-                          to={`${routesGen.mediaWatch(movie.slug)}#player`}
-                          sx={{
-                            width: "max-content",
-                            fontSize: { xs: '0.5rem', sm: '0.8rem', md: '0.9rem' },
-                            padding: { xs: '2px 4px', sm: '6px 10px', md: '8px 16px' }
-                          }}
-                        >
-                          watch now
-                        </Button>
-                        <Button
-                          variant="outlined"
-                          size="large"
-                          color="primary"
-                          component={Link}
-                          to={routesGen.mediaDetail(movie.slug)}
-                          sx={{
-                            width: "max-content",
-                            fontSize: { xs: '0.5rem', sm: '0.8rem', md: '0.9rem' },
-                            padding: { xs: '2px 4px', sm: '6px 10px', md: '8px 16px' },
+                      </div>
 
-                          }}
-                          endIcon={<ArrowForwardIosIcon />}
+                      <div className="flex flex-row gap-2 items-center">
+                        {movie?.category?.map((theLoai, index) => (
+                          <Badge
+                            key={index}
+                            className="bg-primary text-primary-foreground text-[10px] sm:text-xs px-2 py-0.5 h-auto font-normal rounded-sm hover:bg-primary/90"
+                          >
+                            {theLoai?.name}
+                          </Badge>
+                        ))}
+                      </div>
+
+                      {/* buttons */}
+                      <div className="flex flex-row gap-2 items-center mt-2">
+                        <Button
+                          size="lg"
+                          asChild
+                          className="text-xs sm:text-sm md:text-base px-4 py-2 h-auto"
                         >
-                          Xem chi tiết
+                          <Link to={`${routesGen.mediaWatch(movie.slug)}#player`}>
+                            <Play className="mr-2 h-4 w-4" />
+                            Watch now
+                          </Link>
                         </Button>
-                      </Stack>
-                    </Stack>
-                  </Box>
-                </Box>
+                        <Button
+                          variant="outline"
+                          size="lg"
+                          asChild
+                          className="text-xs sm:text-sm md:text-base px-4 py-2 h-auto text-foreground border-primary hover:bg-primary/10"
+                        >
+                          <Link to={routesGen.mediaDetail(movie.slug)}>
+                            Xem chi tiết
+                            <ChevronRight className="ml-2 h-4 w-4" />
+                          </Link>
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </SwiperSlide>
             );
           })
         ) : (
-          <Typography variant="body1" sx={{ textAlign: "center", py: 4 }}>
-            Không có dữ liệu
-          </Typography>
+          <div className="text-center py-4">
+            <span className="text-foreground">Không có dữ liệu</span>
+          </div>
         )}
       </Swiper>
 
-      <Box sx={{
-        display: { xs: "none", md: "block" },
-        position: "absolute",
-        right: 0,
-        bottom: 50,
-        mr: 2,
-        width: "40%",
-        height: "50px",
-        backgroundColor: "transparent",
-        zIndex: 100,
-        borderRadius: "5px 0 0 5px",
-
-      }}>
+      <div className="hidden md:block absolute right-0 bottom-[50px] mr-2 w-[40%] h-[50px] bg-transparent z-[100] rounded-l-[5px]">
         <Swiper
           onSwiper={setThumbsSwiper}
           spaceBetween={10}
@@ -249,43 +136,27 @@ const HeroSlide = ({ mediaType }) => {
           watchSlidesProgress={true}
           modules={[Thumbs]}
           loop={true}
-
         >
-
           {movies.map((movie, index) => {
             const thumbUrl = movie.thumb_url
               ? `https://img.ophim.live/uploads/movies/${movie.thumb_url}`
               : "https://via.placeholder.com/500x750";
             return (
               <SwiperSlide key={index}
-                active={index === activeIndex}
+                className={index === activeIndex ? "swiper-slide-thumb-active" : ""}
                 onClick={() => handleThumbnailClick(index)}
-              ><Box
-                sx={{
-                  border: "2px solid transparent",
-                  "&:hover": {
-                    border: "2px solid #fff",
-                    borderRadius: "4px",
-
-                  }
-                }}
               >
+                <div className={`border-2 border-transparent hover:border-white rounded p-0.5 transition-all ${index === activeIndex ? 'border-primary' : ''}`}>
                   <img src={thumbUrl} alt={movie.name}
-                    style={{
-                      width: "100%",
-                      height: "50px",
-                      objectFit: "cover",
-                      cursor: "pointer",
-                      borderRadius: "4px",
-                    }}
+                    className="w-full h-[50px] object-cover rounded cursor-pointer"
                   />
-                </Box>
+                </div>
               </SwiperSlide>
             );
           })}
         </Swiper>
-      </Box>
-    </Box></>
+      </div>
+    </div>
   );
 };
 

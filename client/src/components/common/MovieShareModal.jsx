@@ -1,13 +1,6 @@
 import { useState } from "react";
-import {
-    Box,
-    IconButton,
-    Typography,
-    Paper,
-    Stack,
-} from "@mui/material";
-import { ContentCopy, Share as ShareIcon } from "@mui/icons-material";
-import Modal from "react-modal";
+import { Share, Copy, X } from "lucide-react";
+import Modal from 'react-modal';
 import {
     FacebookShareButton,
     TwitterShareButton,
@@ -21,8 +14,9 @@ import {
     TelegramIcon,
 } from "react-share";
 import { toast } from "react-toastify";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
-// Cấu hình Modal để hoạt động với root element
 Modal.setAppElement("#root");
 
 const sharePlatforms = [
@@ -43,126 +37,95 @@ const MovieShareModal = ({ movieUrl, movieTitle = "Check out this movie!" }) => 
     const closeModal = () => {
         setModalIsOpen(false);
     };
+
     const handleCopyLink = () => {
         navigator.clipboard.writeText(movieUrl);
         toast.success("Copied link to clipboard");
     }
+
     return (
-        <Box>
-            <IconButton
+        <div>
+            <Button
+                variant="ghost"
+                size="icon"
                 onClick={openModal}
-                aria-label="share movie"
-                sx={{ p: 1 }}
+                className="p-2 h-auto w-auto"
             >
-                <ShareIcon sx={{ color: "inherit" }} />
-            </IconButton>
+                <Share className="w-6 h-6" />
+            </Button>
 
             <Modal
                 contentLabel="Share Movie Modal"
-                ariaHideApp={true}
                 isOpen={modalIsOpen}
                 onRequestClose={closeModal}
-                style={{
-                    overlay: {
-                        backgroundColor: "rgba(62, 62, 62, 0.589)",
-                        zIndex: 1000,
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                    },
-                    content: {
-                        position: "relative",
-                        top: "auto",
-                        left: "auto",
-                        right: "auto",
-                        bottom: "auto",
-                        border: "none",
-                        background: "none",
-                        padding: 0,
-                        width: "90%",
-                        maxWidth: 480,
-                        maxHeight: "80vh",
-                        margin: "0 auto",
-                        overflow: "auto",
-                    },
-                }}
+                className="outline-none"
+                overlayClassName="fixed inset-0 bg-black/60 z-[1000] flex items-center justify-center p-4"
+                shouldCloseOnOverlayClick={true}
             >
-                <Paper
-                    elevation={3}
-                    sx={{
-                        p: 5,
-                        bgcolor: "#f5f5f5",
-                        borderRadius: 5,
-                        boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
-                    }}
-                >
-                    <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 5 }}>
-                        <Typography variant="subtitle1" sx={{ color: "#333", fontWeight: "bold" }}>
+                <div className="bg-white dark:bg-zinc-900 rounded-lg shadow-xl w-full max-w-md overflow-hidden outline-none">
+                    {/* Header */}
+                    <div className="flex justify-between items-center p-4 border-b dark:border-zinc-800">
+                        <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100">
                             Share This Movie
-                        </Typography>
-                        <IconButton onClick={closeModal} sx={{ p: 0.5 }}>
-                            <Typography variant="body1" sx={{ color: "#666", cursor: "pointer", fontWeight: "bold" }}>
-                                ×
-                            </Typography>
-                        </IconButton>
-                    </Box>
-                    <Box sx={{ display: "grid", gridTemplateColumns: { xs: "repeat(2, 1fr)", sm: "repeat(3, 1fr)" }, gap: 1 }}>
-                        {sharePlatforms.map((platform) => {
-                            const ShareButtonComponent = platform.component;
-                            const ShareIconComponent = platform.icon;
+                        </h3>
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={closeModal}
+                            className="h-8 w-8"
+                        >
+                            <X className="h-5 w-5" />
+                        </Button>
+                    </div>
 
-                            return (
-                                <Box key={platform.name}>
-                                    <ShareButtonComponent
-                                        url={movieUrl}
-                                        title={movieTitle}
-                                        quote={movieTitle}
-                                        hashtag="#movie"
-                                        style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "100%" }}
-                                    >
-                                        <Stack spacing={1} alignItems={"center"}>
-                                            <ShareIconComponent size={32} round />
-                                            <Typography variant="body2" sx={{ color: "#333" }}>
+                    {/* Content */}
+                    <div className="p-6">
+                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-6">
+                            {sharePlatforms.map((platform) => {
+                                const ShareButtonComponent = platform.component;
+                                const ShareIconComponent = platform.icon;
+
+                                return (
+                                    <div key={platform.name} className="flex justify-center">
+                                        <ShareButtonComponent
+                                            url={movieUrl}
+                                            title={movieTitle}
+                                            quote={movieTitle}
+                                            hashtag="#movie"
+                                            className="flex flex-col items-center gap-2 group outline-none"
+                                        >
+                                            <ShareIconComponent size={40} round className="transition-transform group-hover:scale-110" />
+                                            <span className="text-xs text-gray-600 dark:text-gray-400 font-medium">
                                                 {platform.name}
-                                            </Typography>
-                                        </Stack>
-                                    </ShareButtonComponent>
-                                </Box>
-                            );
-                        })}
-                    </Box>
-                    <Box sx={{ p: 1, textAlign: "left", mt: 1 }}>
-                        <Typography
-                            variant="subtitle1"
-                            sx={{ color: "black", fontWeight: "bold" }}
-                        >
-                            Movie Link:
-                        </Typography>
-                        <Stack direction={"row"}
-                            sx={{
-                                p: 1,
-                                bgcolor: "white",
-                                borderRadius: 4,
-                                mt: 2,
-                                border: "1px solid #ddd",
-                            }}
-                        >
-                            <Typography
-                                variant="caption"
-                                sx={{ color: "#666", wordBreak: "break-word" }}
-                            >
-                                {movieUrl}
-                            </Typography>
-                            <IconButton
+                                            </span>
+                                        </ShareButtonComponent>
+                                    </div>
+                                );
+                            })}
+                        </div>
 
-                            >
-                                <ContentCopy onClick={handleCopyLink} sx={{ color: "#666" }} />
-                            </IconButton>
-                        </Stack>
-                    </Box>
-                </Paper>
+                        <div className="space-y-2">
+                            <p className="font-semibold text-sm text-gray-900 dark:text-gray-100">
+                                Movie Link:
+                            </p>
+                            <div className="flex items-center gap-2 p-2 bg-gray-100 dark:bg-zinc-800 rounded-md border border-gray-200 dark:border-zinc-700">
+                                <p className="text-xs text-gray-600 dark:text-gray-400 truncate flex-1 font-mono">
+                                    {movieUrl}
+                                </p>
+                                <Button
+                                    size="icon"
+                                    variant="ghost"
+                                    className="h-8 w-8 shrink-0 text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100"
+                                    onClick={handleCopyLink}
+                                >
+                                    <Copy className="h-4 w-4" />
+                                </Button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </Modal>
-        </Box>
+        </div>
     );
 };
 

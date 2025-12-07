@@ -1,8 +1,9 @@
-import { Box, CircularProgress, Alert } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 import { SwiperSlide } from "swiper/react";
 import NavigationSwiper from "./NavigationSwiper";
 import axios from "axios";
+import { Loader2 } from "lucide-react";
+import { Alert, AlertDescription } from "../ui/alert";
 
 const MediaVideo = ({ video }) => {
   const iframeRef = useRef();
@@ -22,7 +23,7 @@ const MediaVideo = ({ video }) => {
   }, [video]);
 
   return (
-    <Box sx={{ height: "max-content" }}>
+    <div className="h-max">
       <iframe
         key={video.id.videoId}
         src={`https://www.youtube.com/embed/${video.id.videoId}`}
@@ -33,7 +34,7 @@ const MediaVideo = ({ video }) => {
         allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
         allowFullScreen
       ></iframe>
-    </Box>
+    </div>
   );
 };
 
@@ -42,7 +43,7 @@ const MediaVideosSlide = ({ slug }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const API_KEY = "AIzaSyBZ7D6i-Zlhs6Ua7Fp9kOcsbCaLyLLSNcs"; // Thay thế API key của bạn ở đây
+  const API_KEY = "AIzaSyBZ7D6i-Zlhs6Ua7Fp9kOcsbCaLyLLSNcs"; // Replace with your API key
 
   useEffect(() => {
     const fetchYouTubeVideos = async () => {
@@ -79,15 +80,15 @@ const MediaVideosSlide = ({ slug }) => {
   return (
     <>
       {error && (
-        <Alert severity="error" sx={{ mb: 2 }}>
-          {error}
+        <Alert variant="destructive" className="mb-2">
+          <AlertDescription>{error}</AlertDescription>
         </Alert>
       )}
 
       {loading ? (
-        <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>
-          <CircularProgress />
-        </Box>
+        <div className="flex justify-center py-4">
+          <Loader2 className="animate-spin text-primary" size={32} />
+        </div>
       ) : (
         videos.length > 0 && (
           <NavigationSwiper>

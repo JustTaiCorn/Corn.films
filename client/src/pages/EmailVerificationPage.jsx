@@ -2,17 +2,10 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { toast } from "react-toastify";
-import {
-    Box,
-    Button,
-    TextField,
-    Typography,
-    Paper,
-    Stack,
-    CircularProgress,
-} from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import { verifyEmail } from "../redux/features/userThunks";
+import { Button } from "@/components/ui/button";
+import { Loader2 } from "lucide-react";
 
 const EmailVerificationPage = () => {
     const [code, setCode] = useState(["", "", "", "", "", ""]);
@@ -24,7 +17,6 @@ const EmailVerificationPage = () => {
     const handleChange = (index, value) => {
         const newCode = [...code];
 
-        // Handle pasted content
         if (value.length > 1) {
             const pastedCode = value.slice(0, 6).split("");
             for (let i = 0; i < 6; i++) {
@@ -71,134 +63,58 @@ const EmailVerificationPage = () => {
     }, [code]);
 
     return (
-        <Box
-            sx={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                minHeight: "100vh",
-                backgroundColor: "rgba(0, 0, 0, 0.1)", // Giữ hiệu ứng backdrop mờ
-            }}
-        >
+        <div className="flex justify-center items-center min-h-screen bg-black/10">
             <motion.div
                 initial={{ opacity: 0, y: -50 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
+                className="w-full max-w-sm px-4"
             >
-                <Paper
-                    elevation={8}
-                    sx={{
-                        padding: 4,
-                        maxWidth: 400,
-                        width: "100%",
-                        backgroundColor: "rgba(33, 33, 33, 0.8)", // Tương tự bg-gray-800 bg-opacity-50
-                        backdropFilter: "blur(10px)",
-                        borderRadius: 2,
-                    }}
-                >
-                    <Typography
-                        variant="h5"
-                        align="center"
-                        sx={{
-                            fontWeight: "bold",
-                            background: "red",
-                            WebkitBackgroundClip: "text",
-                            WebkitTextFillColor: "transparent",
-                            mb: 2,
-                        }}
-                    >
+                <div className="bg-zinc-800/80 backdrop-blur-md rounded-lg shadow-xl p-8 w-full">
+                    <h2 className="text-2xl font-bold text-center mb-2 bg-gradient-to-r from-red-600 to-red-500 bg-clip-text text-transparent">
                         Verify Your Email
-                    </Typography>
-                    <Typography
-                        variant="body2"
-                        align="center"
-                        sx={{ color: "gray", mb: 3 }}
-                    >
+                    </h2>
+                    <p className="text-center text-gray-400 mb-6 text-sm">
                         Enter the 6-digit code sent to your email address.
-                    </Typography>
+                    </p>
 
                     <form onSubmit={handleSubmit}>
-                        <Stack direction="row" spacing={2} justifyContent="space-between">
+                        <div className="flex justify-between gap-2 mb-6">
                             {code.map((digit, index) => (
-                                <TextField
+                                <input
                                     key={index}
-                                    inputRef={(el) => (inputRefs.current[index] = el)}
+                                    ref={(el) => (inputRefs.current[index] = el)}
                                     type="text"
-                                    inputProps={{ maxLength: 1 }}
+                                    maxLength="6"
                                     value={digit}
                                     onChange={(e) => handleChange(index, e.target.value)}
                                     onKeyDown={(e) => handleKeyDown(index, e)}
-                                    variant="outlined"
-                                    size="small"
-                                    sx={{
-                                        width: 50,
-                                        "& .MuiOutlinedInput-root": {
-                                            borderRadius: "8px",
-                                            backgroundColor: "#424242",
-                                            color: "white",
-                                            fontWeight: "bold",
-                                            "& fieldset": {
-                                                borderColor: "#616161",
-                                            },
-                                            "&:hover fieldset": {
-                                                borderColor: "red",
-                                            },
-                                            "&.Mui-focused fieldset": {
-                                                borderColor: "red",
-                                            },
-                                        },
-                                        "& .MuiInputBase-input": {
-                                            textAlign: "center",
-                                            fontSize: "1.5rem",
-                                        },
-                                    }}
+                                    className="w-10 h-12 text-center text-xl font-bold bg-zinc-700 text-white border-2 border-zinc-600 rounded-lg focus:border-red-500 focus:outline-none transition-colors"
                                 />
                             ))}
-                        </Stack>
+                        </div>
 
                         {error && (
-                            <Typography
-                                variant="body2"
-                                sx={{ color: "red", mt: 2, fontWeight: "medium" }}
-                            >
+                            <p className="text-red-500 text-sm mb-4 font-medium text-center">
                                 {error}
-                            </Typography>
+                            </p>
                         )}
 
                         <Button
                             type="submit"
-                            variant="contained"
-                            fullWidth
                             disabled={isLoading || code.some((digit) => !digit)}
-                            sx={{
-                                mt: 3,
-                                py: 1.5,
-                                background: "red", //
-                                color: "white",
-                                fontWeight: "bold",
-                                borderRadius: "8px",
-                                textTransform: "none",
-                                "&:hover": {
-                                    background: "linear-gradient(to right, #ff416c, #ff4b2b)",
-                                },
-                                "&:focus": {
-                                    ring: "2px solid red",
-                                },
-                                "&:disabled": {
-                                    opacity: 0.5,
-                                },
-                            }}
+                            className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-lg shadow-lg hover:shadow-red-500/20 transition-all disabled:opacity-50"
                         >
                             {isLoading ? (
-                                <CircularProgress size={24} color="inherit" />
+                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                             ) : (
                                 "Verify Email"
                             )}
                         </Button>
                     </form>
-                </Paper>
+                </div>
             </motion.div>
-        </Box>
+        </div>
     );
 };
 

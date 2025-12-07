@@ -1,4 +1,4 @@
-import { Avatar } from "@mui/material";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 const TextAvatar = ({ text }) => {
   const stringToColor = (str) => {
@@ -20,14 +20,13 @@ const TextAvatar = ({ text }) => {
   };
 
   return (
-    <Avatar
-      sx={{
-        backgroundColor: stringToColor(text),
-        width: 40,
-        height: 40
-      }}
-    >
-      {`${text.split(" ")[0][0]}`}
+    <Avatar className="w-10 h-10">
+      <AvatarFallback
+        style={{ backgroundColor: stringToColor(text) }}
+        className="text-white font-semibold"
+      >
+        {text.split(" ")[0][0]}
+      </AvatarFallback>
     </Avatar>
   );
 };

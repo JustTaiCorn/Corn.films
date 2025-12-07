@@ -1,4 +1,3 @@
-import { Box, Typography } from "@mui/material";
 import mediaApi from "../api/modules/media.api";
 import CategoryGrid from "../components/common/CategoryGrid";
 import { useQuery } from "@tanstack/react-query";
@@ -15,11 +14,11 @@ export default function MediaCoutries() {
     });
     const items = data?.items;
     return (
-        <Box sx={{ textAlign: "center", mt: 10 }}>
-            <Typography variant="h5" sx={{ fontWeight: 'bold' }}>Quốc Gia</Typography>
-            <Typography variant="h6" sx={{ opacity: 0.5, fontSize: 16 }}>Chọn 1 Quốc gia bên dưới😘</Typography>
+        <div className="text-center mt-20 px-5 text-foreground">
+            <h5 className="font-bold text-2xl mb-2">Quốc Gia</h5>
+            <h6 className="opacity-50 text-base mb-8">Chọn 1 Quốc gia bên dưới😘</h6>
 
             <CategoryGrid items={items} />
-        </Box>
+        </div>
     )
 };

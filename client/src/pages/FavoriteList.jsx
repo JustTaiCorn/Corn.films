@@ -1,19 +1,16 @@
-import DeleteIcon from "@mui/icons-material/Delete";
-import { LoadingButton } from "@mui/lab";
-import { Box, Button, Grid } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import MediaItem from "../components/common/MediaItem";
 import Container from "../components/common/Container";
-import uiConfigs from "../api/configs/ui.configs";
 import favoriteApi from "../api/modules/favorite.api";
 import { setGlobalLoading } from "../redux/features/globalLoadingSlice";
 import { removeFavorite } from "../redux/features/userSlice";
+import { Button } from "@/components/ui/button";
+import { Loader2, Trash2 } from "lucide-react";
 
 const FavoriteItem = ({ media, onRemoved }) => {
   const dispatch = useDispatch();
-
   const [onRequest, setOnRequest] = useState(false);
 
   const onRemove = async () => {
@@ -29,20 +26,20 @@ const FavoriteItem = ({ media, onRemoved }) => {
       onRemoved(media.id);
     }
   };
-  return (<>
-    <MediaItem media={media} />
-    <LoadingButton
-      fullWidth
-      variant="contained"
-      sx={{ marginTop: 2 }}
-      startIcon={<DeleteIcon />}
-      loadingPosition="start"
-      loading={onRequest}
-      onClick={onRemove}
-    >
-      remove
-    </LoadingButton>
-  </>);
+
+  return (
+    <div className="flex flex-col gap-2">
+      <MediaItem media={media} />
+      <Button
+        className="w-full bg-red-600 hover:bg-red-700"
+        onClick={onRemove}
+        disabled={onRequest}
+      >
+        {onRequest ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Trash2 className="mr-2 h-4 w-4" />}
+        remove
+      </Button>
+    </div>
+  );
 };
 
 const FavoriteList = () => {
@@ -52,7 +49,6 @@ const FavoriteList = () => {
   const [count, setCount] = useState(0);
 
   const dispatch = useDispatch();
-
   const skip = 8;
 
   useEffect(() => {
@@ -70,6 +66,7 @@ const FavoriteList = () => {
           mediaId: item.mediaId,
           time: item.mediaTime,
           year: item.mediaYear,
+          id: item.id // Ensure ID works for removal filtering
         }));
 
         setCount(transformedMedias.length);
@@ -94,20 +91,22 @@ const FavoriteList = () => {
   };
 
   return (
-    <Box sx={{ ...uiConfigs.style.mainContent }}>
+    <div className="mt-20 max-w-[1366px] mx-auto px-5 md:px-0 text-foreground">
       <Container header={`Your favorites (${count})`}>
-        <Grid container spacing={1} sx={{ marginRight: "-8px!important" }}>
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
           {filteredMedias.map((media, index) => (
-            <Grid item xs={6} sm={4} md={3} key={index}>
+            <div key={index}>
               <FavoriteItem media={media} onRemoved={onRemoved} />
-            </Grid>
+            </div>
           ))}
-        </Grid>
+        </div>
         {filteredMedias.length < medias.length && (
-          <Button onClick={onLoadMore}>load more</Button>
+          <div className="flex justify-center mt-8">
+            <Button variant="secondary" onClick={onLoadMore}>load more</Button>
+          </div>
         )}
       </Container>
-    </Box>
+    </div>
   );
 };
 

@@ -1,26 +1,19 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Link, useNavigate } from "react-router-dom"; // Added useNavigate
-import {
-    Box,
-    Button,
-    Typography,
-    Container,
-    Paper,
-    CircularProgress,
-} from "@mui/material";
-import { Lock, Mail } from "@mui/icons-material";
-import Input from "../components/common/Input"; // Using the same Input component
-import { useSelector, useDispatch } from "react-redux"; // Added useDispatch
+import { Link, useNavigate } from "react-router-dom";
+import { Lock, Mail, Loader2 } from "lucide-react";
+import Input from "../components/common/Input";
+import { useSelector, useDispatch } from "react-redux";
 import { login } from "../redux/features/userThunks";
 import { toast } from "react-toastify";
 import { setError } from "../redux/features/userSlice";
+import { Button } from "@/components/ui/button";
 
 const LoginPage = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
-    const dispatch = useDispatch(); 
+    const dispatch = useDispatch();
     const { isLoading } = useSelector((state) => state.user);
 
     const handleLogin = async (e) => {
@@ -40,49 +33,19 @@ const LoginPage = () => {
     };
 
     return (
-        <Container
-            maxWidth="sm"
-            sx={{
-                minHeight: "100vh",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                px: { xs: 2, sm: 3 },
-            }}
-        >
+        <div className="min-h-screen flex items-center justify-center px-4 sm:px-6">
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
-                style={{ width: "100%" }}
+                className="w-full max-w-sm"
             >
-                <Paper
-                    elevation={3}
-                    sx={{
-                        p: { xs: 2, sm: 3, md: 4 },
-                        backgroundColor: "rgba(66, 66, 66, 0.9)",
-                        backdropFilter: "blur(10px)",
-                        borderRadius: 2,
-                        maxWidth: 480,
-                        mx: "auto",
-                    }}
-                >
-                    <Typography
-                        variant="h4"
-                        align="center"
-                        sx={{
-                            mb: { xs: 2, sm: 4 },
-                            fontWeight: "bold",
-                            background: "red",
-                            WebkitBackgroundClip: "text",
-                            WebkitTextFillColor: "transparent",
-                            fontSize: { xs: "1.5rem", sm: "2rem" },
-                        }}
-                    >
+                <div className="bg-zinc-800/90 backdrop-blur-md rounded-lg shadow-xl p-6 sm:p-8">
+                    <h1 className="text-3xl sm:text-4xl font-bold text-center mb-6 sm:mb-8 bg-gradient-to-r from-red-600 to-red-500 bg-clip-text text-transparent">
                         Welcome Back
-                    </Typography>
+                    </h1>
 
-                    <Box component="form" onSubmit={handleLogin} sx={{ mt: 1 }}>
+                    <form onSubmit={handleLogin} className="flex flex-col gap-4">
                         <Input
                             icon={Mail}
                             type="email"
@@ -99,90 +62,42 @@ const LoginPage = () => {
                             onChange={(e) => setPassword(e.target.value)}
                         />
 
-                        <Box
-                            sx={{
-                                display: "flex",
-                                justifyContent: "flex-start",
-                                mb: { xs: 2, sm: 3 },
-                            }}
-                        >
+                        <div className="flex justify-start">
                             <Link
                                 to="/forgot-password"
-                                style={{ textDecoration: "none" }}
+                                className="text-xs sm:text-sm text-red-500 hover:underline"
                             >
-                                <Typography
-                                    variant="body2"
-                                    sx={{
-                                        color: "red",
-                                        "&:hover": { textDecoration: "underline" },
-                                        fontSize: { xs: "0.75rem", sm: "0.875rem" },
-                                    }}
-                                >
-                                    Forgot password?
-                                </Typography>
+                                Forgot password?
                             </Link>
-                        </Box>
+                        </div>
+
                         <Button
-                            component={motion.button}
-                            whileHover={{ scale: 1.02 }}
-                            whileTap={{ scale: 0.98 }}
                             type="submit"
-                            fullWidth
-                            variant="contained"
                             disabled={isLoading}
-                            sx={{
-                                mt: { xs: 2, sm: 3 },
-                                mb: 2,
-                                py: { xs: 1, sm: 1.5 },
-                                background: "red",
-                                "&:hover": {
-                                    background: "red",
-                                },
-                                fontSize: { xs: "0.875rem", sm: "1rem" },
-                            }}
+                            className="w-full bg-red-600 hover:bg-red-700 text-white font-medium py-2 text-sm sm:text-base"
                         >
                             {isLoading ? (
-                                <CircularProgress size={24} color="inherit" />
+                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                             ) : (
                                 "Login"
                             )}
                         </Button>
 
-                        <Box
-                            sx={{
-                                textAlign: "center",
-                                mt: { xs: 1, sm: 2 },
-                                py: 2,
-                                bgcolor: "rgba(33, 33, 33, 0.5)",
-                            }}
-                        >
-                            <Typography
-                                variant="body2"
-                                color="text.secondary"
-                                sx={{ fontSize: { xs: "0.75rem", sm: "0.875rem" } }}
-                            >
-                                Don&#39;t have an account?{" "}
+                        <div className="bg-zinc-800/50 p-4 rounded text-center mt-4">
+                            <p className="text-xs sm:text-sm text-gray-400">
+                                Don't have an account?{" "}
                                 <Link
                                     to="/sign-up"
-                                    style={{ color: "red", textDecoration: "none" }}
+                                    className="text-red-500 hover:underline"
                                 >
-                                    <Typography
-                                        component="span"
-                                        sx={{
-                                            color: "red",
-                                            "&:hover": { textDecoration: "underline" },
-                                            fontSize: "inherit",
-                                        }}
-                                    >
-                                        Sign up
-                                    </Typography>
+                                    Sign up
                                 </Link>
-                            </Typography>
-                        </Box>
-                    </Box>
-                </Paper>
+                            </p>
+                        </div>
+                    </form>
+                </div>
             </motion.div>
-        </Container>
+        </div>
     );
 };
 
