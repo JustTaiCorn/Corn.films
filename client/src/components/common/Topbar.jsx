@@ -60,12 +60,12 @@ export default function Topbar() {
     }
 
     return (
-        <div className="hidden md:flex items-center justify-between mx-auto my-4 h-[70px] max-w-[100vw] pr-8 relative">
+        <div className="hidden md:flex items-center justify-between mx-auto my-4 h-[70px] relative">
             <div
                 className="flex items-center relative flex-1 max-w-[500px]"
                 ref={searchRef}
             >
-                <div className="w-full max-w-[400px] min-w-[250px] flex items-center relative gap-2">
+                <div className="w-full min-w-[350px] flex items-center relative gap-2">
                     <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                     <Input
                         className="pl-9 pr-10"
@@ -90,7 +90,7 @@ export default function Topbar() {
 
                 {/* Search Results Dropdown */}
                 {data?.items && (debouncedQuery.trim().length > 0) && (
-                    <div className="absolute top-full left-0 w-[80%] max-h-[70vh] mt-4 rounded-lg shadow-lg bg-popover z-[1300] border overflow-hidden">
+                    <div className="absolute top-full left-0 w-full max-h-[70vh] mt-4 rounded-lg shadow-lg bg-popover z-[1300] border overflow-hidden">
                         {isLoading ? (
                             <div className="flex justify-center p-4">
                                 <Loader2 className="h-6 w-6 animate-spin text-primary" />
@@ -131,20 +131,6 @@ export default function Topbar() {
                         ) : null}
                     </div>
                 )}
-            </div>
-
-            <div className="flex items-center gap-2">
-                <Button variant="ghost" size="icon" className="relative text-foreground">
-                    <Badge variant="destructive" className="absolute -top-1 -right-1 h-4 w-4 p-0 items-center justify-center text-[10px]">3</Badge>
-                    <Bell className="h-5 w-5" />
-                </Button>
-                <div title="Tài khoản">
-                    <Button variant="ghost" size="icon" className="rounded-full">
-                        <Avatar className="h-8 w-8">
-                            <AvatarFallback className="bg-primary text-primary-foreground">U</AvatarFallback>
-                        </Avatar>
-                    </Button>
-                </div>
             </div>
         </div>
     );

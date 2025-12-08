@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const Paginations = ({ currentPage, totalPages, onPageChange }) => {
-    // Generate page numbers to display
     const getPageNumbers = () => {
         const pages = [];
         const maxPagesToShow = 5;
@@ -52,9 +51,8 @@ const Paginations = ({ currentPage, totalPages, onPageChange }) => {
                     key={index}
                     variant={page === currentPage ? "default" : "outline"}
                     size="sm"
-                    onClick={() => typeof page === 'number' ? onPageChange(page) : null}
-                    disabled={typeof page !== 'number'}
-                    className={typeof page !== 'number' ? "cursor-default border-none hover:bg-transparent" : "w-10"}
+                    onClick={() => onPageChange(page)}
+                    className="cursor-default border-none hover:bg-transparent w-10"
                 >
                     {page}
                 </Button>

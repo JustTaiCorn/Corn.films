@@ -40,8 +40,8 @@ const LoginPage = () => {
                 transition={{ duration: 0.5 }}
                 className="w-full max-w-sm"
             >
-                <div className="bg-zinc-800/90 backdrop-blur-md rounded-lg shadow-xl p-6 sm:p-8">
-                    <h1 className="text-3xl sm:text-4xl font-bold text-center mb-6 sm:mb-8 bg-gradient-to-r from-red-600 to-red-500 bg-clip-text text-transparent">
+                <div className="bg-white/90 backdrop-blur-md rounded-lg shadow-xl p-6 sm:p-8 dark:bg-zinc-800/90">
+                    <h1 className="text-3xl sm:text-4xl font-bold text-center mb-6 sm:mb-8 text-black">
                         Welcome Back
                     </h1>
 
@@ -65,7 +65,7 @@ const LoginPage = () => {
                         <div className="flex justify-start">
                             <Link
                                 to="/forgot-password"
-                                className="text-xs sm:text-sm text-red-500 hover:underline"
+                                className="text-xs sm:text-sm text-black hover:underline"
                             >
                                 Forgot password?
                             </Link>
@@ -83,12 +83,12 @@ const LoginPage = () => {
                             )}
                         </Button>
 
-                        <div className="bg-zinc-800/50 p-4 rounded text-center mt-4">
-                            <p className="text-xs sm:text-sm text-gray-400">
+                        <div className="text-center mt-4">
+                            <p className="text-xs sm:text-sm text-black dark:text-white">
                                 Don't have an account?{" "}
                                 <Link
                                     to="/sign-up"
-                                    className="text-red-500 hover:underline"
+                                    className="text-black hover:underline"
                                 >
                                     Sign up
                                 </Link>

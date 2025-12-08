@@ -4,7 +4,7 @@ const Input = ({ ...props }) => {
     return (
         <ShadcnInput
             {...props}
-            className="bg-white text-black border-zinc-700 focus-visible:ring-green-500 focus-visible:border-green-500 hover:border-green-500 rounded-sm"
+            className="bg-white text-black border-zinc-700 focus-visible:ring-gray-800 focus-visible:border-gray-500 hover:border-gray-500 rounded-sm"
         />
     );
 };

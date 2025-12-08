@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 
 const Footer = () => {
   return (
-    <div className="mt-8 mb-4 ml-0 w-full max-w-[80%] rounded-none bg-card p-6 shadow-lg md:ml-[17%] md:rounded-2xl md:p-8">
+    <div className="relative mt-8 mb-4 bg-card p-6 shadow-lg mx-auto w-[95%] rounded-xl md:ml-[340px] md:w-auto md:mr-8 md:rounded-2xl md:p-8">
       <div className="mx-auto flex max-w-[1200px] flex-col gap-8">
         {/* Phần trên: Logo, mô tả, menu, liên hệ */}
         <div className="flex flex-col items-start justify-between gap-8 md:flex-row">
@@ -12,7 +12,7 @@ const Footer = () => {
           <div className="flex max-w-full flex-col items-center gap-4 md:max-w-[400px] md:items-start">
             <Logo />
             <p className="text-center text-sm text-muted-foreground md:text-left">
-              Toàn bộ nội dung trên trang web này được tổng hợp từ các nền tảng video chính thống trên Internet và không cung cấp dịch vụ phát trực tuyến chính thức. Nếu bạn phát hiện quyền lợi của mình bị xâm phạm, vui lòng thông báo cho chúng tôi.
+              Toàn bộ nội dung trên trang web này được tổng hợp từ các nền tảng video  trên Internet và không cung cấp dịch vụ phát trực tuyến chính thức. Nếu bạn phát hiện quyền lợi của mình bị xâm phạm, vui lòng thông báo cho chúng tôi.
             </p>
           </div>
           {/* Thông tin liên hệ */}
@@ -30,17 +30,17 @@ const Footer = () => {
               Địa chỉ: 123 Đường ABC, Quận XYZ, TP.Hà Nội
             </p>
             {/* Các icon mạng xã hội */}
-            <div className="flex gap-4">
-              <Button variant="outline" size="icon" className="text-primary border-muted-foreground/20 hover:bg-primary/10">
+            <div className="flex gap-4 text-primary border-muted-foreground/20">
+              <Button variant="outline" size="icon" className=" hover:bg-primary/10">
                 <Facebook className="h-4 w-4" />
               </Button>
-              <Button variant="outline" size="icon" className="text-primary border-muted-foreground/20 hover:bg-primary/10">
+              <Button variant="outline" size="icon" className=" hover:bg-primary/10">
                 <Instagram className="h-4 w-4" />
               </Button>
-              <Button variant="outline" size="icon" className="text-primary border-muted-foreground/20 hover:bg-primary/10">
+              <Button variant="outline" size="icon" className=" hover:bg-primary/10">
                 <Twitter className="h-4 w-4" />
               </Button>
-              <Button variant="outline" size="icon" className="text-primary border-muted-foreground/20 hover:bg-primary/10">
+              <Button variant="outline" size="icon" className=" hover:bg-primary/10">
                 <Github className="h-4 w-4" />
               </Button>
             </div>

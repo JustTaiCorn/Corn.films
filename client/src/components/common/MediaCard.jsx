@@ -11,7 +11,7 @@ const MediaCard = ({ mediaType }) => {
     return (
         <div className="[&_.swiper-slide]:w-1/2 [&_.swiper-slide]:sm:w-1/2 [&_.swiper-slide]:md:w-1/2 [&_.swiper-slide]:lg:w-[32.5%]">
             <Swiper
-                slidesPerView="auto"
+                slidesPerView="3"
                 spaceBetween={10}
             >
                 {medias?.map((media, index) => (
@@ -46,10 +46,10 @@ const MediaCard = ({ mediaType }) => {
                                         <p className="text-[#ddd] text-xs line-clamp-1 overflow-hidden text-ellipsis">
                                             {media.origin_name || media.subtitle || ''}
                                         </p>
-                                        <div className="flex flex-row flex-wrap gap-2"> // Corrected spacing syntax
-                                            <p className="text-[#bbb] text-[11px]">{media.episode_current}</p>
-                                            <p className="text-[#bbb] text-[11px]">{media.year}</p>
-                                            <p className="text-[#bbb] text-[11px]">{media.time}</p>
+                                        <div className="flex flex-row flex-wrap gap-2 text-sm text-[#bbb]">
+                                            <p  >{media.episode_current}</p>
+                                            <p  >{media.year}</p>
+                                            <p  >{media.time}</p>
                                         </div>
                                     </div>
                                 </div>

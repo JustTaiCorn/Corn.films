@@ -1,4 +1,5 @@
 import privateClient from "../client/private.client";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 const reviewApi = {
   add: async ({ mediaId, mediaTitle, mediaPoster, content, mediaSlug }) => {
     try {
@@ -45,17 +46,6 @@ const reviewApi = {
     }
   },
 
-  reply: async ({ reviewId, content }) => {
-    try {
-      const response = await privateClient.post(`reviews/reply/${reviewId}`, {
-        content,
-      });
-
-      return { response: response.data };
-    } catch (err) {
-      return { err };
-    }
-  },
   like: async ({ reviewId }) => {
     try {
       const response = await privateClient.post(`reviews/like/${reviewId}`);
@@ -74,6 +64,46 @@ const reviewApi = {
       return { err };
     }
   },
+};
+
+export const useReviews = ({ mediaId }) => {
+  return useQuery({
+    queryKey: ["reviews", mediaId],
+    queryFn: () => reviewApi.getReviewsByMediaId(mediaId),
+    enabled: !!mediaId,
+  });
+};
+
+export const useAddReview = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: reviewApi.add,
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries(["reviews", variables.mediaId]);
+    },
+  });
+};
+
+export const useRemoveReview = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: reviewApi.remove,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["reviews"] });
+    },
+  });
+};
+
+export const useLikeReview = () => {
+  return useMutation({
+    mutationFn: reviewApi.like,
+  });
+};
+
+export const useDislikeReview = () => {
+  return useMutation({
+    mutationFn: reviewApi.dislike,
+  });
 };
 
 export default reviewApi;
