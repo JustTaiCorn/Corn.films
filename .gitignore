@@ -88,3 +88,5 @@ vendor/
 *.tmp
 *.swp
 *.swo
+
+.env
