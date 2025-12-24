@@ -1,6 +1,9 @@
 import bcryptjs from "bcryptjs";
 import crypto from "crypto";
-import { generateTokenAndSetCookie } from "../utils/generateTokenAndSetCookie.js";
+import {
+  generateTokenAndSetCookie,
+  REFRESH_TOKEN_TTL,
+} from "../utils/generateTokenAndSetCookie.js";
 import {
   sendPasswordResetEmail,
   sendResetSuccessEmail,
@@ -8,6 +11,7 @@ import {
   sendWelcomeEmail,
 } from "../mailtrap/emails.js";
 import { User } from "../models/user.model.js";
+import { Session } from "../models/Session.js";
 
 export const signup = async (req, res) => {
   const { email, password, username } = req.body;
@@ -18,8 +22,6 @@ export const signup = async (req, res) => {
     }
 
     const userAlreadyExists = await User.findOne({ email });
-    console.log("userAlreadyExists", userAlreadyExists);
-
     if (userAlreadyExists) {
       return res
         .status(400)
@@ -36,7 +38,7 @@ export const signup = async (req, res) => {
       password: hashedPassword,
       username,
       verificationToken,
-      verificationTokenExpiresAt: Date.now() + 24 * 60 * 60 * 1000, // 24 hours
+      verificationTokenExpiresAt: Date.now() + 24 * 60 * 60 * 1000,
     });
 
     await user.save();
@@ -97,8 +99,18 @@ export const verifyEmail = async (req, res) => {
 };
 
 export const logout = async (req, res) => {
-  res.clearCookie("token");
-  res.status(200).json({ success: true, message: "Logged out successfully" });
+  try {
+    const token = req.cookies?.refreshToken;
+    if (token) {
+      await Session.deleteOne({ refreshToken: token });
+    }
+    res.clearCookie("refreshToken");
+    res.clearCookie("token");
+    res.status(200).json({ success: true, message: "Logged out successfully" });
+  } catch (error) {
+    console.log("error in logout ", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
 };
 
 export const login = async (req, res) => {
@@ -125,8 +137,16 @@ export const login = async (req, res) => {
       });
     }
 
-    const token = generateTokenAndSetCookie(res, user._id);
-
+    const { accessToken, refreshToken } = generateTokenAndSetCookie(
+      res,
+      user._id
+    );
+    const session = new Session({
+      userId: user._id,
+      refreshToken,
+      expiresAt: Date.now() + REFRESH_TOKEN_TTL,
+    });
+    await session.save();
     user.lastLogin = new Date();
     await user.save();
 
@@ -137,7 +157,7 @@ export const login = async (req, res) => {
         ...user._doc,
         password: undefined,
       },
-      token,
+      accessToken,
     });
   } catch (error) {
     console.log("Error in login ", error);
@@ -300,5 +320,32 @@ export const updateProfile = async (req, res) => {
       success: false,
       message: "Failed to update profile",
     });
+  }
+};
+export const refreshToken = async (req, res) => {
+  try {
+    const token = req.cookies?.refreshToken;
+    if (!token) {
+      return res
+        .status(401)
+        .json({ success: false, message: "No refresh token provided" });
+    }
+    const session = await Session.findOne({ refreshToken: token });
+    if (!session) {
+      return res
+        .status(401)
+        .json({ success: false, message: "Invalid or expired refresh token" });
+    }
+
+    if (session.expiresAt < Date.now()) {
+      return res
+        .status(401)
+        .json({ message: "Refresh token expired", success: false });
+    }
+    const { accessToken } = generateTokenAndSetCookie(res, session.userId);
+    return res.status(200).json({ success: true, accessToken });
+  } catch (error) {
+    console.log("Error in refreshToken", error);
+    return res.status(500).json({ success: false, message: "Server error" });
   }
 };

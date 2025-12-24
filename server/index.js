@@ -24,9 +24,9 @@ app.use(
         callback(new Error("Not allowed by CORS"));
       }
     },
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Các phương thức HTTP được phép
-    allowedHeaders: ["Content-Type", "Authorization"], // Các header được phép
-    credentials: true, // Cho phép gửi cookie, token, v.v. nếu cần
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
   })
 );
 app.use(express.json());

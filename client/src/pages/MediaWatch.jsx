@@ -49,7 +49,7 @@ const MediaWatch = () => {
         fetchImages();
     }, [media]);
 
-    if (!media) return null; // Should handle null media better
+    if (!media) return null;
     if (isLoading) {
         return <GlobalLoading isLoading={isLoading} />
     }
@@ -119,7 +119,7 @@ const MediaWatch = () => {
                             ))}
                         </div>
 
-                        <p className="text-base leading-relaxed">
+                        <p className="text-base leading-relaxed text-wrap">
                             {content}
                         </p>
                     </div>

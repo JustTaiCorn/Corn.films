@@ -1,4 +1,4 @@
-import { lazy } from "react";
+import { lazy, useEffect, useState } from "react";
 import MediaCategory from "../pages/MediaCategory";
 import MediaCoutries from "../pages/MediaCoutries";
 import SignUpPage from "../pages/SignUpPage";
@@ -6,13 +6,14 @@ import LoginPage from "../pages/LoginPage";
 import EmailVerificationPage from "../pages/EmailVerificationPage";
 import ForgotPasswordPage from "../pages/ForgotPasswordPage";
 import { Navigate } from "react-router";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import MediaListByRequest from "../pages/MediaListByRequest";
 import ResetPasswordPage from "../pages/ResetPasswordPage";
 import FavoriteList from "../pages/FavoriteList";
 import ReviewList from "../pages/ReviewList";
 import ProfilePage from "../pages/ProfilePage";
 import ScheduleMedia from "../pages/ScheduleMedia";
+import { checkAuth, refreshToken } from "@/redux/features/userThunks";
 const HomePage = lazy(() => import("../pages/HomePage"));
 const MediaDetail = lazy(() => import("../pages/MediaDetail"));
 const MediaList = lazy(() => import("../pages/MediaList"));
@@ -38,13 +39,41 @@ const RedirectAuthenticatedUser = ({ children }) => {
 };
 
 const ProtectedRoute = ({ children }) => {
-  const { isAuthenticated, user } = useSelector((state) => state.user);
+  const { isAuthenticated, user, accessToken } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+  const [isInitializing, setIsInitializing] = useState(true);
+
+  useEffect(() => {
+    const init = async () => {
+      if (!accessToken) {
+        await dispatch(refreshToken());
+      }
+      if (accessToken && !user) {
+        await dispatch(checkAuth());
+      }
+      setIsInitializing(false);
+    };
+    init();
+  }, []);
+
+  if (isInitializing) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-white">
+        <div className="flex flex-col items-center space-y-4">
+          <div className="relative">
+            <div className="w-16 h-16 border-4 border-gray-200 border-t-gray-800 rounded-full animate-spin"></div>
+          </div>
+          <p className="text-gray-600 text-lg font-medium">Đang tải...</p>
+        </div>
+      </div>
+    );
+  }
 
   if (!isAuthenticated) {
     return <Navigate to='/log-in' replace />;
   }
 
-  if (!user.isVerified) {
+  if (user && !user.isVerified) {
     return <Navigate to='/verify-email' replace />;
   }
 

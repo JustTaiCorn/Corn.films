@@ -1,34 +1,34 @@
 import jwt from "jsonwebtoken";
 
 export const verifyToken = (req, res, next) => {
-  // Kiểm tra token từ cả cookie và header Authorization
-  const tokenFromCookie = req.cookies.token;
-  const tokenFromHeader = req.headers.authorization?.split(" ")[1];
-  const token = tokenFromHeader || tokenFromCookie;
+  const authHeader = req.headers.authorization;
+  const tokenFromHeader = authHeader?.split(" ")[1];
 
-  if (!token) {
+  if (!tokenFromHeader) {
     return res.status(401).json({
       success: false,
-      message: "Unauthorized - no token provided",
+      message: "Lỗi xác thực người dùng",
     });
   }
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(
+      tokenFromHeader,
+      process.env.ACCESS_TOKEN_SECRET
+    );
     if (!decoded) {
       return res.status(401).json({
         success: false,
-        message: "Unauthorized - invalid token",
+        message: "Lỗi xác thực người dùng",
       });
     }
 
     req.user = { id: decoded.userId };
     next();
   } catch (error) {
-    console.error("Error in verifyToken:", error);
-    return res.status(401).json({
+    return res.status(500).json({
       success: false,
-      message: "Unauthorized - invalid token",
+      message: "Lỗi hệ thống",
     });
   }
 };

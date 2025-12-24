@@ -1,5 +1,4 @@
-
-import { useDispatch, useSelector } from "react-redux";
+// import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer } from "react-toastify";
 
 import { BrowserRouter, Route, Routes } from "react-router-dom";
@@ -10,28 +9,15 @@ import "swiper/css/pagination";
 import routes from "./routes/routes";
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { Suspense, lazy, useEffect } from "react";
+// import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { Suspense, lazy } from "react";
 import GlobalLoading from "./components/common/GlobalLoading";
-import { checkAuth } from "./redux/features/userThunks";
+// import { checkAuth } from "./redux/features/userThunks";
 const MainLayout = lazy(() => import("./components/layout/MainLayout"));
 const PageWrapper = lazy(() => import("./components/common/PageWrapper"));
 
 const queryClient = new QueryClient();
 const App = () => {
-  const { themeMode } = useSelector((state) => state.themeMode);
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    const initializeAuth = async () => {
-      try {
-        await dispatch(checkAuth());
-      } catch (error) {
-        console.error('Auth check failed:', error);
-      }
-    };
-    initializeAuth();
-  }, [dispatch]);
 
   return (
     <>
@@ -48,7 +34,6 @@ const App = () => {
           closeOnClick
           pauseOnFocusLoss
           pauseOnHover
-          theme={themeMode}
         />
 
         {/* app routes */}

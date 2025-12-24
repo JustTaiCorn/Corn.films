@@ -18,7 +18,7 @@ const RecommendSlide = ({ category, country, year,
   return (
     <AutoSwiper>
       {medias.map((media, index) => (
-        <SwiperSlide key={index}>
+        <SwiperSlide key={index} >
           <MediaItem media={media} />
         </SwiperSlide>
       ))}

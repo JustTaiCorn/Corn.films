@@ -1,4 +1,5 @@
 import {
+  setAccessToken,
   setAuthState,
   setCheckingAuth,
   setError,
@@ -8,15 +9,20 @@ import {
 } from "./userSlice";
 import privateClient from "../../api/client/private.client";
 import { setGlobalLoading } from "./globalLoadingSlice";
+import store from "../store";
+import { toast } from "react-toastify";
 export const signup = (email, password, username) => async (dispatch) => {
   dispatch(setLoading(true));
   try {
-    const response = await privateClient.post(`/user/signup`, {
-      email,
-      password,
-      username,
-    });
-    // Không lưu trạng thái người dùng ngay sau khi đăng ký
+    const response = await privateClient.post(
+      `/user/signup`,
+      {
+        email,
+        password,
+        username,
+      },
+      { withCredentials: true }
+    );
     dispatch(
       setMessage("Đăng ký thành công. Vui lòng kiểm tra email để xác thực.")
     );
@@ -34,21 +40,24 @@ export const signup = (email, password, username) => async (dispatch) => {
 export const login = (email, password) => async (dispatch) => {
   dispatch(setLoading(true));
   try {
-    const response = await privateClient.post(`/user/login`, {
-      email,
-      password,
-    });
+    const response = await privateClient.post(
+      `/user/login`,
+      {
+        email,
+        password,
+      },
+      { withCredentials: true }
+    );
 
     if (!response.data.user.isVerified) {
       dispatch(setError("Vui lòng xác thực email trước khi đăng nhập"));
       return;
     }
-
-    localStorage.setItem("token", response.data.token);
     dispatch(
       setAuthState({
         user: response.data.user,
         isAuthenticated: true,
+        accessToken: response.data.accessToken,
       })
     );
     return response.data;
@@ -64,8 +73,10 @@ export const login = (email, password) => async (dispatch) => {
 export const logout = () => async (dispatch) => {
   dispatch(setGlobalLoading(true));
   try {
-    await privateClient.post(`/user/logout`);
-    dispatch(setAuthState({ user: null, isAuthenticated: false }));
+    await privateClient.post(`/user/logout`, { withCredentials: true });
+    dispatch(
+      setAuthState({ user: null, isAuthenticated: false, accessToken: null })
+    );
     dispatch(setListFavorites([]));
     dispatch(setGlobalLoading(false));
     localStorage.removeItem("token");
@@ -78,15 +89,9 @@ export const logout = () => async (dispatch) => {
 export const checkAuth = () => async (dispatch) => {
   dispatch(setCheckingAuth(true));
   try {
-    // Kiểm tra token trong localStorage
-    const token = localStorage.getItem("token");
-    if (!token) {
-      dispatch(setAuthState({ user: null, isAuthenticated: false }));
-      return;
-    }
-
-    // Gọi API kiểm tra auth với token
-    const response = await privateClient.get(`/user/check-auth`);
+    const response = await privateClient.get(`/user/check-auth`, {
+      withCredentials: true,
+    });
     if (response.data?.user) {
       dispatch(
         setAuthState({
@@ -95,20 +100,41 @@ export const checkAuth = () => async (dispatch) => {
         })
       );
     } else {
-      // Nếu không có user data, xóa token và set trạng thái chưa auth
-      localStorage.removeItem("token");
-      dispatch(setAuthState({ user: null, isAuthenticated: false }));
+      dispatch(
+        setAuthState({ user: null, isAuthenticated: false, accessToken: null })
+      );
     }
   } catch (error) {
-    // Nếu có lỗi, xóa token và set trạng thái chưa auth
-    localStorage.removeItem("token");
-    dispatch(setAuthState({ user: null, isAuthenticated: false }));
+    dispatch(
+      setAuthState({ user: null, isAuthenticated: false, accessToken: null })
+    );
     console.error("Check auth error:", error);
   } finally {
     dispatch(setCheckingAuth(false));
   }
 };
-
+export const refreshToken = () => async (dispatch) => {
+  dispatch(setLoading(true));
+  try {
+    const response = await privateClient.post(`/user/refresh-token`, {
+      withCredentials: true,
+    });
+    dispatch(setAccessToken(response.data.accessToken));
+    const { user } = store.getState().user;
+    if (!user) {
+      await dispatch(checkAuth());
+    }
+  } catch (error) {
+    dispatch(
+      setError(error.response?.data?.message || "Error refreshing token")
+    );
+    toast.error("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.");
+    await dispatch(logout());
+    throw error;
+  } finally {
+    dispatch(setLoading(false));
+  }
+};
 export const verifyEmail = (code) => async (dispatch) => {
   dispatch(setLoading(true));
   try {
@@ -117,6 +143,7 @@ export const verifyEmail = (code) => async (dispatch) => {
       setAuthState({
         user: response.data.user,
         isAuthenticated: true,
+        accessToken: response.data.accessToken,
       })
     );
     return response.data;

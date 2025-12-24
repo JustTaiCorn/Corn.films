@@ -1,16 +1,21 @@
 import jwt from "jsonwebtoken";
+import crypto from "crypto";
+const ACCESS_TOKEN_TTL = "30m";
+export const REFRESH_TOKEN_TTL = 14 * 24 * 60 * 60 * 1000;
 
 export const generateTokenAndSetCookie = (res, userId) => {
-  const token = jwt.sign({ userId }, process.env.JWT_SECRET, {
-    expiresIn: "7d",
+  const accessToken = jwt.sign({ userId }, process.env["ACCESS_TOKEN_SECRET"], {
+    expiresIn: ACCESS_TOKEN_TTL,
   });
 
-  res.cookie("token", token, {
+  const refreshToken = crypto.randomBytes(64).toString("hex");
+
+  res.cookie("refreshToken", refreshToken, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "strict",
-    maxAge: 7 * 24 * 60 * 60 * 1000,
+    maxAge: REFRESH_TOKEN_TTL,
   });
 
-  return token;
+  return { accessToken, refreshToken };
 };

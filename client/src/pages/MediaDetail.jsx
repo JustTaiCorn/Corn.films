@@ -168,7 +168,7 @@ const MediaDetail = () => {
   return (
     <>
       <ImageHeader imgPath={thumbUrl} />
-      <div className="text-foreground max-w-[1366px] mx-auto px-5 md:px-0 mt-[-10rem] md:mt-[-15rem] lg:mt-[-20rem] relative ">
+      <div className="text-foreground w-full max-w-[1366px] mt-[-5rem] mx-auto px-5 relative ">
         <div className="flex flex-col md:flex-row gap-8">
           {/* poster */}
           <div className="w-[70%]  md:w-[40%] mx-auto md:mx-0 shrink-0">

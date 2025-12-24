@@ -33,10 +33,10 @@ const MediaItem = ({ media, className }) => {
     : `https://img.ophim.live/uploads/movies/${poster_url}`;
 
   return (
-    <div className={cn("p-1 sm:p-2 m-0.5 w-full max-w-full min-h-[300px]  group", className)}>
+    <div className={cn("w-full group", className)}>
       <Link to={routesGen.mediaDetail(slug)} className="no-underline block">
-        {/* Poster Image */}
-        <div className="relative w-full h-[300px]    mb-2 overflow-hidden rounded-lg sm:rounded-xl shadow-md">
+        {/* Poster Image - Aspect ratio 2:3 (chuẩn poster phim) */}
+        <div className="relative w-full aspect-[2/3] mb-2 overflow-hidden rounded-lg shadow-md">
           <img
             loading="lazy"
             src={posterPath}
@@ -46,12 +46,12 @@ const MediaItem = ({ media, className }) => {
         </div>
 
         {/* Text content below poster */}
-        <div className="flex flex-col gap-0.5 mt-1 text-center h-[60px] sm:h-[70px]">
-          <h6 className="text-primary font-bold text-xs sm:text-sm md:text-base line-clamp-1 overflow-hidden text-ellipsis px-1">
+        <div className="flex flex-col gap-0.5 mt-1 text-center min-h-[45px] sm:min-h-[50px]">
+          <h6 className="text-primary font-bold text-xs sm:text-sm line-clamp-2 overflow-hidden px-1">
             {title}
           </h6>
 
-          <p className="text-muted-foreground text-[10px] sm:text-xs md:text-sm line-clamp-1 overflow-hidden text-ellipsis px-1">
+          <p className="text-muted-foreground text-[10px] sm:text-xs line-clamp-1 overflow-hidden px-1">
             {origin_name || (time && `${time} - `) || year}
           </p>
         </div>

@@ -39,7 +39,7 @@ const ResetPasswordPage = () => {
 
 	return (
 		<div className="mt-20 min-h-[70vh] flex items-center justify-center px-4">
-			<div className="bg-zinc-800/90 backdrop-blur-md rounded-lg shadow-xl p-6 sm:p-8 w-full max-w-sm">
+			<div className=" backdrop-blur-md rounded-lg shadow-xl p-6 sm:p-8 w-full max-w-sm">
 				<h2 className="text-2xl font-bold text-center mb-2 bg-gradient-to-r from-red-500 to-red-600 bg-clip-text text-transparent">
 					Reset Password
 				</h2>
@@ -61,7 +61,7 @@ const ResetPasswordPage = () => {
 						value={password}
 						onChange={(e) => setPassword(e.target.value)}
 						required
-						className="bg-zinc-700 border-zinc-600 text-white focus:border-red-500"
+						className="  focus:border-red-500"
 					/>
 					<Input
 						type="password"
@@ -69,7 +69,7 @@ const ResetPasswordPage = () => {
 						value={confirmPassword}
 						onChange={(e) => setConfirmPassword(e.target.value)}
 						required
-						className="bg-zinc-700 border-zinc-600 text-white focus:border-red-500"
+						className=" focus:border-red-500"
 					/>
 
 					<Button

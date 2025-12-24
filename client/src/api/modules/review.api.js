@@ -3,13 +3,17 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 const reviewApi = {
   add: async ({ mediaId, mediaTitle, mediaPoster, content, mediaSlug }) => {
     try {
-      const response = await privateClient.post("reviews", {
-        mediaId,
-        mediaTitle,
-        mediaPoster,
-        content,
-        mediaSlug,
-      });
+      const response = await privateClient.post(
+        "reviews",
+        { withCredentials: true },
+        {
+          mediaId,
+          mediaTitle,
+          mediaPoster,
+          content,
+          mediaSlug,
+        }
+      );
 
       return { response: response.data };
     } catch (err) {
@@ -19,7 +23,9 @@ const reviewApi = {
 
   remove: async ({ reviewId }) => {
     try {
-      const response = await privateClient.delete(`reviews/${reviewId}`);
+      const response = await privateClient.delete(`reviews/${reviewId}`, {
+        withCredentials: true,
+      });
 
       return { response: response.data };
     } catch (err) {
@@ -29,7 +35,9 @@ const reviewApi = {
   // Get reviews của user hiện tại
   getList: async () => {
     try {
-      const response = await privateClient.get("reviews");
+      const response = await privateClient.get("reviews", {
+        withCredentials: true,
+      });
 
       return { response: response.data };
     } catch (err) {
@@ -39,7 +47,9 @@ const reviewApi = {
 
   getReviewsByMediaId: async (mediaId) => {
     try {
-      const response = await privateClient.get(`reviews/media/${mediaId}`);
+      const response = await privateClient.get(`reviews/media/${mediaId}`, {
+        withCredentials: true,
+      });
       return { response: response.data };
     } catch (err) {
       return { err };
@@ -48,7 +58,9 @@ const reviewApi = {
 
   like: async ({ reviewId }) => {
     try {
-      const response = await privateClient.post(`reviews/like/${reviewId}`);
+      const response = await privateClient.post(`reviews/like/${reviewId}`, {
+        withCredentials: true,
+      });
 
       return { response: response.data };
     } catch (err) {
@@ -57,7 +69,9 @@ const reviewApi = {
   },
   dislike: async ({ reviewId }) => {
     try {
-      const response = await privateClient.post(`reviews/dislike/${reviewId}`);
+      const response = await privateClient.post(`reviews/dislike/${reviewId}`, {
+        withCredentials: true,
+      });
 
       return { response: response.data };
     } catch (err) {

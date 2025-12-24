@@ -4,6 +4,7 @@ import {
   forgotPassword,
   login,
   logout,
+  refreshToken,
   resetPassword,
   signup,
   updatepassword,
@@ -62,4 +63,6 @@ router.put(
   requestHandler.validate,
   updateProfile
 );
+
+router.post("/refresh-token", refreshToken);
 export default router;

@@ -20,14 +20,14 @@ const ForgotPasswordPage = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-black/10">
+    <div className="flex justify-center items-center min-h-screen">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
         className="w-full max-w-sm px-4"
       >
-        <div className="bg-zinc-800/80 backdrop-blur-md rounded-lg shadow-xl overflow-hidden w-full">
+        <div className="backdrop-blur-md rounded-lg shadow-xl overflow-hidden w-full">
           <div className="p-8">
             <h2 className="text-2xl font-bold text-center mb-2 bg-gradient-to-r from-red-600 to-red-500 bg-clip-text text-transparent">
               Forgot Password
@@ -45,7 +45,7 @@ const ForgotPasswordPage = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
-                    className="bg-zinc-700 border-zinc-600 text-white focus:border-red-500"
+                    className=" border-zinc-600 text-black focus:border-red-500"
                   />
                 </div>
 
@@ -69,7 +69,6 @@ const ForgotPasswordPage = () => {
                   transition={{ type: "spring", stiffness: 500, damping: 30 }}
                 >
                   <div className="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                    {/* Can add an icon here like Mail */}
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                     </svg>
@@ -82,7 +81,7 @@ const ForgotPasswordPage = () => {
             )}
           </div>
 
-          <div className="px-8 py-4 bg-zinc-900/50 flex justify-center">
+          <div className="px-8 py-4 border-border border-t flex justify-center">
             <RouterLink
               to="/log-in"
               className="text-red-500 hover:underline flex items-center text-sm"
