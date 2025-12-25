@@ -4,11 +4,9 @@ import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import dayjs from "dayjs";
 import reviewApi from "../api/modules/review.api";
-import Container from "../components/common/Container";
 import { setGlobalLoading } from "../redux/features/globalLoadingSlice";
 import { routesGen } from "../routes/routes";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import { Loader2, Trash2, Star } from "lucide-react";
 
 const ReviewItem = ({ review, onRemoved }) => {

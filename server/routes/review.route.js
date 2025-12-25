@@ -8,8 +8,6 @@ const router = express.Router();
 
 // Get reviews của user hiện tại
 router.get("/", verifyToken, reviewController.getReviewsOfUser);
-
-// Get reviews theo mediaId - không cần đăng nhập cũng xem được
 router.get("/media/:mediaId", reviewController.getReviewsByMediaId);
 
 router.post(

@@ -12,8 +12,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, } from "@/components/ui/avatar";
 
 const UserMenu = ({ buttonSx }) => {
   const { user } = useSelector((state) => state.user);
@@ -49,8 +48,7 @@ const UserMenu = ({ buttonSx }) => {
       <DropdownMenuContent className="w-56" align="end" forceMount>
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">{user.username}</p>
-            <p className="text-xs leading-none text-muted-foreground">{user.id}</p>
+            <p className="text-sm font-medium leading-none uppercase">{user.username}</p>
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />

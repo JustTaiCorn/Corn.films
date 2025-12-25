@@ -8,7 +8,8 @@ import {
   LayoutGrid,
   Heart,
   MessageSquare,
-  User
+  User,
+  Search
 } from "lucide-react";
 
 const main = [
@@ -54,6 +55,12 @@ const main = [
     icon: <LayoutGrid size={24} />,
     state: "the loai",
   },
+  {
+    display: "Tim kiem",
+    path: "/search",
+    icon: <Search size={24} />,
+    state: "tim kiem",
+  }
 ];
 
 const user = [

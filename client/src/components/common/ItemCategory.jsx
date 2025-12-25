@@ -13,7 +13,7 @@ const ItemCategory = ({ item }) => {
         <div>
             <Button
                 variant="outline"
-                className="w-full p-6 capitalize rounded-full hover:text-white"
+                className="w-full p-6 capitalize rounded-full hover:bg-primary hover:text-white "
                 onClick={handleClick}
             >
                 {item.name}

@@ -343,7 +343,8 @@ export const refreshToken = async (req, res) => {
         .json({ message: "Refresh token expired", success: false });
     }
     const { accessToken } = generateTokenAndSetCookie(res, session.userId);
-    return res.status(200).json({ success: true, accessToken });
+    console.log(accessToken);
+    return res.status(200).json({accessToken });
   } catch (error) {
     console.log("Error in refreshToken", error);
     return res.status(500).json({ success: false, message: "Server error" });

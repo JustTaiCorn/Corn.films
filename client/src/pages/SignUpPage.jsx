@@ -13,30 +13,54 @@ const SignUpPage = () => {
     const [username, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [localError, setLocalError] = useState("");
+    const [error, setError] = useState("");
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { error, isLoading } = useSelector((state) => state.user);
+    const { isLoading } = useSelector((state) => state.user);
+
+    const validatePassword = (pass) => {
+        const errors = [];
+
+        if (pass.length < 6) {
+            errors.push("Password must be at least 6 characters");
+        }
+        if (!/[A-Z]/.test(pass)) {
+            errors.push("Password must contain at least one uppercase letter");
+        }
+        if (!/[a-z]/.test(pass)) {
+            errors.push("Password must contain at least one lowercase letter");
+        }
+        if (!/\d/.test(pass)) {
+            errors.push("Password must contain at least one number");
+        }
+        if (!/[^A-Za-z0-9]/.test(pass)) {
+            errors.push("Password must contain at least one special character");
+        }
+
+        return errors;
+    };
 
     const handleSignUp = async (e) => {
         e.preventDefault();
-        setLocalError("");
+        setError("");
 
         if (!username || !email || !password) {
-            setLocalError("Please fill in all fields");
+            setError("Please fill in all fields");
             return;
         }
 
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
-            setLocalError("Please enter a valid email address");
+            setError("Please enter a valid email address");
             return;
         }
 
-        if (password.length < 6) {
-            setLocalError("Password must be at least 6 characters long");
+        const passwordErrors = validatePassword(password);
+        if (passwordErrors.length > 0) {
+            setError(passwordErrors[0]);
             return;
         }
+
 
         try {
             await dispatch(signup(email, password, username));
@@ -84,10 +108,10 @@ const SignUpPage = () => {
                             onChange={(e) => setPassword(e.target.value)}
                         />
 
-                        {(localError || error) && (
+                        {(error) && (
                             <Alert variant="destructive">
                                 <AlertDescription>
-                                    {localError || error}
+                                    {error}
                                 </AlertDescription>
                             </Alert>
                         )}

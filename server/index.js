@@ -9,15 +9,13 @@ config();
 const app = express();
 
 const allowedOrigins = [
-  "http://localhost:5173", // Frontend local khi phát triển
-  "https://popcornflims.netlify.app", // Frontend trên Netlify (production)
+  "http://localhost:5173",
+  "https://popcornflims.netlify.app",
 ];
 
-// Cấu hình CORS cho nhiều origins
 app.use(
   cors({
     origin: function (origin, callback) {
-      // Kiểm tra xem origin có trong danh sách allowedOrigins không
       if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true);
       } else {

@@ -5,19 +5,6 @@ import getTMDBImages from "../../api/configs/images.config";
 import { cn } from "@/lib/utils";
 
 const MediaItem = ({ media, className }) => {
-  const [posters, setPosters] = useState([]);
-
-  useEffect(() => {
-    const fetchImages = async () => {
-      if (media) {
-        const { posters } = await getTMDBImages(media);
-        setPosters(posters);
-      }
-    };
-
-    fetchImages();
-  }, [media]);
-
   const {
     name,
     year,
@@ -28,9 +15,8 @@ const MediaItem = ({ media, className }) => {
   } = media;
 
   const title = name;
-  const posterPath = posters[0]?.file_path
-    ? `https://image.tmdb.org/t/p/w500${posters[0].file_path}`
-    : `https://img.ophim.live/uploads/movies/${poster_url}`;
+  const posterPath =
+    `https://img.ophim.live/uploads/movies/${poster_url}`;
 
   return (
     <div className={cn("w-full group", className)}>

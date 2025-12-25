@@ -5,14 +5,14 @@ const reviewApi = {
     try {
       const response = await privateClient.post(
         "reviews",
-        { withCredentials: true },
+
         {
           mediaId,
           mediaTitle,
           mediaPoster,
           content,
           mediaSlug,
-        }
+        },{ withCredentials: true },
       );
 
       return { response: response.data };

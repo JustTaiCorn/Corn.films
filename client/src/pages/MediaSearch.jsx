@@ -35,20 +35,21 @@ const MediaSearch = () => {
   }, [debounceSearch]);
 
   return (
-    <div className="mt-20 max-w-[1366px] mx-auto text-foreground px-5 md:px-0 min-h-screen">
-      <div className="flex flex-col gap-8 w-full">
-        <Input
+    <div className="mt-20 max-w-[1366px] h-full mx-auto text-foreground px-5 md:px-0 min-h-screen">
+      <div className="flex flex-col items-center gap-8 w-full mx-auto ">
+
+        <div className="w-full max-w-xl md:min-w-xl min-w-[150px] mx-auto"><Input
           placeholder="Tìm kiếm phim..."
           className="w-full h-12 text-lg"
           autoFocus
           value={searchQuery}
           onChange={onQueryChange}
         />
-
+        </div>
         {debouncedQuery && (
           <MediaGrid
             medias={data?.items || []}
-            isLoading={isLoading} // MediaGrid likely ignores this prop in pure tailwind version if not handled, but good to keep
+            isLoading={isLoading}
           />
         )}
       </div>

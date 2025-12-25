@@ -98,9 +98,8 @@ const MediaDetail = () => {
   const thumbUrl = media.thumb_url
     ? `https://img.ophim.live/uploads/movies/${media.thumb_url}`
     : "https://via.placeholder.com/500x750";
-  const posterPath = posters[0]?.file_path
-    ? `https://image.tmdb.org/t/p/w500${posters[0].file_path}`
-    : `https://img.ophim.live/uploads/movies/${media.poster_url}`;
+  const posterPath =
+    `https://img.ophim.live/uploads/movies/${media.poster_url}`;
 
   const onFavoriteClick = async () => {
     if (!user) {
