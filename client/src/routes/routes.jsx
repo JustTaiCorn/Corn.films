@@ -39,24 +39,9 @@ const RedirectAuthenticatedUser = ({ children }) => {
 };
 
 const ProtectedRoute = ({ children }) => {
-  const { isAuthenticated, user, accessToken } = useSelector((state) => state.user);
-  const dispatch = useDispatch();
-  const [isInitializing, setIsInitializing] = useState(true);
+  const { isAuthenticated, user, isCheckingAuth } = useSelector((state) => state.user);
 
-  useEffect(() => {
-    const init = async () => {
-      if (!accessToken) {
-        await dispatch(refreshToken());
-      }
-      if (accessToken && !user) {
-        await dispatch(checkAuth());
-      }
-      setIsInitializing(false);
-    };
-    init();
-  }, []);
-
-  if (isInitializing) {
+  if (isCheckingAuth) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-white">
         <div className="flex flex-col items-center space-y-4">
@@ -70,11 +55,11 @@ const ProtectedRoute = ({ children }) => {
   }
 
   if (!isAuthenticated) {
-    return <Navigate to='/log-in' replace />;
+    return <Navigate to="/log-in" replace />;
   }
 
   if (user && !user.isVerified) {
-    return <Navigate to='/verify-email' replace />;
+    return <Navigate to="/verify-email" replace />;
   }
 
   return children;
@@ -126,7 +111,11 @@ const routes = [
   },
   {
     path: "/log-in",
-    element: <LoginPage />
+    element: (
+      <RedirectAuthenticatedUser>
+        <LoginPage />
+      </RedirectAuthenticatedUser>
+    ),
   },
   {
     path: "/verify-email",

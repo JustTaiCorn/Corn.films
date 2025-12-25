@@ -7,7 +7,7 @@ export const userSlice = createSlice({
     accessToken: null,
     error: null,
     isLoading: false,
-    isCheckingAuth: false,
+    isCheckingAuth: true,
     message: null,
     listFavorites: [],
   },
@@ -18,7 +18,7 @@ export const userSlice = createSlice({
     },
     setUser: (state, action) => {
       state.user = action.payload;
-      state.isAuthenticated = !!action.payload;
+      state.isAuthenticated = true;
       state.isLoading = false;
       state.isCheckingAuth = false;
       state.error = null;
@@ -28,9 +28,11 @@ export const userSlice = createSlice({
       state.error = null;
     },
     setAuthState: (state, action) => {
-      state.user = action.payload.user;
-      state.isAuthenticated = action.payload.isAuthenticated;
-      state.accessToken = action.payload.accessToken;
+      if (action.payload.user !== undefined) state.user = action.payload.user;
+      if (action.payload.isAuthenticated !== undefined)
+        state.isAuthenticated = action.payload.isAuthenticated;
+      if (action.payload.accessToken !== undefined)
+        state.accessToken = action.payload.accessToken;
       state.isLoading = false;
       state.isCheckingAuth = false;
       state.error = null;
@@ -38,7 +40,6 @@ export const userSlice = createSlice({
     setAccessToken: (state, action) => {
       state.accessToken = action.payload;
       state.isLoading = false;
-      state.isCheckingAuth = false;
       state.error = null;
     },
     setError: (state, action) => {

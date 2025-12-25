@@ -1,6 +1,7 @@
 import bcryptjs from "bcryptjs";
 import crypto from "crypto";
 import {
+  ACCESS_TOKEN_TTL,
   generateTokenAndSetCookie,
   REFRESH_TOKEN_TTL,
 } from "../utils/generateTokenAndSetCookie.js";
@@ -12,6 +13,7 @@ import {
 } from "../mailtrap/emails.js";
 import { User } from "../models/user.model.js";
 import { Session } from "../models/Session.js";
+import jwt from "jsonwebtoken";
 
 export const signup = async (req, res) => {
   const { email, password, username } = req.body;
@@ -342,9 +344,14 @@ export const refreshToken = async (req, res) => {
         .status(401)
         .json({ message: "Refresh token expired", success: false });
     }
-    const { accessToken } = generateTokenAndSetCookie(res, session.userId);
-    console.log(accessToken);
-    return res.status(200).json({accessToken });
+    const accessToken = jwt.sign(
+      { userId: session.userId },
+      process.env["ACCESS_TOKEN_SECRET"],
+      {
+        expiresIn: ACCESS_TOKEN_TTL,
+      }
+    );
+    return res.status(200).json({ accessToken });
   } catch (error) {
     console.log("Error in refreshToken", error);
     return res.status(500).json({ success: false, message: "Server error" });

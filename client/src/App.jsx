@@ -9,16 +9,29 @@ import "swiper/css/pagination";
 import routes from "./routes/routes";
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-// import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { Suspense, lazy } from "react";
+import { Suspense, useEffect, useState } from "react";
 import GlobalLoading from "./components/common/GlobalLoading";
-// import { checkAuth } from "./redux/features/userThunks";
-const MainLayout = lazy(() => import("./components/layout/MainLayout"));
-const PageWrapper = lazy(() => import("./components/common/PageWrapper"));
-
+import { useDispatch, useSelector } from "react-redux";
+import { checkAuth, refreshToken } from "@/redux/features/userThunks.js";
+import PageWrapper from "@/components/common/PageWrapper.jsx";
+import MainLayout from "@/components/layout/MainLayout.jsx";
 const queryClient = new QueryClient();
 const App = () => {
-
+  const dispatch = useDispatch();
+  const { user, accessToken } = useSelector((state) => state.user);
+  const [isLoading, setIsLoading] = useState(true);
+  useEffect(() => {
+    if (!accessToken) {
+      dispatch(refreshToken());
+    }
+    if (accessToken && !user) {
+      dispatch(checkAuth());
+    }
+    setIsLoading(false);
+  }, []);
+  if (isLoading) {
+    return <GlobalLoading isLoading={true} />;
+  }
   return (
     <>
       <QueryClientProvider client={queryClient}>

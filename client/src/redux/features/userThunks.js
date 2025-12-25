@@ -6,6 +6,7 @@ import {
   setListFavorites,
   setLoading,
   setMessage,
+  setUser,
 } from "./userSlice";
 import privateClient from "../../api/client/private.client";
 import { setGlobalLoading } from "./globalLoadingSlice";
@@ -79,7 +80,7 @@ export const logout = () => async (dispatch) => {
     );
     dispatch(setListFavorites([]));
     dispatch(setGlobalLoading(false));
-    localStorage.removeItem("token");
+    toast.success("Đăng xuất thành công");
   } catch (error) {
     dispatch(setError("Error logging out"));
     throw error;
@@ -93,12 +94,7 @@ export const checkAuth = () => async (dispatch) => {
       withCredentials: true,
     });
     if (response.data?.user) {
-      dispatch(
-        setAuthState({
-          user: response.data.user,
-          isAuthenticated: true,
-        })
-      );
+      dispatch(setUser(response.data.user));
     } else {
       dispatch(
         setAuthState({ user: null, isAuthenticated: false, accessToken: null })
@@ -129,7 +125,6 @@ export const refreshToken = () => async (dispatch) => {
       setError(error.response?.data?.message || "Error refreshing token")
     );
     toast.error("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.");
-    await dispatch(logout());
     throw error;
   } finally {
     dispatch(setLoading(false));

@@ -1,13 +1,15 @@
 import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 
+const PageWrapper = ({ children }) => {
+  const { pathname } = useLocation();
 
-const PageWrapper = ({  children }) => {
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, []);
+  }, [pathname]);
 
   return (
-      children
+    children
   );
 };
 

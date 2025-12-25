@@ -73,7 +73,7 @@ const ReviewItem = ({ review, onRemoved }) => {
             {dayjs(review.createdAt).format("DD/MM/YYYY • HH:mm")}
           </span>
 
-          <p className="text-sm text-zinc-300 leading-relaxed line-clamp-3 mt-1">
+          <p className="text-xl  leading-relaxed line-clamp-3 mt-1">
             {review.content}
           </p>
         </div>

@@ -44,18 +44,20 @@ privateClient.interceptors.response.use(
     originalRequest._retry = originalRequest._retry || 0;
     if (error.response?.status === 401 && originalRequest._retry < 4) {
       originalRequest._retry += 1;
+
+      try {
+        const response = await privateClient.post("/user/refresh-token");
+        store.dispatch(setAccessToken(response.data.accessToken));
+        originalRequest.headers[
+          "Authorization"
+        ] = `Bearer ${response.data.accessToken}`;
+        return privateClient(originalRequest);
+      } catch (refreshError) {
+        return Promise.reject(refreshError);
+      }
     }
 
-    try {
-      const response = await privateClient.post("/user/refresh-token");
-      store.dispatch(setAccessToken(response.data.accessToken));
-      originalRequest.headers[
-        "Authorization"
-      ] = `Bearer ${response.data.accessToken}`;
-      return privateClient(originalRequest);
-    } catch (refreshError) {
-      return Promise.reject(refreshError);
-    }
+    return Promise.reject(error);
   }
 );
 export default privateClient;
