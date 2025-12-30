@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, Link, useLocation } from "react-router-dom";
 import Container from "../components/common/Container";
-import ImageHeader from "../api/configs/ImageHeader"; // Need to refactor this too
+import ImageHeader from "../components/common/ImageHeader.jsx"; // Need to refactor this too
 import { useDetail } from "../api/modules/media.api";
 
 import RecommendSlide from "../components/common/RecommendSlide";

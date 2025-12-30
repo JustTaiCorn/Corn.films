@@ -2,11 +2,12 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import dayjs from "dayjs";
 import { toast } from "react-toastify";
-import { Send, Trash2, ThumbsUp, ThumbsDown, Loader2 } from "lucide-react";
+import {Send, Trash2, ThumbsUp, ThumbsDown, Loader2, InfoIcon} from "lucide-react";
 import { useReviews, useAddReview, useRemoveReview, useLikeReview, useDislikeReview } from "../../api/modules/review.api";
 import Container from "./Container";
 import TextAvatar from "./TextAvatar";
 import { Button } from "@/components/ui/button";
+import {Alert, AlertDescription, AlertTitle} from "@/components/ui/alert.jsx";
 
 const ReviewItem = ({ review, user }) => {
   const [likes, setLikes] = useState(review.likes?.length || 0);
@@ -151,9 +152,14 @@ const MediaReview = ({ media, slug }) => {
             <Loader2 className="w-8 h-8 animate-spin" />
           </div>
         ) : reviews.length === 0 ? (
-          <p className="text-center text-gray-500 p-8">
-            Chưa có bình luận nào. Hãy là người đầu tiên!
-          </p>
+            <Alert className="m-4 p-5 mx-auto">
+                <InfoIcon className="h-4 w-4" />
+                <AlertTitle className="font-bold">Thông báo</AlertTitle>
+                <AlertDescription>
+                    Hãy là người đầu tiên bình luận về tác phẩm này!
+                </AlertDescription>
+            </Alert>
+
         ) : (
           <>
             {visibleReviews.map(review =>

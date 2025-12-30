@@ -20,14 +20,14 @@ const App = () => {
   const dispatch = useDispatch();
   const { user, accessToken } = useSelector((state) => state.user);
   const [isLoading, setIsLoading] = useState(true);
-  useEffect(() => {
-    if (!accessToken) {
-      dispatch(refreshToken());
-    }
-    if (accessToken && !user) {
-      dispatch(checkAuth());
-    }
-    setIsLoading(false);
+  useEffect(async () => {
+      if (!accessToken) {
+          await dispatch(refreshToken());
+      }
+      if (accessToken && !user) {
+        await  dispatch(checkAuth());
+      }
+      setIsLoading(false);
   }, []);
   if (isLoading) {
     return <GlobalLoading isLoading={true} />;

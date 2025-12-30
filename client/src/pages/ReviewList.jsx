@@ -34,7 +34,7 @@ const ReviewItem = ({ review, onRemoved }) => {
           className="w-full md:w-32 shrink-0"
         >
           <div
-            className="relative pt-[140%] md:pt-[150%] bg-cover bg-center rounded-lg overflow-hidden shadow-lg group-hover:scale-105 transition-transform duration-300"
+            className="relative pt-[140%] md:pt-[150%] bg-cover bg-center rounded-lg overflow-hidden shadow-lg  transition-transform duration-300"
             style={{ backgroundImage: `url(https://img.ophim.live/uploads/movies/${review.mediaPoster})` }}
           >
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />

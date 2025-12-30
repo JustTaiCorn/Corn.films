@@ -2,6 +2,7 @@ import HeroSlide from '../components/common/HeroSlide';
 import Container from "../components/common/Container";
 import MediaSlide from "../components/common/MediaSlide";
 import MediaCard from '../components/common/MediaCard';
+import Topbar from "@/components/common/Topbar.jsx";
 
 const mediaType = {
   phimmoicapnhat: "phim-moi-cap-nhat",
@@ -13,7 +14,7 @@ const mediaType = {
 };
 const HomePage = () => {
   return (
-    <>
+    <><Topbar/>
       <HeroSlide mediaType={mediaType.phimmoicapnhat} />
 
       <div className="mt-[-4rem] max-w-[1366px] mx-auto px-5 md:px-0 pb-20 relative z-10">

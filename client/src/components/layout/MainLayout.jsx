@@ -1,33 +1,23 @@
 
 import { Outlet } from "react-router-dom";
 import Footer from "../common/Footer";
-import GlobalLoading from "../common/GlobalLoading";
-
-import Topbar from "../common/Topbar";
-import SideBarForPC from "../common/SideBarForPC";
+import SideBarForPC from "../common/SideBar.jsx";
 const MainLayout = () => {
     return (
         <>
 
 
-            <div className="flex min-h-screen flex-col">
-                <div className="flex flex-grow flex-row">
-                    {/* sidebar */}
+            <div className="flex min-h-screen flex-col bg-background text-foreground">
+                <div>
                     <SideBarForPC />
-                    {/* sidebar */}
-
-                    {/* main */}
                     <main
-                        className="flex-grow overflow-hidden min-h-screen ml-0 md:ml-[320px] lg:ml-[320px] flex flex-col"
+                        className="flex-grow overflow-hidden min-h-screen ml-0 md:ml-[320px] lg:ml-[320px] pt-16"
                     >
-                        <Topbar />
+
                         <Outlet />
                     </main>
-                    {/* main */}
                 </div>
-                {/* footer */}
                 <Footer />
-                {/* footer */}
             </div>
         </>
     );

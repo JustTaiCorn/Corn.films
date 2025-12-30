@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import Container from "../components/common/Container";
-import ImageHeader from "../api/configs/ImageHeader";
+import ImageHeader from "../components/common/ImageHeader.jsx";
 import { useDetail } from "../api/modules/media.api";
 import RecommendSlide from "../components/common/RecommendSlide";
 import MediaPlayer from "../components/common/MediaPlayer";
