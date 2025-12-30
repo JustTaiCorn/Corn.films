@@ -13,18 +13,6 @@ router.get("/media/:mediaId", reviewController.getReviewsByMediaId);
 router.post(
   "/",
   verifyToken,
-  body("mediaId")
-    .exists()
-    .withMessage("mediaId is required")
-    .isLength({ min: 1 })
-    .withMessage("mediaId can not be empty"),
-  body("content")
-    .exists()
-    .withMessage("content is required")
-    .isLength({ min: 1 })
-    .withMessage("content can not be empty"),
-  body("mediaTitle").exists().withMessage("mediaTitle is required"),
-  body("mediaPoster").exists().withMessage("mediaPoster is required"),
   requestHandler.validate,
   reviewController.create
 );

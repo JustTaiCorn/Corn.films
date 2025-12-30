@@ -30,6 +30,9 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.get('/ms', (req, res) => {
+    res.set('Content-Type', 'text/plain');
+    res.send('ms');});
 app.use("/api/v1", routes);
 
 const PORT = process.env.PORT || 5000;
