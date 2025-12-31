@@ -9,12 +9,13 @@ import {
   signup,
   updatepassword,
   updateProfile,
+  updateAvatar,
   verifyEmail,
 } from "../controllers/user.controller.js";
-import { body } from "express-validator";
 import { verifyToken } from "../middlewares/verifyToken.js";
 import requestHandler from "../handlers/request.handler.js";
 import favoriteController from "../controllers/favorite.controller.js";
+import upload from "../middlewares/upload.js";
 
 const router = express.Router();
 
@@ -33,14 +34,6 @@ router.get("/favorites", verifyToken, favoriteController.getFavoritesOfUser);
 router.post(
   "/favorites",
   verifyToken,
-  body("mediaId")
-    .exists()
-    .withMessage("mediaId is required")
-    .isLength({ min: 1 })
-    .withMessage("mediaId can not be empty"),
-  body("mediaTitle").exists().withMessage("mediaTitle is required"),
-  body("mediaPoster").exists().withMessage("mediaPoster is required"),
-  body("mediaRate").exists().withMessage("mediaRate is required"),
   requestHandler.validate,
   favoriteController.addFavorite
 );
@@ -62,6 +55,13 @@ router.put(
   verifyToken,
   requestHandler.validate,
   updateProfile
+);
+
+router.post(
+  "/update-avatar",
+  verifyToken,
+  upload.single("avatar"),
+  updateAvatar
 );
 
 router.post("/refresh-token", refreshToken);

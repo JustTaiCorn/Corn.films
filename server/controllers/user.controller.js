@@ -1,5 +1,6 @@
 import bcryptjs from "bcryptjs";
 import crypto from "crypto";
+import cloudinary from "../configs/cloudinary.config.js";
 import {
   ACCESS_TOKEN_TTL,
   generateTokenAndSetCookie,
@@ -321,6 +322,55 @@ export const updateProfile = async (req, res) => {
     res.status(500).json({
       success: false,
       message: "Failed to update profile",
+    });
+  }
+};
+
+export const updateAvatar = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({
+        success: false,
+        message: "No file uploaded",
+      });
+    }
+
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+    const cldRes = await cloudinary.uploader.upload(
+      req.file.path,
+      {
+        folder: "Pop-corn-films",
+        resource_type: "image",
+        format: "webp",
+      },
+      (error, result) => {
+        console.log(result, error);
+      }
+    );
+
+    user.avatarUrl = cldRes.secure_url;
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Avatar updated successfully",
+      avatarUrl: user.avatarUrl,
+      user: {
+        ...user._doc,
+        password: undefined,
+      },
+    });
+  } catch (error) {
+    console.log("Error in updateAvatar:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to update avatar",
     });
   }
 };

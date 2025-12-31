@@ -67,32 +67,25 @@ const remove = async (req, res) => {
     });
   }
 };
-
-// Thêm endpoint để lấy reviews theo mediaId
 const getReviewsByMediaId = async (req, res) => {
   try {
     const { mediaId } = req.params;
-    console.log("mediaId:", mediaId);
-
-    // First, find all reviews for this media
     const allReviews = await reviewModel
       .find({
         mediaId,
       })
       .populate({
         path: "user",
-        select: "username",
+        select: "username avatarUrl",
       })
       .populate({
         path: "replies",
         populate: {
           path: "user",
-          select: "username",
+          select: "username avatarUrl",
         },
       })
       .sort("-createdAt");
-
-    // Then collect all replies IDs to filter them out from top-level reviews
     const replyIds = new Set();
     allReviews.forEach((review) => {
       if (review.replies && review.replies.length > 0) {
@@ -103,8 +96,6 @@ const getReviewsByMediaId = async (req, res) => {
         });
       }
     });
-
-    // Filter out reviews that are actually replies to other reviews
     const topLevelReviews = allReviews.filter(
       (review) => !replyIds.has(review._id.toString())
     );

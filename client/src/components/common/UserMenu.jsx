@@ -13,6 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, } from "@/components/ui/avatar";
+import { AvatarImage } from "@/components/ui/avatar";
 
 const UserMenu = ({ buttonSx }) => {
   const { user } = useSelector((state) => state.user);
@@ -33,6 +34,7 @@ const UserMenu = ({ buttonSx }) => {
       <DropdownMenuTrigger asChild>
         <div className="flex items-center gap-2 cursor-pointer p-2 rounded-md hover:bg-secondary transition-colors" style={buttonSx}>
           <Avatar className="h-9 w-9">
+            <AvatarImage src={user.avatarUrl} />
             <AvatarFallback className="font-bold bg-primary text-primary-foreground">
               {user.username?.charAt(0).toUpperCase()}
             </AvatarFallback>

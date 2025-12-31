@@ -1,11 +1,10 @@
-// import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer } from "react-toastify";
-
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+
 import routes from "./routes/routes";
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -15,71 +14,82 @@ import { useDispatch, useSelector } from "react-redux";
 import { checkAuth, refreshToken } from "@/redux/features/userThunks.js";
 import PageWrapper from "@/components/common/PageWrapper.jsx";
 import MainLayout from "@/components/layout/MainLayout.jsx";
-const queryClient = new QueryClient();
+
+const queryClient = new QueryClient({
+    defaultOptions: {
+        queries: {
+            retry: 1,
+            staleTime: 5 * 60 * 1000, // 5 phút
+        },
+    },
+});
+
 const App = () => {
-  const dispatch = useDispatch();
-  const { user, accessToken } = useSelector((state) => state.user);
-  const [isLoading, setIsLoading] = useState(true);
-  useEffect(async () => {
-      if (!accessToken) {
-          await dispatch(refreshToken());
-      }
-      if (accessToken && !user) {
-        await  dispatch(checkAuth());
-      }
-      setIsLoading(false);
-  }, []);
-  if (isLoading) {
-    return <GlobalLoading isLoading={true} />;
-  }
-  return (
-    <>
-      <QueryClientProvider client={queryClient}>
-        {/* <ReactQueryDevtools initialIsOpen={false} /> */}
-        {/* <SplashCursor /> */}
+    const dispatch = useDispatch();
+    const { accessToken, user, isLoading } = useSelector((state) => state.user);
+    const [authChecked, setAuthChecked] = useState(false);
+    useEffect(() => {
+        const initializeAuth = async () => {
+            try {
+                if (!accessToken) {
+                    await dispatch(refreshToken()).unwrap();
+                }
+                if (accessToken && !user) {
+                    await dispatch(checkAuth()).unwrap();
+                }
+            } catch (error) {
+                console.log("Auth initialization failed:", error);
+            } finally {
+                setAuthChecked(true);
+            }
+        };
 
-        {/* config toastify */}
-        <ToastContainer
-          position="bottom-left"
-          autoClose={5000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          pauseOnFocusLoss
-          pauseOnHover
-        />
+        initializeAuth();
+    }, [dispatch, accessToken, user]);
 
-        {/* app routes */}
-        <Suspense fallback={<GlobalLoading isLoading={true} />}>
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<MainLayout />}>
-                {routes.map((route, index) => (
-                  route.index ? (
-                    <Route
-                      index
-                      key={index}
-                      element={
-                        <PageWrapper>{route.element}</PageWrapper>
-                      }
-                    />
-                  ) : (
-                    <Route
-                      path={route.path}
-                      key={index}
-                      element={<PageWrapper>{route.element}</PageWrapper>}
-                    />
-                  )
-                ))}
-              </Route>
-            </Routes>
-          </BrowserRouter>
-        </Suspense>
+    // Hiển thị full screen loading chỉ khi đang kiểm tra auth lần đầu
+    if (!authChecked) {
+        return <GlobalLoading isLoading={true} fullScreen />;
+    }
 
-      </QueryClientProvider>
-    </>
-  );
+    return (
+        <QueryClientProvider client={queryClient}>
+            <ToastContainer
+                position="bottom-left"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                pauseOnFocusLoss
+                pauseOnHover
+            />
 
+            {/* Loading cho lazy load các page riêng biệt */}
+            <Suspense fallback={<GlobalLoading isLoading={true} />}>
+                <BrowserRouter>
+                    <Routes>
+                        <Route path="/" element={<MainLayout />}>
+                            {routes.map((route, index) =>
+                                route.index ? (
+                                    <Route
+                                        index
+                                        key={index}
+                                        element={<PageWrapper>{route.element}</PageWrapper>}
+                                    />
+                                ) : (
+                                    <Route
+                                        path={route.path}
+                                        key={index}
+                                        element={<PageWrapper>{route.element}</PageWrapper>}
+                                    />
+                                )
+                            )}
+                        </Route>
+                    </Routes>
+                </BrowserRouter>
+            </Suspense>
+        </QueryClientProvider>
+    );
 };
 
 export default App;

@@ -1,13 +1,12 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { Search, X, Bell } from "lucide-react";
-import { Link, useNavigate } from 'react-router-dom';
+import { Search, X } from "lucide-react";
+import {  useNavigate } from 'react-router-dom';
 import { useSearch } from '../../api/modules/media.api';
 import debounce from 'lodash.debounce';
 import { routesGen } from '../../routes/routes';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Loader2 } from "lucide-react";
 
@@ -62,10 +61,10 @@ export default function Topbar() {
     return (
         <div className="hidden md:flex items-center justify-between mx-auto my-4 h-[70px] relative">
             <div
-                className="flex items-center relative flex-1 max-w-[500px]"
+                className="flex items-center relative flex-1 max-w-[300px]"
                 ref={searchRef}
             >
-                <div className="w-full min-w-[350px] flex items-center relative gap-2">
+                <div className="w-full flex items-center relative gap-2">
                     <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                     <Input
                         className="pl-9 pr-10"

@@ -2,12 +2,12 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import dayjs from "dayjs";
 import { toast } from "react-toastify";
-import {Send, Trash2, ThumbsUp, ThumbsDown, Loader2, InfoIcon} from "lucide-react";
+import { Send, Trash2, ThumbsUp, ThumbsDown, Loader2, InfoIcon } from "lucide-react";
 import { useReviews, useAddReview, useRemoveReview, useLikeReview, useDislikeReview } from "../../api/modules/review.api";
 import Container from "./Container";
-import TextAvatar from "./TextAvatar";
 import { Button } from "@/components/ui/button";
-import {Alert, AlertDescription, AlertTitle} from "@/components/ui/alert.jsx";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert.jsx";
+import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar.jsx";
 
 const ReviewItem = ({ review, user }) => {
   const [likes, setLikes] = useState(review.likes?.length || 0);
@@ -67,17 +67,22 @@ const ReviewItem = ({ review, user }) => {
   return (
     <div className="p-4 border-b">
       <div className="flex gap-3">
-        <TextAvatar text={review.user?.username} />
+        <Avatar className="h-9 w-9">
+          <AvatarImage src={review.user?.avatarUrl} />
+          <AvatarFallback className="font-bold bg-primary text-primary-foreground">
+            {review.user?.username?.charAt(0).toUpperCase()}
+          </AvatarFallback>
+        </Avatar>
         <div className="flex-1">
           <div className="flex justify-between items-start mb-2">
             <div>
-              <p className="font-semibold">{review.user?.username}</p>
+              <h3 className="font-semibold">{review.user?.username}</h3>
               <p className="text-xs text-gray-500">
-                {dayjs(review.createdAt).format("DD-MM-YYYY HH:mm:ss")}
+                {dayjs(review.createdAt).format("DD-MM-YYYY")}
               </p>
             </div>
           </div>
-          <p className="mb-3">{review.content}</p>
+          <p className="mb-3 ">{review.content}</p>
           <div className="flex gap-4 items-center">
             <Button
               variant="ghost"
@@ -120,6 +125,7 @@ const MediaReview = ({ media, slug }) => {
   const [visibleCount, setVisibleCount] = useState(4);
 
   const { data: reviewsData, isPending: isLoading } = useReviews({ mediaId: media?._id || media?.id });
+  console.log("reviewsData", reviewsData);
   const { mutateAsync: addReview, isPending: isSubmitting } = useAddReview();
 
   const reviews = reviewsData?.response?.results || [];
@@ -152,13 +158,13 @@ const MediaReview = ({ media, slug }) => {
             <Loader2 className="w-8 h-8 animate-spin" />
           </div>
         ) : reviews.length === 0 ? (
-            <Alert className="m-4 p-5 mx-auto">
-                <InfoIcon className="h-4 w-4" />
-                <AlertTitle className="font-bold">Thông báo</AlertTitle>
-                <AlertDescription>
-                    Hãy là người đầu tiên bình luận về tác phẩm này!
-                </AlertDescription>
-            </Alert>
+          <Alert className="m-4 p-5 mx-auto">
+            <InfoIcon className="h-4 w-4" />
+            <AlertTitle className="font-bold">Thông báo</AlertTitle>
+            <AlertDescription>
+              Hãy là người đầu tiên bình luận về tác phẩm này!
+            </AlertDescription>
+          </Alert>
 
         ) : (
           <>
@@ -181,7 +187,12 @@ const MediaReview = ({ media, slug }) => {
       {user && (
         <Container header="Viết bình luận">
           <div className="flex gap-3 p-4">
-            <TextAvatar text={user.username} />
+              <Avatar className="h-9 w-9">
+                  <AvatarImage src={user?.avatarUrl} />
+                  <AvatarFallback className="font-bold bg-primary text-primary-foreground">
+                      {user?.username?.charAt(0).toUpperCase()}
+                  </AvatarFallback>
+              </Avatar>
             <div className="flex-1">
               <textarea
                 value={content}
