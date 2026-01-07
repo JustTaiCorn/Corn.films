@@ -14,11 +14,16 @@ const userSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      required: true,
+      required: false, // Not required for Google auth users
+      default: "",
     },
     username: {
       type: String,
       required: true,
+    },
+    googleAuth: {
+      type: Boolean,
+      default: false,
     },
     lastLogin: {
       type: Date,

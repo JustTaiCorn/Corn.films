@@ -56,7 +56,7 @@ const main = [
     state: "the loai",
   },
   {
-    display: "Tim kiem",
+    display: "Tìm kiếm",
     path: "/search",
     icon: <Search size={24} />,
     state: "tim kiem",
@@ -65,17 +65,17 @@ const main = [
 
 const user = [
   {
-    display: "favorites",
+    display: "Yêu thích",
     path: "/favorites",
     icon: <Heart size={24} />,
   },
   {
-    display: "reviews",
+    display: "Đánh giá",
     path: "/reviews",
     icon: <MessageSquare size={24} />,
   },
   {
-    display: "profile",
+    display: "Tài khoản",
     path: "/profile",
     icon: <User size={24} />,
   },

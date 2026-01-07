@@ -407,3 +407,88 @@ export const refreshToken = async (req, res) => {
     return res.status(500).json({ success: false, message: "Server error" });
   }
 };
+
+export const googleAuth = async (req, res) => {
+  try {
+    const { accessToken: firebaseToken } = req.body;
+
+    if (!firebaseToken) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Thiếu Firebase token." });
+    }
+
+    const admin = await import("firebase-admin");
+
+    let decodedToken;
+    try {
+      decodedToken = await admin.default.auth().verifyIdToken(firebaseToken);
+    } catch (error) {
+      console.error("Firebase token verification failed:", error);
+      return res
+        .status(401)
+        .json({ success: false, message: "Token Google không hợp lệ." });
+    }
+
+    const { email, name, picture, uid } = decodedToken;
+
+    if (!email) {
+      return res.status(400).json({
+        success: false,
+        message: "Không thể lấy email từ tài khoản Google.",
+      });
+    }
+
+    let user = await User.findOne({ email });
+
+    if (user) {
+      if (!user.googleAuth) {
+        return res.status(409).json({
+          success: false,
+          message:
+            "Email này đã được đăng ký bằng mật khẩu. Vui lòng đăng nhập bằng email/password.",
+        });
+      }
+    } else {
+      const username = email.split("@")[0] + "_" + uid.substring(0, 6);
+
+      user = new User({
+        username,
+        email,
+        avatarUrl: picture || "",
+        googleAuth: true,
+        isVerified: true,
+        password: "",
+      });
+      await user.save();
+    }
+
+    const { accessToken, refreshToken } = generateTokenAndSetCookie(
+      res,
+      user._id
+    );
+
+    const session = new Session({
+      userId: user._id,
+      refreshToken,
+      expiresAt: Date.now() + REFRESH_TOKEN_TTL,
+    });
+    await session.save();
+
+    user.lastLogin = new Date();
+    await user.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "Đăng nhập Google thành công!",
+      accessToken,
+      user: {
+        ...user._doc,
+        password: undefined,
+      },
+    });
+  } catch (error) {
+    console.error("Lỗi khi gọi googleAuth:", error);
+    return res.status(500).json({ success: false, message: "Lỗi hệ thống" });
+  }
+};

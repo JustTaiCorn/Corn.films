@@ -12,6 +12,7 @@ import privateClient from "../../api/client/private.client";
 import { setGlobalLoading } from "./globalLoadingSlice";
 import store from "../store";
 import { toast } from "react-toastify";
+import { authWithGoogle } from "../../lib/firebase";
 export const signup = (email, password, username) => async (dispatch) => {
   dispatch(setLoading(true));
   try {
@@ -84,6 +85,37 @@ export const logout = () => async (dispatch) => {
   } catch (error) {
     dispatch(setError("Error logging out"));
     throw error;
+  }
+};
+
+export const googleLogin = () => async (dispatch) => {
+  dispatch(setLoading(true));
+  try {
+    const firebaseToken = await authWithGoogle();
+
+    const response = await privateClient.post(
+      `/user/google`,
+      { accessToken: firebaseToken },
+      { withCredentials: true }
+    );
+
+    dispatch(
+      setAuthState({
+        user: response.data.user,
+        isAuthenticated: true,
+        accessToken: response.data.accessToken,
+      })
+    );
+    toast.success("Đăng nhập Google thành công!");
+    return response.data;
+  } catch (error) {
+    const errorMessage =
+      error.response?.data?.message || "Đăng nhập Google thất bại";
+    dispatch(setError(errorMessage));
+    toast.error(errorMessage);
+    throw error;
+  } finally {
+    dispatch(setLoading(false));
   }
 };
 
@@ -185,13 +217,11 @@ export const resetPassword = (token, password) => async (dispatch) => {
 export const uploadAvatar = (file) => async (dispatch) => {
   dispatch(setLoading(true));
   const formData = new FormData();
-console.log(file)
   formData.append("avatar", file);
-console.log(formData);
   try {
-    const response = await privateClient.post("/user/update-avatar", formData,
-        { headers: { "Content-Type": "multipart/form-data" } }
-    );
+    const response = await privateClient.post("/user/update-avatar", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
     dispatch(
       setAuthState({
         user: { ...response.data.user, avatarUrl: response.data.avatarUrl },

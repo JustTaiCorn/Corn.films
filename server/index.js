@@ -5,6 +5,8 @@ import { config } from "dotenv";
 import mongoose from "mongoose";
 import cors from "cors";
 import routes from "./routes/routes.js";
+import admin from "firebase-admin";
+import serviceAccount from "./Myservice.json" with { type: "json" };
 config();
 const app = express();
 
@@ -30,6 +32,9 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+});
 app.get('/ms', (req, res) => {
     res.set('Content-Type', 'text/plain');
     res.send('ms');});
