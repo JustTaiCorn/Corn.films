@@ -5,6 +5,7 @@ import { Moon, Sun } from "lucide-react";
 
 const MediaPlayer = () => {
     const selectedEpisode = useSelector((state) => state.episode.selectedEpisode);
+    console.log(selectedEpisode);
     const [isTheaterMode, setIsTheaterMode] = useState(false);
 
     const toggleTheaterMode = () => {

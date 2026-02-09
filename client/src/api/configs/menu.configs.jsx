@@ -9,7 +9,8 @@ import {
   Heart,
   MessageSquare,
   User,
-  Search
+  Search,
+    Clock
 } from "lucide-react";
 
 const main = [
@@ -79,6 +80,11 @@ const user = [
     path: "/profile",
     icon: <User size={24} />,
   },
+  {
+    display: "Lịch sử xem",
+    path: "/history",
+    icon: <Clock size={24} />,
+  }
 ];
 
 const menuConfigs = { main, user };

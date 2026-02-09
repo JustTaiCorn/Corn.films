@@ -8,10 +8,11 @@ export const generateTokenAndSetCookie = (res, userId) => {
     expiresIn: ACCESS_TOKEN_TTL,
   });
   const refreshToken = crypto.randomBytes(64).toString("hex");
+  const isProduction = process.env.NODE_ENV === "production";
   res.cookie("refreshToken", refreshToken, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "strict",
+    secure: isProduction,
+    sameSite: isProduction ? "none" : "lax",
     maxAge: REFRESH_TOKEN_TTL,
   });
 

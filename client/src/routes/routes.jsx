@@ -6,12 +6,13 @@ import LoginPage from "../pages/LoginPage";
 import EmailVerificationPage from "../pages/EmailVerificationPage";
 import ForgotPasswordPage from "../pages/ForgotPasswordPage";
 import { Navigate } from "react-router";
-import {  useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import MediaListByRequest from "../pages/MediaListByRequest";
 import ResetPasswordPage from "../pages/ResetPasswordPage";
 import FavoriteList from "../pages/FavoriteList";
 import ReviewList from "../pages/ReviewList";
 import ProfilePage from "../pages/ProfilePage";
+import HistoryWatchPage from "@/pages/HistoryWatchPage";
 const HomePage = lazy(() => import("../pages/HomePage"));
 const MediaDetail = lazy(() => import("../pages/MediaDetail"));
 const MediaList = lazy(() => import("../pages/MediaList"));
@@ -135,6 +136,15 @@ const routes = [
       </ProtectedRoute>
     ),
     state: "favorites"
+  },
+  {
+    path: "/history",
+    element: (
+      <ProtectedRoute>
+        <HistoryWatchPage />
+      </ProtectedRoute>
+    ),
+    state: "history"
   },
   {
     path: "/reviews",

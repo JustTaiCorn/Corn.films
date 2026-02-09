@@ -32,10 +32,10 @@ const App = () => {
         const initializeAuth = async () => {
             try {
                 if (!accessToken) {
-                    await dispatch(refreshToken()).unwrap();
+                    await dispatch(refreshToken());
                 }
                 if (accessToken && !user) {
-                    await dispatch(checkAuth()).unwrap();
+                    await dispatch(checkAuth());
                 }
             } catch (error) {
                 console.log("Auth initialization failed:", error);

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import Container from "../components/common/Container";
 import ImageHeader from "../components/common/ImageHeader.jsx";
@@ -12,11 +12,14 @@ import getTMDBImages from "../api/configs/images.config";
 import GlobalLoading from "../components/common/GlobalLoading";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import { useAddHistory } from "../api/modules/history.api";
 
 const MediaWatch = () => {
     const dispatch = useDispatch();
     const { slug } = useParams();
     const playerRef = useRef(null);
+    const { isAuthenticated } = useSelector((state) => state.user);
+    const addHistory = useAddHistory();
 
     const [posters, setPosters] = useState([]);
     const { isLoading, data } = useDetail({ slug });
@@ -48,6 +51,19 @@ const MediaWatch = () => {
 
         fetchImages();
     }, [media]);
+
+    useEffect(() => {
+        if (media && isAuthenticated) {
+            addHistory.mutate({
+                mediaId: media._id,
+                mediaType: media.type,
+                title: media.name || media.title,
+                poster: media.poster_url,
+                slug: media.slug,
+                episode: episodes[0]?.name ? parseInt(episodes[0].name) : 1,
+            });
+        }
+    }, [media?._id, isAuthenticated]);
 
     if (!media) return null;
     if (isLoading) {
