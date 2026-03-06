@@ -11,7 +11,7 @@ const MainLayout = () => {
                 <div>
                     <SideBarForPC />
                     <main
-                        className="flex-grow overflow-hidden min-h-screen ml-0 md:ml-[320px] lg:ml-[320px] pt-16"
+                        className="flex-grow overflow-hidden min-h-screen ml-0 md:ml-[320px] lg:ml-[320px] "
                     >
 
                         <Outlet />

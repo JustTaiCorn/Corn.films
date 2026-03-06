@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import { Menu as MenuIcon } from "lucide-react";
 import { useState, memo } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import Logo from "./Logo";
 import UserMenu from "./UserMenu";
 import MobileSidebar from "./MobileSidebar.jsx";
@@ -12,6 +12,7 @@ import { ModeToggle } from "@/components/ui/mode-toggle.jsx";
 const SideBar = memo(function SidebarForPC() {
   const { user } = useSelector((state) => state.user);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { pathname } = useLocation();
 
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
 
@@ -42,20 +43,24 @@ const SideBar = memo(function SidebarForPC() {
           <Logo />
         </div>
 
-        <div className="grow overflow-y-auto flex flex-col gap-1">
-          {menuConfigs.main.map((item, index) => (
-            <Button
-              key={index}
-              variant="ghost"
-              asChild
-              className="justify-start gap-4 text-primary uppercase font-medium hover:bg-secondary"
-            >
-              <Link to={item.path}>
-                {item.icon}
-                {item.display}
-              </Link>
-            </Button>
-          ))}
+        <div className="grow overflow-y-auto flex flex-col gap-1 space-y-1">
+          {menuConfigs.main.map((item, index) => {
+            const isActive = pathname === item.path
+            return (
+              <Button
+                key={index}
+                variant="ghost"
+                asChild
+                className={`justify-start gap-4 uppercase font-semibold hover:bg-secondary ${isActive ? "bg-primary border border-primary text-primary-foreground" : "text-primary"
+                  }`}
+              >
+                <Link to={item.path}>
+                  {item.icon}
+                  {item.display}
+                </Link>
+              </Button>
+            );
+          })}
         </div>
 
         <div className="my-4 h-px bg-border" />
