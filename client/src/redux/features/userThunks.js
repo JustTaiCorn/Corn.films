@@ -156,7 +156,6 @@ export const refreshToken = () => async (dispatch) => {
     dispatch(
       setError(error.response?.data?.message || "Error refreshing token")
     );
-    toast.error("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.");
     throw error;
   } finally {
     dispatch(setLoading(false));

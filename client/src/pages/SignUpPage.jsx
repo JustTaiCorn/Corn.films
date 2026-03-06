@@ -79,7 +79,7 @@ const SignUpPage = () => {
                 className="w-full max-w-sm"
             >
                 <div className="bg-white/90 backdrop-blur-md rounded-lg shadow-xl p-6 sm:p-8 dark:bg-zinc-800/90">
-                    <h1 className="text-3xl sm:text-4xl font-bold text-center mb-6 sm:mb-8 text-black">
+                    <h1 className="text-3xl sm:text-4xl font-bold text-center mb-6 sm:mb-8 text-primary">
                         Create Account
                     </h1>
 
@@ -135,7 +135,7 @@ const SignUpPage = () => {
                                 Already have an account?{" "}
                                 <Link
                                     to="/log-in"
-                                    className="text-black hover:underline"
+                                    className="text-primary hover:underline"
                                 >
                                     Login
                                 </Link>

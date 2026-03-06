@@ -9,6 +9,9 @@
   },
   "dependencies": {
     "@arcjet/node": "^1.0.0-beta.2",
+    "@tanstack/ai": "^0.6.1",
+    "@tanstack/ai-gemini": "^0.7.0",
+    "@tanstack/ai-openai": "^0.6.0",
     "bcryptjs": "^2.4.3",
     "cloudinary": "^2.8.0",
     "cookie-parser": "~1.4.4",

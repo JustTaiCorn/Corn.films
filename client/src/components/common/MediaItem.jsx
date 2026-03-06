@@ -11,7 +11,7 @@ const MediaItem = ({ media, className }) => {
     slug,
     poster_url,
     time,
-    origin_name
+    origin_name, quality, lang
   } = media;
 
   const title = name;
@@ -21,7 +21,6 @@ const MediaItem = ({ media, className }) => {
   return (
     <div className={cn("w-full group", className)}>
       <Link to={routesGen.mediaDetail(slug)} className="no-underline block">
-        {/* Poster Image - Aspect ratio 2:3 (chuẩn poster phim) */}
         <div className="relative w-full aspect-[2/3] mb-2 overflow-hidden rounded-lg shadow-md">
           <img
             loading="lazy"
@@ -29,9 +28,22 @@ const MediaItem = ({ media, className }) => {
             alt={title}
             className="absolute top-0 left-0 w-full h-full object-cover transition-all duration-300 group-hover:brightness-75 group-hover:scale-105"
           />
+
+          {/* Quality & Language labels */}
+          <div className="absolute top-0 left-0 right-0 z-10 flex items-center justify-between p-1.5 pointer-events-none">
+            {quality && (
+              <span className="bg-black/70 text-white text-[10px] sm:text-xs font-semibold px-2 py-1 rounded">
+                {quality}
+              </span>
+            )}
+            {lang && (
+              <span className="bg-black/70 text-red-500 text-[10px] sm:text-xs font-semibold px-2 py-1 rounded ml-auto">
+                {lang}
+              </span>
+            )}
+          </div>
         </div>
 
-        {/* Text content below poster */}
         <div className="flex flex-col gap-0.5 mt-1 text-center min-h-[45px] sm:min-h-[50px]">
           <h6 className="text-primary font-bold text-xs sm:text-sm line-clamp-2 overflow-hidden px-1">
             {title}

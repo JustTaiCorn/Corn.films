@@ -49,7 +49,7 @@ const LoginPage = () => {
                 className="w-full max-w-sm"
             >
                 <div className="bg-white/90 backdrop-blur-md rounded-lg shadow-xl p-6 sm:p-8 dark:bg-zinc-800/90">
-                    <h1 className="text-3xl sm:text-4xl font-bold text-center mb-6 sm:mb-8 text-black">
+                    <h1 className="text-3xl sm:text-4xl font-bold text-center mb-6 sm:mb-8 text-primary">
                         Welcome Back
                     </h1>
 
@@ -73,7 +73,7 @@ const LoginPage = () => {
                         <div className="flex justify-start">
                             <Link
                                 to="/forgot-password"
-                                className="text-xs sm:text-sm text-black hover:underline"
+                                className="text-xs sm:text-sm text-primary hover:underline"
                             >
                                 Forgot password?
                             </Link>
@@ -135,7 +135,7 @@ const LoginPage = () => {
                                 Don't have an account?{" "}
                                 <Link
                                     to="/sign-up"
-                                    className="text-black hover:underline"
+                                    className="text-primary hover:underline"
                                 >
                                     Sign up
                                 </Link>

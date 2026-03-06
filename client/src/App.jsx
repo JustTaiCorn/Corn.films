@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { checkAuth, refreshToken } from "@/redux/features/userThunks.js";
 import PageWrapper from "@/components/common/PageWrapper.jsx";
 import MainLayout from "@/components/layout/MainLayout.jsx";
+import ChatWidget from "@/components/common/ChatWidget.jsx";
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -26,7 +27,7 @@ const queryClient = new QueryClient({
 
 const App = () => {
     const dispatch = useDispatch();
-    const { accessToken, user, isLoading } = useSelector((state) => state.user);
+    const { accessToken, user } = useSelector((state) => state.user);
     const [authChecked, setAuthChecked] = useState(false);
     useEffect(() => {
         const initializeAuth = async () => {
@@ -46,10 +47,8 @@ const App = () => {
 
         initializeAuth();
     }, [dispatch, accessToken, user]);
-
-    // Hiển thị full screen loading chỉ khi đang kiểm tra auth lần đầu
     if (!authChecked) {
-        return <GlobalLoading isLoading={true} fullScreen />;
+        return <GlobalLoading />;
     }
 
     return (
@@ -88,6 +87,8 @@ const App = () => {
                     </Routes>
                 </BrowserRouter>
             </Suspense>
+
+            <ChatWidget />
         </QueryClientProvider>
     );
 };

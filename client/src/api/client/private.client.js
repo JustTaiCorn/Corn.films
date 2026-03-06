@@ -1,7 +1,7 @@
 import store from "@/redux/store";
 import axios from "axios";
 import { setAccessToken } from "@/redux/features/userSlice";
-const API_URL =
+export const API_URL =
   import.meta.env.MODE === "production"
     ? "https://corn-films.onrender.com/api/v1"
     : "http://localhost:5000/api/v1";
@@ -21,7 +21,7 @@ privateClient.interceptors.request.use(
   },
   (error) => {
     return Promise.reject(error);
-  }
+  },
 );
 
 privateClient.interceptors.response.use(
@@ -48,9 +48,8 @@ privateClient.interceptors.response.use(
       try {
         const response = await privateClient.post("/user/refresh-token");
         store.dispatch(setAccessToken(response.data.accessToken));
-        originalRequest.headers[
-          "Authorization"
-        ] = `Bearer ${response.data.accessToken}`;
+        originalRequest.headers["Authorization"] =
+          `Bearer ${response.data.accessToken}`;
         return privateClient(originalRequest);
       } catch (refreshError) {
         return Promise.reject(refreshError);
@@ -58,6 +57,6 @@ privateClient.interceptors.response.use(
     }
 
     return Promise.reject(error);
-  }
+  },
 );
 export default privateClient;

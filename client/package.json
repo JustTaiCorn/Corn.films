@@ -19,6 +19,7 @@
     "@radix-ui/react-slot": "^1.2.4",
     "@reduxjs/toolkit": "^2.5.0",
     "@tailwindcss/postcss": "^4.1.17",
+    "@tanstack/ai-react": "^0.6.1",
     "@tanstack/react-query": "^5.64.1",
     "@tanstack/react-query-devtools": "^5.64.2",
     "@vercel/analytics": "^1.4.1",
