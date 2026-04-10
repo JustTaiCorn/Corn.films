@@ -32,7 +32,6 @@ const reviewApi = {
       return { err };
     }
   },
-  // Get reviews của user hiện tại
   getList: async () => {
     try {
       const response = await privateClient.get("reviews", {

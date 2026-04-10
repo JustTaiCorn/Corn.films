@@ -9,31 +9,6 @@ const mediaEndpoints = {
   listByCountry: ({ country, currPage }) =>
     `quoc-gia/${country}?page=${currPage || 1}`,
 };
-// Hàm return url dựa vào params
-const buildUrl = (params) => {
-  const {
-    category = "",
-    country = "",
-    year = "",
-    sort_field = "",
-    page = "",
-    type = "",
-  } = params;
-  const baseUrl = "https://ophim1.com/v1/api/danh-sach/";
-
-  const queryParams = new URLSearchParams();
-  if (type) queryParams.append("type", type);
-  if (category) queryParams.append("category", category);
-  if (country) queryParams.append("country", country);
-  if (year) queryParams.append("year", year);
-  if (sort_field) queryParams.append("sort_field", sort_field);
-  if (page) queryParams.append("page", page);
-
-  return `${baseUrl}?${queryParams.toString()}`;
-};
-
-// Hàm lấy danh sách phim đã sắp xếp
-
 const mediaApi = {
   getList: async ({ mediaType, currPage }) => {
     try {
@@ -104,11 +79,17 @@ const mediaApi = {
       return { err };
     }
   },
-  getSortedMovies: async (params) => {
+  getSortedMovies: async ({ category, country, year, sort_field, page, type }) => {
     try {
-      const url = buildUrl(params);
-      const response = await publicClient.get(url);
+      const params = {};
+      if (type) params.type = type;
+      if (category) params.category = category;
+      if (country) params.country = country;
+      if (year) params.year = year;
+      if (sort_field) params.sort_field = sort_field;
+      if (page) params.page = page;
 
+      const response = await publicClient.get("danh-sach", { params });
       return response.data;
     } catch (err) {
       return { err };

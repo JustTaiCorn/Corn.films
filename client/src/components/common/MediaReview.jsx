@@ -30,8 +30,6 @@ const ReviewItem = ({ review, user }) => {
     const isLike = type === 'like';
     const currentVote = isLike ? isLiked : isDisliked;
     const oppositeVote = isLike ? isDisliked : isLiked;
-
-    // Optimistic update
     if (isLike) {
       setLikes(prev => currentVote ? prev - 1 : prev + 1);
       setIsLiked(!currentVote);
@@ -52,13 +50,11 @@ const ReviewItem = ({ review, user }) => {
 
     if (err) {
       toast.error(err.message);
-      // Revert on error
       setLikes(review.likes?.length || 0);
       setDislikes(review.dislikes?.length || 0);
       setIsLiked(review.likes?.includes(user.id));
       setIsDisliked(review.dislikes?.includes(user.id));
     } else if (response) {
-      // Sync with server response if needed
       setLikes(response.likes);
       setDislikes(response.dislikes);
     }
