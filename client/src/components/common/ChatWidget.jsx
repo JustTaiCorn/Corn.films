@@ -1,20 +1,34 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import { useChat, fetchServerSentEvents } from "@tanstack/ai-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { MessageCircle, X, Send, Bot, User } from "lucide-react";
+import { useSelector } from "react-redux";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
 import { API_URL } from "@/api/client/private.client";
+import store from "@/redux/store";
 
 const ChatWidget = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [input, setInput] = useState("");
     const bottomRef = useRef(null);
+    const accessToken = useSelector((state) => state.user.accessToken);
 
-    const { messages, sendMessage, isLoading } = useChat({
-        connection: fetchServerSentEvents(`${API_URL}/chat/ai`),
-    });
+    const connection = useMemo(
+        () =>
+            fetchServerSentEvents(`${API_URL}/chat/ai`, () => {
+                const token = store.getState().user.accessToken;
+                const headers = { "Content-Type": "application/json" };
+                if (token) headers["Authorization"] = `Bearer ${token}`;
+                return { headers, credentials: "include" };
+            }),
+        // accessToken is read at request time via store.getState(), but we still
+        // recreate the connection if it changes so token-aware retries work.
+        [accessToken],
+    );
+
+    const { messages, sendMessage, isLoading } = useChat({ connection });
 
     useEffect(() => {
         bottomRef.current?.scrollIntoView({ behavior: "smooth" });

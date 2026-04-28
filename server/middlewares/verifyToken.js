@@ -32,3 +32,24 @@ export const verifyToken = (req, res, next) => {
     });
   }
 };
+
+export const optionalVerifyToken = (req, _res, next) => {
+  const authHeader = req.headers.authorization;
+  const tokenFromHeader = authHeader?.split(" ")[1];
+
+  if (!tokenFromHeader) {
+    req.user = null;
+    return next();
+  }
+
+  try {
+    const decoded = jwt.verify(
+      tokenFromHeader,
+      process.env.ACCESS_TOKEN_SECRET,
+    );
+    req.user = decoded?.userId ? { id: decoded.userId } : null;
+  } catch (_error) {
+    req.user = null;
+  }
+  next();
+};

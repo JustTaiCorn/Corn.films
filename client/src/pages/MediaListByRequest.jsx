@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useParams, useSearchParams, Link as RouterLink, useLocation } from "react-router-dom";
 import { useListByCategory, useListByCountry, useSortedMovies } from "../api/modules/media.api";
-import MediaGrid from "../components/common/MediaGrid";
+ import MediaGrid from "../components/common/MediaGrid";
 import Paginations from "../components/common/Paginations";
 import FilterBar from "../components/common/FilterBar";
 import { ChevronRight } from "lucide-react";
